@@ -15,7 +15,7 @@ export function SelectedWork({ projects }: { projects: CaseStudyMeta[] }) {
           </h2>
         </div>
         <p className="hidden max-w-xs text-right text-sm leading-relaxed text-muted sm:block">
-          Three case studies from KlearNow — AI, identity, and logistics tooling.
+          Selected work from KlearNow — mobile Track &amp; Trace, AI, identity, and logistics tooling.
         </p>
       </div>
 
@@ -33,6 +33,7 @@ export function SelectedWork({ projects }: { projects: CaseStudyMeta[] }) {
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                  unoptimized={project.cover.endsWith(".svg")}
                 />
               </div>
               <div className="space-y-3 p-5">
