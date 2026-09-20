@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { DialogueMessage } from "@/content/track-and-trace";
+type DialogueMessage = {
+  id: string;
+  speaker: string;
+  label: string;
+  text: string;
+};
 
 export function ConversationThread({
   title,

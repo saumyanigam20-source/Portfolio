@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" fill="none">
+  <rect width="1600" height="900" fill="#121614"/>
+  <defs>
+    <radialGradient id="g" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1280 80) rotate(90) scale(640 900)">
+      <stop stop-color="#a8c4a0" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#121614" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#g)"/>
+  <g opacity="0.9">
+    <rect x="90" y="120" width="150" height="88" rx="18" fill="#1c2420" stroke="#a8c4a0" stroke-opacity="0.25"/>
+    <rect x="260" y="120" width="150" height="88" rx="18" fill="#1c2420" stroke="#a8c4a0" stroke-opacity="0.25"/>
+    <rect x="430" y="120" width="150" height="88" rx="18" fill="#1c2420" stroke="#a8c4a0" stroke-opacity="0.25"/>
+    <rect x="175" y="228" width="150" height="88" rx="18" fill="#1c2420" stroke="#a8c4a0" stroke-opacity="0.25"/>
+    <rect x="345" y="228" width="150" height="88" rx="18" fill="#1c2420" stroke="#a8c4a0" stroke-opacity="0.25"/>
+    <text x="165" y="172" text-anchor="middle" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="16">Admin</text>
+    <text x="335" y="172" text-anchor="middle" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="16">Finance</text>
+    <text x="505" y="172" text-anchor="middle" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="16">KlearHub</text>
+    <text x="250" y="280" text-anchor="middle" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="16">Entity</text>
+    <text x="420" y="280" text-anchor="middle" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="16">Payments</text>
+  </g>
+  <path d="M335 316 C335 360 335 390 920 430" stroke="#a8c4a0" stroke-opacity="0.45" stroke-width="2" fill="none"/>
+  <rect x="920" y="150" width="560" height="620" rx="32" fill="#1a221e" stroke="#a8c4a0" stroke-opacity="0.4" stroke-width="2"/>
+  <rect x="920" y="150" width="560" height="64" rx="32" fill="#2f4a45"/>
+  <text x="952" y="190" fill="#d5e0dc" font-family="system-ui,sans-serif" font-size="20">KlearAssist</text>
+  <text x="1200" y="280" text-anchor="middle" fill="#eceae4" font-family="system-ui,sans-serif" font-size="22">Hi there, Brooke</text>
+  <rect x="960" y="320" width="480" height="72" rx="16" fill="#121614" stroke="#eceae4" stroke-opacity="0.1"/>
+  <rect x="960" y="408" width="480" height="72" rx="16" fill="#121614" stroke="#eceae4" stroke-opacity="0.1"/>
+  <rect x="960" y="496" width="480" height="72" rx="16" fill="#121614" stroke="#eceae4" stroke-opacity="0.1"/>
+  <text x="984" y="362" fill="#a8c4a0" font-family="system-ui,sans-serif" font-size="16">Track my shipment</text>
+  <text x="984" y="450" fill="#a8c4a0" font-family="system-ui,sans-serif" font-size="16">Show upcoming ETAs</text>
+  <text x="984" y="538" fill="#a8c4a0" font-family="system-ui,sans-serif" font-size="16">View delayed shipments</text>
+  <rect x="960" y="640" width="400" height="56" rx="14" fill="#121614" stroke="#eceae4" stroke-opacity="0.12"/>
+  <rect x="1376" y="640" width="64" height="56" rx="14" fill="#2f4a45"/>
+  <text x="90" y="520" fill="#a8c4a0" font-family="system-ui,sans-serif" font-size="22" letter-spacing="6">KLEARNOW</text>
+  <text x="90" y="600" fill="#eceae4" font-family="system-ui,sans-serif" font-size="56" font-weight="600">Ask the platform.</text>
+  <text x="90" y="668" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="28">Get the record. Take the action.</text>
+</svg>

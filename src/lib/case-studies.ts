@@ -5,6 +5,7 @@ import { remark } from "remark";
 import remarkGfm from "remark-gfm";
 import html from "remark-html";
 import { trackAndTraceMeta } from "@/content/track-and-trace";
+import { klearassistMeta } from "@/content/klearassist";
 
 const caseStudiesDirectory = path.join(process.cwd(), "content/case-studies");
 
@@ -51,15 +52,27 @@ const interactiveStudies: CaseStudyMeta[] = [
     cover: trackAndTraceMeta.cover,
     summary: trackAndTraceMeta.summary,
   },
+  {
+    title: klearassistMeta.title,
+    slug: klearassistMeta.slug,
+    company: klearassistMeta.company,
+    role: klearassistMeta.role,
+    tags: [...klearassistMeta.tags],
+    category: klearassistMeta.category,
+    cover: klearassistMeta.cover,
+    summary: klearassistMeta.summary,
+  },
 ];
 
 export function getCaseStudies(): CaseStudyMeta[] {
-  const fromMarkdown = getCaseStudySlugs().map((slug) => {
-    const fullPath = path.join(caseStudiesDirectory, `${slug}.md`);
-    const fileContents = fs.readFileSync(fullPath, "utf8");
-    const { data } = matter(fileContents);
-    return data as CaseStudyMeta;
-  });
+  const fromMarkdown = getCaseStudySlugs()
+    .filter((slug) => slug !== "klearassist")
+    .map((slug) => {
+      const fullPath = path.join(caseStudiesDirectory, `${slug}.md`);
+      const fileContents = fs.readFileSync(fullPath, "utf8");
+      const { data } = matter(fileContents);
+      return data as CaseStudyMeta;
+    });
 
   return [...interactiveStudies, ...fromMarkdown].sort((a, b) => {
     const ai = preferredOrder.indexOf(a.slug);
