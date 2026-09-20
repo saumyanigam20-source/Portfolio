@@ -3,7 +3,7 @@ export const profile = {
   firstName: "Saumya",
   headline: "UX designer shaping enterprise product",
   supporting:
-    "7+ years in digital design. 3+ years on logistics, operations, and conversational UX.",
+    "I design logistics, operations, and conversational UX — dense systems, made easier to use.",
   currently:
     "I'm a UX Designer III at KlearNow, designing enterprise experiences for logistics and operations. I specialise in user research, product design, and conversational UX — turning complex workflows into clear, scalable flows.",
   role: "UX Designer III",

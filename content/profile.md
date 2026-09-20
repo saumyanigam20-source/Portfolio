@@ -1,7 +1,7 @@
 ---
 name: Saumya Nigam
 headline: UX & Visual Designer from Gurgaon, India
-subhead: 7+ years in digital design, 3+ years designing enterprise product experiences.
+subhead: Logistics, operations, and conversational UX — dense systems, made easier to use.
 role: UX Designer III at KlearNow
 location: Gurgaon, India
 email: saumyanigam20@gmail.com

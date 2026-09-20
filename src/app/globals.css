@@ -247,12 +247,100 @@ a {
   );
 }
 
+.proto-kpi {
+  transition:
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.proto-kpi:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(165deg, #ffffff 0%, #eef6f8 100%);
+  box-shadow:
+    0 0 0 1px rgba(42, 106, 114, 0.12),
+    0 10px 18px rgba(42, 106, 114, 0.14);
+}
+
+.proto-row {
+  cursor: pointer;
+  transition:
+    background 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.proto-row:hover {
+  background: #e8f2f5;
+  box-shadow: 0 0 0 1px rgba(47, 95, 104, 0.1);
+}
+
+.proto-row-meta {
+  transition: transform 140ms ease;
+}
+
+.proto-row:hover .proto-row-meta {
+  transform: translateX(2px);
+}
+
+.proto-device button,
+.proto-btn {
+  transition:
+    transform 160ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 160ms ease,
+    filter 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.proto-device button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.07);
+}
+
+.proto-device button:active {
+  transform: scale(0.97);
+  filter: brightness(0.98);
+}
+
+.proto-btn:hover,
+.proto-device button:hover .proto-btn {
+  transform: translateY(-1px);
+  background: linear-gradient(180deg, #ffffff 0%, #e7f2f4 100%);
+  border-color: #8aa8b0;
+  box-shadow: 0 4px 10px rgba(47, 95, 104, 0.16);
+  color: #2f5f68;
+}
+
+.proto-btn:active {
+  transform: scale(0.97);
+}
+
 .proto-device {
   background: radial-gradient(
     120% 80% at 50% 0%,
     rgba(61, 92, 86, 0.22),
     transparent 62%
   );
+}
+
+.proto-scroll {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(28, 42, 48, 0.28) transparent;
+}
+
+.proto-scroll::-webkit-scrollbar {
+  width: 3px;
+}
+
+.proto-scroll::-webkit-scrollbar-thumb {
+  background: rgba(28, 42, 48, 0.28);
+  border-radius: 99px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -262,7 +350,19 @@ a {
     animation: none;
   }
 
-  .proto-hotspot:active {
+  .proto-hotspot:active,
+  .proto-kpi,
+  .proto-kpi:hover,
+  .proto-kpi:active,
+  .proto-row-meta,
+  .proto-row:hover .proto-row-meta,
+  .proto-device button,
+  .proto-device button:hover,
+  .proto-device button:active,
+  .proto-btn,
+  .proto-btn:hover,
+  .proto-btn:active,
+  .proto-device button:hover .proto-btn {
     transform: none;
   }
 }

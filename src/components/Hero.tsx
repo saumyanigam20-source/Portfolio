@@ -23,7 +23,7 @@ export function Hero() {
         <h1 className="animate-rise delay-1 mt-3 max-w-4xl font-display text-[clamp(2.2rem,6.5vw,4.4rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
           {profile.headline}
         </h1>
-        <p className="animate-rise delay-2 mt-6 max-w-xl text-lg leading-relaxed text-muted sm:text-xl">
+        <p className="hero-supporting animate-rise delay-2 mt-6 max-w-xl text-lg leading-relaxed text-muted sm:text-xl">
           {profile.supporting}
         </p>
         <div className="animate-rise delay-3 mt-10 flex flex-wrap items-center gap-4">
