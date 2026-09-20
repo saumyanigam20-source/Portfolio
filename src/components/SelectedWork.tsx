@@ -29,7 +29,7 @@ export function SelectedWork({ projects }: { projects: CaseStudyMeta[] }) {
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
                   src={project.cover}
-                  alt=""
+                  alt={project.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover transition duration-700 group-hover:scale-[1.04]"
@@ -38,7 +38,7 @@ export function SelectedWork({ projects }: { projects: CaseStudyMeta[] }) {
               </div>
               <div className="space-y-3 p-5">
                 <div className="flex items-start justify-between gap-3">
-                  <h3 className="font-display text-lg leading-snug font-semibold tracking-[-0.02em]">
+                  <h3 className="font-display text-[1.35rem] leading-[1.15] font-semibold tracking-[-0.035em] text-ink sm:text-[1.45rem]">
                     {project.title}
                   </h3>
                   <span

@@ -1,38 +1,141 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" fill="none">
-  <rect width="1600" height="900" fill="#121614"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200" fill="none">
+  <rect width="1600" height="1200" fill="#0c1214"/>
   <defs>
-    <radialGradient id="g" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1280 80) rotate(90) scale(640 900)">
-      <stop stop-color="#a8c4a0" stop-opacity="0.28"/>
-      <stop offset="1" stop-color="#121614" stop-opacity="0"/>
+    <radialGradient id="kaGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1180 180) rotate(92) scale(820 1100)">
+      <stop stop-color="#33657c" stop-opacity="0.55"/>
+      <stop offset="0.55" stop-color="#1a3a46" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#0c1214" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="kaSage" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(240 980) rotate(-70) scale(640 800)">
+      <stop stop-color="#a8c4a0" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#0c1214" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="kaBar" x1="0" y1="0" x2="1600" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#12303a"/>
+      <stop offset="1" stop-color="#0e1c22"/>
+    </linearGradient>
+    <filter id="kaSoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#041016" flood-opacity="0.55"/>
+    </filter>
+    <filter id="kaLift" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#041016" flood-opacity="0.4"/>
+    </filter>
   </defs>
-  <rect width="1600" height="900" fill="url(#g)"/>
-  <g opacity="0.9">
-    <rect x="90" y="120" width="150" height="88" rx="18" fill="#1c2420" stroke="#a8c4a0" stroke-opacity="0.25"/>
-    <rect x="260" y="120" width="150" height="88" rx="18" fill="#1c2420" stroke="#a8c4a0" stroke-opacity="0.25"/>
-    <rect x="430" y="120" width="150" height="88" rx="18" fill="#1c2420" stroke="#a8c4a0" stroke-opacity="0.25"/>
-    <rect x="175" y="228" width="150" height="88" rx="18" fill="#1c2420" stroke="#a8c4a0" stroke-opacity="0.25"/>
-    <rect x="345" y="228" width="150" height="88" rx="18" fill="#1c2420" stroke="#a8c4a0" stroke-opacity="0.25"/>
-    <text x="165" y="172" text-anchor="middle" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="16">Admin</text>
-    <text x="335" y="172" text-anchor="middle" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="16">Finance</text>
-    <text x="505" y="172" text-anchor="middle" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="16">KlearHub</text>
-    <text x="250" y="280" text-anchor="middle" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="16">Entity</text>
-    <text x="420" y="280" text-anchor="middle" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="16">Payments</text>
+
+  <rect width="1600" height="1200" fill="url(#kaGlow)"/>
+  <rect width="1600" height="1200" fill="url(#kaSage)"/>
+
+  <rect x="48" y="42" width="1504" height="1116" rx="28" fill="#10181c" stroke="#a8c4a0" stroke-opacity="0.12"/>
+  <rect x="48" y="42" width="1504" height="56" rx="28" fill="url(#kaBar)"/>
+  <rect x="48" y="70" width="1504" height="28" fill="#12303a"/>
+  <circle cx="86" cy="70" r="6" fill="#c45c4a"/>
+  <circle cx="108" cy="70" r="6" fill="#d2b15a"/>
+  <circle cx="130" cy="70" r="6" fill="#6f9b72"/>
+  <text x="158" y="76" fill="#d5e0dc" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="600" letter-spacing="0.8">KlearNow</text>
+  <text x="248" y="76" fill="#8aa3ab" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">Dashboard</text>
+
+  <rect x="48" y="98" width="72" height="1060" fill="#0d1a20"/>
+  <rect x="64" y="128" width="40" height="40" rx="10" fill="#33657c"/>
+  <rect x="70" y="196" width="28" height="8" rx="4" fill="#2a4148"/>
+  <rect x="70" y="216" width="28" height="8" rx="4" fill="#2a4148"/>
+  <rect x="70" y="236" width="28" height="8" rx="4" fill="#2a4148"/>
+  <rect x="70" y="256" width="28" height="8" rx="4" fill="#33657c" fill-opacity="0.7"/>
+
+  <g font-family="ui-sans-serif, system-ui, sans-serif">
+    <g filter="url(#kaLift)">
+      <rect x="168" y="150" width="196" height="92" rx="20" fill="#182428" stroke="#a8c4a0" stroke-opacity="0.22"/>
+      <circle cx="204" cy="196" r="16" fill="#24363c"/>
+      <path d="M204 188v16M196 196h16" stroke="#a8c4a0" stroke-width="1.6" stroke-linecap="round"/>
+      <text x="230" y="192" fill="#eceae4" font-size="18" font-weight="700">Admin</text>
+      <text x="230" y="214" fill="#8aa3ab" font-size="12">Users · roles</text>
+    </g>
+    <g filter="url(#kaLift)">
+      <rect x="388" y="150" width="196" height="92" rx="20" fill="#182428" stroke="#a8c4a0" stroke-opacity="0.22"/>
+      <circle cx="424" cy="196" r="16" fill="#24363c"/>
+      <text x="418" y="201" fill="#a8c4a0" font-size="13" font-weight="700">$</text>
+      <text x="450" y="192" fill="#eceae4" font-size="18" font-weight="700">Finance</text>
+      <text x="450" y="214" fill="#8aa3ab" font-size="12">Invoices</text>
+    </g>
+    <g filter="url(#kaLift)">
+      <rect x="278" y="268" width="216" height="92" rx="20" fill="#1c333c" stroke="#a8c4a0" stroke-opacity="0.45" stroke-width="1.5"/>
+      <circle cx="318" cy="314" r="16" fill="#33657c"/>
+      <path d="M312 318h12M314 312h8" stroke="#eceae4" stroke-width="1.5" stroke-linecap="round"/>
+      <text x="346" y="310" fill="#eceae4" font-size="18" font-weight="700">KlearHub</text>
+      <text x="346" y="332" fill="#c5e0d6" font-size="12">Shipments live</text>
+    </g>
+    <g filter="url(#kaLift)">
+      <rect x="168" y="386" width="196" height="92" rx="20" fill="#182428" stroke="#a8c4a0" stroke-opacity="0.22"/>
+      <circle cx="204" cy="432" r="16" fill="#24363c"/>
+      <rect x="196" y="426" width="16" height="12" rx="2" stroke="#a8c4a0" stroke-width="1.4"/>
+      <text x="230" y="428" fill="#eceae4" font-size="18" font-weight="700">Entity</text>
+      <text x="230" y="450" fill="#8aa3ab" font-size="12">Customers</text>
+    </g>
+    <g filter="url(#kaLift)">
+      <rect x="388" y="386" width="196" height="92" rx="20" fill="#182428" stroke="#a8c4a0" stroke-opacity="0.22"/>
+      <circle cx="424" cy="432" r="16" fill="#24363c"/>
+      <rect x="416" y="426" width="16" height="11" rx="2" stroke="#a8c4a0" stroke-width="1.4"/>
+      <text x="450" y="428" fill="#eceae4" font-size="18" font-weight="700">Payments</text>
+      <text x="450" y="450" fill="#8aa3ab" font-size="12">Aging</text>
+    </g>
   </g>
-  <path d="M335 316 C335 360 335 390 920 430" stroke="#a8c4a0" stroke-opacity="0.45" stroke-width="2" fill="none"/>
-  <rect x="920" y="150" width="560" height="620" rx="32" fill="#1a221e" stroke="#a8c4a0" stroke-opacity="0.4" stroke-width="2"/>
-  <rect x="920" y="150" width="560" height="64" rx="32" fill="#2f4a45"/>
-  <text x="952" y="190" fill="#d5e0dc" font-family="system-ui,sans-serif" font-size="20">KlearAssist</text>
-  <text x="1200" y="280" text-anchor="middle" fill="#eceae4" font-family="system-ui,sans-serif" font-size="22">Hi there, Brooke</text>
-  <rect x="960" y="320" width="480" height="72" rx="16" fill="#121614" stroke="#eceae4" stroke-opacity="0.1"/>
-  <rect x="960" y="408" width="480" height="72" rx="16" fill="#121614" stroke="#eceae4" stroke-opacity="0.1"/>
-  <rect x="960" y="496" width="480" height="72" rx="16" fill="#121614" stroke="#eceae4" stroke-opacity="0.1"/>
-  <text x="984" y="362" fill="#a8c4a0" font-family="system-ui,sans-serif" font-size="16">Track my shipment</text>
-  <text x="984" y="450" fill="#a8c4a0" font-family="system-ui,sans-serif" font-size="16">Show upcoming ETAs</text>
-  <text x="984" y="538" fill="#a8c4a0" font-family="system-ui,sans-serif" font-size="16">View delayed shipments</text>
-  <rect x="960" y="640" width="400" height="56" rx="14" fill="#121614" stroke="#eceae4" stroke-opacity="0.12"/>
-  <rect x="1376" y="640" width="64" height="56" rx="14" fill="#2f4a45"/>
-  <text x="90" y="520" fill="#a8c4a0" font-family="system-ui,sans-serif" font-size="22" letter-spacing="6">KLEARNOW</text>
-  <text x="90" y="600" fill="#eceae4" font-family="system-ui,sans-serif" font-size="56" font-weight="600">Ask the platform.</text>
-  <text x="90" y="668" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="28">Get the record. Take the action.</text>
+
+  <path d="M494 360 C640 360 720 390 860 470" stroke="#a8c4a0" stroke-opacity="0.55" stroke-width="2.2" fill="none"/>
+  <circle cx="494" cy="360" r="5" fill="#a8c4a0"/>
+  <circle cx="860" cy="470" r="5" fill="#a8c4a0"/>
+
+  <g filter="url(#kaSoft)">
+    <rect x="860" y="168" width="640" height="720" rx="28" fill="#f4f7f8" stroke="#d5e4ea" stroke-width="2"/>
+    <rect x="860" y="168" width="640" height="68" rx="28" fill="#33657c"/>
+    <rect x="860" y="208" width="640" height="28" fill="#33657c"/>
+    <text x="892" y="212" fill="#ffffff" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700">KlearAssist</text>
+    <rect x="1408" y="188" width="22" height="22" rx="4" stroke="#d5e0dc" stroke-width="1.6"/>
+    <rect x="1414" y="194" width="16" height="16" rx="3" stroke="#d5e0dc" stroke-width="1.6"/>
+    <path d="M1450 190l14 14M1464 190l-14 14" stroke="#d5e0dc" stroke-width="1.8" stroke-linecap="round"/>
+
+    <text x="1180" y="292" text-anchor="middle" fill="#465161" font-family="ui-sans-serif, system-ui, sans-serif" font-size="26" font-weight="600">Hi there, <tspan fill="#33657c" font-weight="700">Brooke</tspan></text>
+    <text x="1180" y="328" text-anchor="middle" fill="#1c2a32" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22">What would you <tspan fill="#33657c" font-weight="700">like</tspan> to know?</text>
+
+    <g font-family="ui-sans-serif, system-ui, sans-serif">
+      <rect x="900" y="368" width="560" height="78" rx="16" fill="#ffffff" stroke="#d5dee6"/>
+      <circle cx="938" cy="407" r="16" fill="#eef2f5"/>
+      <circle cx="938" cy="401" r="6" stroke="#5b6b78" stroke-width="1.5"/>
+      <path d="M926 419c2-6 7-9 12-9s10 3 12 9" stroke="#5b6b78" stroke-width="1.5" fill="none"/>
+      <text x="968" y="414" fill="#1c2a32" font-size="18" font-weight="600">Track my shipment</text>
+
+      <rect x="900" y="462" width="560" height="78" rx="16" fill="#ffffff" stroke="#d5dee6"/>
+      <circle cx="938" cy="501" r="16" fill="#eef2f5"/>
+      <rect x="930" y="493" width="16" height="16" rx="3" stroke="#5b6b78" stroke-width="1.5"/>
+      <text x="968" y="508" fill="#1c2a32" font-size="18" font-weight="600">Show upcoming ETAs</text>
+
+      <rect x="900" y="556" width="560" height="78" rx="16" fill="#ffffff" stroke="#d5dee6"/>
+      <circle cx="938" cy="595" r="16" fill="#eef2f5"/>
+      <path d="M938 586v18M929 595h18" stroke="#5b6b78" stroke-width="1.5" stroke-linecap="round"/>
+      <text x="968" y="602" fill="#1c2a32" font-size="18" font-weight="600">View delayed shipments</text>
+    </g>
+
+    <rect x="900" y="788" width="478" height="56" rx="14" fill="#ffffff" stroke="#d5dee6"/>
+    <text x="922" y="822" fill="#9aa3b0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16">Ask a question...</text>
+    <rect x="1392" y="788" width="68" height="56" rx="12" fill="#33657c"/>
+    <path d="M1416 806l32 10-14 6-6 14-12-30Z" fill="#ffffff"/>
+  </g>
+
+  <g filter="url(#kaLift)" transform="translate(620 640)">
+    <rect width="280" height="196" rx="16" fill="#ffffff" stroke="#d5dee6"/>
+    <rect width="280" height="36" rx="16" fill="#eef4f6"/>
+    <rect y="24" width="280" height="12" fill="#eef4f6"/>
+    <text x="16" y="24" fill="#33657c" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700">Upcoming · this week</text>
+    <text x="16" y="68" fill="#1c2a32" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600">KX-A7J4-73</text>
+    <text x="168" y="68" fill="#5b6b78" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12">Fri · Hamburg</text>
+    <text x="16" y="98" fill="#1c2a32" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600">KX-U1C6-8389</text>
+    <text x="168" y="98" fill="#8a3e2c" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12">Delayed</text>
+    <text x="16" y="128" fill="#1c2a32" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600">KX-M2P9-441</text>
+    <text x="168" y="128" fill="#2f6b52" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12">In transit</text>
+    <rect x="16" y="150" width="88" height="28" rx="14" fill="#33657c"/>
+    <text x="32" y="169" fill="#ffffff" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600">Open list</text>
+  </g>
+
+  <text x="168" y="920" fill="#a8c4a0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="700" letter-spacing="7">KLEARNOW</text>
+  <text x="166" y="1006" fill="#071014" font-family="ui-sans-serif, system-ui, sans-serif" font-size="72" font-weight="800">Ask the platform.</text>
+  <text x="164" y="1004" fill="#ffffff" font-family="ui-sans-serif, system-ui, sans-serif" font-size="72" font-weight="800">Ask the platform.</text>
+  <text x="168" y="1062" fill="#d7ddd8" font-family="ui-sans-serif, system-ui, sans-serif" font-size="28" font-weight="600">Get the record. Take the action.</text>
 </svg>

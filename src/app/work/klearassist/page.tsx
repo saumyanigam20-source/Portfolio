@@ -63,7 +63,7 @@ export default function KlearAssistPage() {
             src={meta.cover}
             alt=""
             width={1600}
-            height={1000}
+            height={1200}
             priority
             unoptimized
             className="h-auto w-full"
