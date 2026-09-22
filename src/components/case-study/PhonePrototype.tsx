@@ -259,11 +259,11 @@ function Dashboard({ go }: { go: (next: Screen) => void }) {
       </p>
 
       <SectionLabel color="#e24b4b">Critical Alerts & Action Center</SectionLabel>
-      <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
+      <div className="proto-rail mt-2 flex gap-2 pb-1">
         <button
           type="button"
           onClick={() => go("drayage")}
-          className="min-w-[72%] rounded-2xl border border-[#f3c4c8] p-3 text-left"
+          className="min-w-[78%] snap-start rounded-2xl border border-[#f3c4c8] p-3 text-left"
           style={{
             background:
               "linear-gradient(165deg, #fff8f9 0%, #fde8ec 52%, #f6d2d9 100%)",
@@ -277,14 +277,14 @@ function Dashboard({ go }: { go: (next: Screen) => void }) {
             12 containers are approaching their last free day. Take action now to
             avoid demurrage fees.
           </p>
-          <span className="proto-btn mt-3 inline-flex rounded-full border border-[#c9d4e3] bg-white px-3 py-1.5 text-[11px] font-medium text-[#3d4d63]">
+          <span className="proto-btn mt-3 inline-flex rounded-full border border-[#2f5f68] bg-white px-3.5 py-1.5 text-[11px] font-semibold text-[#2f5f68]">
             Request Drayage
           </span>
         </button>
         <button
           type="button"
           onClick={() => go("visibility")}
-          className="min-w-[72%] rounded-2xl border border-[#f0e0c4] p-3 text-left"
+          className="min-w-[78%] snap-start rounded-2xl border border-[#f0e0c4] p-3 text-left"
           style={{
             background:
               "linear-gradient(165deg, #fffaf3 0%, #f8ecd8 52%, #f3dfc0 100%)",
@@ -298,7 +298,7 @@ function Dashboard({ go }: { go: (next: Screen) => void }) {
             8 shipments have been delayed. The next estimated arrival is Apr 15,
             2024.
           </p>
-          <span className="proto-btn mt-3 inline-flex rounded-full border border-[#c9d4e3] bg-white px-3 py-1.5 text-[11px] font-medium text-[#3d4d63]">
+          <span className="proto-btn mt-3 inline-flex rounded-full border border-[#2f5f68] bg-white px-3.5 py-1.5 text-[11px] font-semibold text-[#2f5f68]">
             View Delayed
           </span>
         </button>
@@ -326,47 +326,63 @@ function Overview({
   setOverlay: (overlay: Overlay) => void;
 }) {
   return (
-    <div className="px-4 pb-5 pt-2">
-      <div className="flex items-start justify-between gap-2">
-        <h3 className="text-[20px] font-semibold tracking-[-0.03em]">KlearHub Overview</h3>
+    <div className="px-3.5 pb-4 pt-1.5">
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-[15px] font-semibold tracking-[-0.02em]">
+          KlearHub Overview
+        </h3>
         <button
           type="button"
           aria-label="Open filters"
           onClick={() => setOverlay("filters")}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#d8dee8] bg-white text-[15px]"
+          className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#d8dee8] bg-white text-[12px]"
         >
           ☰
         </button>
       </div>
-      <div className="mt-3 flex gap-2">
-        <span className="flex-1 rounded-lg bg-[#2f5f68] py-2 text-center text-[11px] font-semibold tracking-wide text-white">
+      <div className="mt-2 flex gap-1.5">
+        <span className="flex-1 rounded-md bg-[#2f5f68] py-1.5 text-center text-[10px] font-semibold tracking-wide text-white">
           KLEARVIEW
         </span>
-        <span className="proto-btn flex-1 rounded-lg border border-[#d8dee8] bg-white py-2 text-center text-[11px] font-semibold tracking-wide text-[#6b7380]">
+        <span className="proto-btn flex-1 rounded-md border border-[#d8dee8] bg-white py-1.5 text-center text-[10px] font-semibold tracking-wide text-[#6b7380]">
           CONTAINER
         </span>
       </div>
-      <div className="mt-3 space-y-2">
-        <RowKpi title="Active Shipments" delta="+12% vs last month" value="147" />
-        <RowKpi title="Waiting to Depart" delta="+5% vs last month" value="19" />
+      <div className="mt-2 space-y-1.5">
+        <RowKpi
+          compact
+          title="Active Shipments"
+          delta="+12% vs last month"
+          value="147"
+        />
+        <RowKpi
+          compact
+          title="Waiting to Depart"
+          delta="+5% vs last month"
+          value="19"
+        />
       </div>
-      <p className="mt-4 text-[13px] font-semibold">Ocean Shipments</p>
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        <Kpi title="Active MBLs" delta="+12% vs last month" value="1099" />
-        <Kpi title="Completed" delta="+2.1% vs last month" value="2033" />
-        <Kpi title="On hold" delta="-1.1% vs last month" value="14" down />
-        <Kpi title="Exceptions" delta="+4 this week" value="6" down />
+      <p className="mt-3 text-[11px] font-semibold">Ocean Shipments</p>
+      <div className="mt-1.5 grid grid-cols-2 gap-1.5">
+        <Kpi compact title="Active MBLs" delta="+12% MoM" value="1099" />
+        <Kpi compact title="Completed" delta="+2.1% MoM" value="2033" />
+        <Kpi compact title="On hold" delta="-1.1% MoM" value="14" down />
+        <Kpi compact title="Exceptions" delta="+4 this week" value="6" down />
       </div>
-      <p className="mt-4 text-[13px] font-semibold text-[#e26a2d]">Port of Lading</p>
-      <div className="mt-2 space-y-2">
-        <LinkRow label="Waiting to Depart POL" value="0 MBLs" />
-        <LinkRow label="At POL — ready" value="24 MBLs" />
-        <LinkRow label="Departed this week" value="18 MBLs" />
+      <p className="mt-3 text-[11px] font-semibold text-[#e26a2d]">
+        Port of Lading
+      </p>
+      <div className="mt-1.5 space-y-1.5">
+        <LinkRow compact label="Waiting to Depart POL" value="0 MBLs" />
+        <LinkRow compact label="At POL — ready" value="24 MBLs" />
+        <LinkRow compact label="Departed this week" value="18 MBLs" />
       </div>
-      <p className="mt-4 text-[13px] font-semibold text-[#2aa3a8]">Port of Unlading</p>
-      <div className="mt-2 space-y-2">
-        <LinkRow label="Arriving this week" value="9 MBLs" />
-        <LinkRow label="At destination" value="31 MBLs" />
+      <p className="mt-3 text-[11px] font-semibold text-[#2aa3a8]">
+        Port of Unlading
+      </p>
+      <div className="mt-1.5 space-y-1.5">
+        <LinkRow compact label="Arriving this week" value="9 MBLs" />
+        <LinkRow compact label="At destination" value="31 MBLs" />
       </div>
     </div>
   );
@@ -387,8 +403,8 @@ function Visibility({
         {filtered ? "KlearHub Shipments" : "Visibility"}
       </h3>
       <div className="mt-3 flex gap-2">
-        <div className="flex flex-1 items-center gap-2 rounded-xl border border-[#d8dee8] bg-white px-3 py-2 text-[11px] text-[#9aa3b0]">
-          Search by Shipment ID, container nu...
+        <div className="flex h-10 min-w-0 flex-1 items-center rounded-xl border border-[#d8dee8] bg-white px-3 text-[11px] text-[#9aa3b0]">
+          <span className="truncate">Search by shipment ID, container…</span>
         </div>
         <button
           type="button"
@@ -412,23 +428,30 @@ function Visibility({
       ) : null}
       <div className="mt-3 space-y-3">
         <ShipmentCard
-          company="Schlumberger Argentina..."
+          company="Schlumberger Argentina"
           knId="KX-A7J4-73"
-          origin="Charleston (USC)"
+          status="At POL"
+          origin="Charleston"
+          originCode="USC"
           originDate="Aug 21, 2025 ETD"
-          dest="Hamburg (DEHAM)"
+          dest="Hamburg"
+          destCode="DEHAM"
           destDate="Sep 22, 2025 ETA"
           container="HLBU8168248"
-          po="HLBU8168248"
+          po="4514710485"
           mbol="HLCUOS1250801516"
           onClick={() => go("shipment")}
         />
         <ShipmentCard
           company="MI-Overseas"
           knId="KX-U1C6-8389"
-          origin="Houston, USA (USHOU)"
+          status="In Transit"
+          statusTone="warn"
+          origin="Houston"
+          originCode="USHOU"
           originDate="Aug 21, 2025 ETD"
-          dest="Genove, Italy (ITGOA)"
+          dest="Genoa"
+          destCode="ITGOA"
           destDate="Oct 10, 2025 ETA"
           container="—"
           po="4514710485"
@@ -438,9 +461,13 @@ function Visibility({
         <ShipmentCard
           company="Global Trade Inc."
           knId="KX-UIC8-900"
-          origin="Los Angeles (USLAX)"
+          status="Delayed"
+          statusTone="alert"
+          origin="Los Angeles"
+          originCode="USLAX"
           originDate="Aug 25, 2025 ETD"
-          dest="Rotterdam (NLRTM)"
+          dest="Rotterdam"
+          destCode="NLRTM"
           destDate="Sep 28, 2025 ETA"
           container="MSKU1234567"
           po="789654123"
@@ -465,9 +492,7 @@ function Shipment({ go }: { go: (next: Screen) => void }) {
           ←
         </button>
         <p className="flex-1 text-[15px] font-semibold">Shipment: KX-A7J4-73</p>
-        <span className="rounded-full border border-[#8fd4a4] px-2 py-0.5 text-[10px] font-medium text-[#2f9a55]">
-          At POL
-        </span>
+        <StatusChip label="At POL" />
       </div>
 
       <Accordion title="Basic Information" icon="👤">
@@ -509,7 +534,9 @@ function Shipment({ go }: { go: (next: Screen) => void }) {
         <p className="mt-1 text-[11px] text-[#7b8494]">
           Commercial Invoice · ingested Sep 19, 2025
         </p>
-        <p className="mt-2 text-[11px] font-medium text-[#2f5f68]">Open preview →</p>
+        <span className="proto-btn mt-3 inline-flex rounded-full border border-[#2f5f68] bg-white px-3.5 py-1.5 text-[11px] font-semibold text-[#2f5f68]">
+          Open preview
+        </span>
       </button>
     </div>
   );
@@ -599,10 +626,10 @@ function Preview({
       </div>
       <div className="min-h-[420px] flex-1 bg-[#eef1f4]" />
       <div className="grid grid-cols-2 gap-3 px-4 py-4">
-        <span className="proto-btn rounded-xl border border-[#c9d4e3] py-3 text-center text-[13px]">
+        <span className="proto-btn rounded-xl border border-[#c9d4e3] bg-white py-3 text-center text-[13px] font-medium text-[#3d4d63]">
           ‹ Previous
         </span>
-        <span className="proto-btn rounded-xl border border-[#c9d4e3] py-3 text-center text-[13px]">
+        <span className="proto-btn rounded-xl border border-[#2f5f68] bg-white py-3 text-center text-[13px] font-semibold text-[#2f5f68]">
           Next ›
         </span>
       </div>
@@ -769,6 +796,20 @@ function StatusBar() {
   );
 }
 
+function TabGlyph({ src }: { src: string }) {
+  return (
+    <span className="flex h-3.5 w-3.5 items-center justify-center">
+      <img
+        src={src}
+        alt=""
+        width={14}
+        height={14}
+        className="h-3.5 w-3.5 object-contain brightness-0 invert"
+      />
+    </span>
+  );
+}
+
 function TabBar({
   active,
   onDashboard,
@@ -778,48 +819,49 @@ function TabBar({
   onDashboard: () => void;
   onKlearHub: () => void;
 }) {
+  const tabClass =
+    "flex h-full flex-col items-center justify-center gap-1 px-1 py-1 leading-none";
+
   return (
-    <div className="grid shrink-0 grid-cols-4 bg-[#3a6a72] pb-3 pt-2 text-[9px] text-white/70">
+    <div className="grid h-[52px] shrink-0 grid-cols-4 items-stretch bg-[#3a6a72] pb-2 pt-1.5 text-[9px] text-white/70">
       <button
         type="button"
         onClick={onDashboard}
-        className={`flex flex-col items-center gap-0.5 ${active === "dashboard" ? "text-white" : ""}`}
+        className={`${tabClass} ${active === "dashboard" ? "text-white" : ""}`}
       >
-        <img
-          src="/images/prototype/dashboard-tab.png"
-          alt=""
-          width={14}
-          height={14}
-          className="h-3.5 w-3.5 brightness-0 invert"
-        />
+        <TabGlyph src="/images/prototype/dashboard-tab.png" />
         Dashboard
       </button>
       <button
         type="button"
         onClick={onKlearHub}
-        className={`flex flex-col items-center gap-0.5 ${active === "klearhub" ? "bg-[#2f5a61] text-white" : ""}`}
+        className={`${tabClass} ${active === "klearhub" ? "rounded-md bg-[#2f5a61] text-white" : ""}`}
       >
-        <img
-          src="/images/prototype/klearhub-tab.png"
-          alt=""
-          width={14}
-          height={14}
-          className="h-3.5 w-3.5 brightness-0 invert"
-        />
+        <TabGlyph src="/images/prototype/klearhub-tab.png" />
         KlearHub
       </button>
-      <span className="flex flex-col items-center gap-0.5">
-        <img
-          src="/images/prototype/notifications-tab.png"
-          alt=""
-          width={14}
-          height={14}
-          className="h-3.5 w-3.5 brightness-0 invert"
-        />
+      <span className={tabClass}>
+        <TabGlyph src="/images/prototype/notifications-tab.png" />
         Notifications
       </span>
-      <span className="flex flex-col items-center gap-0.5">
-        <span className="text-[14px]">☰</span>
+      <span className={tabClass}>
+        <span className="flex h-3.5 w-3.5 items-center justify-center">
+          <svg
+            viewBox="0 0 14 14"
+            width={14}
+            height={14}
+            className="h-3.5 w-3.5"
+            fill="none"
+            aria-hidden
+          >
+            <path
+              d="M2.5 4h9M2.5 7h9M2.5 10h9"
+              stroke="currentColor"
+              strokeWidth="1.35"
+              strokeLinecap="round"
+            />
+          </svg>
+        </span>
         More
       </span>
     </div>
@@ -867,19 +909,41 @@ function Kpi({
   delta,
   value,
   down,
+  compact,
 }: {
   title: string;
   delta: string;
   value: string;
   down?: boolean;
+  compact?: boolean;
 }) {
   return (
-    <div className="proto-kpi rounded-2xl bg-white p-3 shadow-[0_0_0_1px_rgba(28,42,50,0.05)]">
-      <p className="text-[11px] font-medium leading-snug">{title}</p>
-      <p className={`mt-1 text-[10px] ${down ? "text-[#d14b4b]" : "text-[#2f9a55]"}`}>
+    <div
+      className={`proto-kpi bg-white shadow-[0_0_0_1px_rgba(28,42,50,0.05)] ${
+        compact ? "rounded-xl p-2" : "rounded-2xl p-3"
+      }`}
+    >
+      <p
+        className={`font-medium leading-snug ${
+          compact ? "truncate text-[10px]" : "text-[11px]"
+        }`}
+      >
+        {title}
+      </p>
+      <p
+        className={`mt-0.5 truncate ${
+          compact ? "text-[9px]" : "mt-1 text-[10px]"
+        } ${down ? "text-[#d14b4b]" : "text-[#2f9a55]"}`}
+      >
         {delta}
       </p>
-      <p className="mt-2 text-[18px] font-semibold tracking-[-0.03em]">{value}</p>
+      <p
+        className={`font-semibold tracking-[-0.03em] ${
+          compact ? "mt-1 text-[15px]" : "mt-2 text-[18px]"
+        }`}
+      >
+        {value}
+      </p>
     </div>
   );
 }
@@ -888,27 +952,61 @@ function RowKpi({
   title,
   delta,
   value,
+  compact,
 }: {
   title: string;
   delta: string;
   value: string;
+  compact?: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between rounded-2xl bg-white px-3 py-3 shadow-[0_0_0_1px_rgba(28,42,50,0.05)]">
-      <div>
-        <p className="text-[13px] font-medium">{title}</p>
-        <p className="text-[10px] text-[#2f9a55]">{delta}</p>
+    <div
+      className={`flex items-center justify-between bg-white shadow-[0_0_0_1px_rgba(28,42,50,0.05)] ${
+        compact
+          ? "rounded-xl px-2.5 py-2"
+          : "rounded-2xl px-3 py-3"
+      }`}
+    >
+      <div className="min-w-0">
+        <p className={`font-medium ${compact ? "text-[11px]" : "text-[13px]"}`}>
+          {title}
+        </p>
+        <p className={`text-[#2f9a55] ${compact ? "text-[9px]" : "text-[10px]"}`}>
+          {delta}
+        </p>
       </div>
-      <p className="text-[20px] font-semibold">{value}</p>
+      <p
+        className={`shrink-0 font-semibold ${
+          compact ? "text-[16px]" : "text-[20px]"
+        }`}
+      >
+        {value}
+      </p>
     </div>
   );
 }
 
-function LinkRow({ label, value }: { label: string; value: string }) {
+function LinkRow({
+  label,
+  value,
+  compact,
+}: {
+  label: string;
+  value: string;
+  compact?: boolean;
+}) {
   return (
-    <div className="proto-row flex items-center justify-between rounded-2xl bg-white px-3 py-3 text-[12px] shadow-[0_0_0_1px_rgba(28,42,50,0.05)]">
-      <span>{label}</span>
-      <span className="proto-row-meta font-medium text-[#2f5f68]">{value} ›</span>
+    <div
+      className={`proto-row flex items-center justify-between bg-white shadow-[0_0_0_1px_rgba(28,42,50,0.05)] ${
+        compact
+          ? "rounded-xl px-2.5 py-2 text-[11px]"
+          : "rounded-2xl px-3 py-3 text-[12px]"
+      }`}
+    >
+      <span className="min-w-0 truncate">{label}</span>
+      <span className="proto-row-meta shrink-0 font-medium text-[#2f5f68]">
+        {value} ›
+      </span>
     </div>
   );
 }
@@ -950,12 +1048,38 @@ function Chip({ children }: { children: ReactNode }) {
   );
 }
 
+function StatusChip({
+  label,
+  tone = "ok",
+}: {
+  label: string;
+  tone?: "ok" | "warn" | "alert";
+}) {
+  const tones = {
+    ok: "border-[#9ed4b0] bg-[#f1faf4] text-[#217a45]",
+    warn: "border-[#e6c58a] bg-[#fff8ee] text-[#9a6b1e]",
+    alert: "border-[#efb4b8] bg-[#fff5f6] text-[#c0434d]",
+  };
+
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-full border px-2.5 py-1 text-[10px] font-medium leading-none ${tones[tone]}`}
+    >
+      {label}
+    </span>
+  );
+}
+
 function ShipmentCard({
   company,
   knId,
+  status = "At POL",
+  statusTone = "ok",
   origin,
+  originCode,
   originDate,
   dest,
+  destCode,
   destDate,
   container,
   po,
@@ -964,60 +1088,76 @@ function ShipmentCard({
 }: {
   company: string;
   knId: string;
+  status?: string;
+  statusTone?: "ok" | "warn" | "alert";
   origin: string;
+  originCode: string;
   originDate: string;
   dest: string;
+  destCode: string;
   destDate: string;
   container: string;
   po: string;
   mbol: string;
   onClick: () => void;
 }) {
+  const bar =
+    statusTone === "alert"
+      ? "from-[#e36a73] via-[#e36a73]/70 to-transparent"
+      : statusTone === "warn"
+        ? "from-[#d4a24a] via-[#d4a24a]/70 to-transparent"
+        : "from-[#3dba6e] via-[#3dba6e]/75 to-transparent";
+
   return (
     <button
       type="button"
       onClick={onClick}
-      className="w-full overflow-hidden rounded-2xl bg-white text-left shadow-[0_0_0_1px_rgba(28,42,50,0.06)]"
+      className="w-full overflow-hidden rounded-[1.15rem] bg-white text-left shadow-[0_0_0_1px_rgba(28,42,50,0.08)]"
     >
-      <div className="flex items-start justify-between px-3 pt-3">
-        <div>
-          <p className="text-[13px] font-semibold">{company}</p>
-          <p className="text-[10px] text-[#7b8494]">
-            {knId} | Import
+      <div className="flex items-start gap-2 px-3.5 pt-3.5">
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[13px] font-semibold leading-snug">{company}</p>
+          <p className="mt-0.5 truncate text-[10px] text-[#7b8494]">
+            {knId} · Import
           </p>
         </div>
-        <span className="rounded-full border border-[#8fd4a4] px-2 py-0.5 text-[10px] text-[#2f9a55]">
-          At POL
-        </span>
+        <StatusChip label={status} tone={statusTone} />
       </div>
-      <div className="mt-3 grid grid-cols-2 gap-2 px-3 text-[11px]">
-        <div>
-          <p className="font-medium">{origin}</p>
-          <p className="text-[10px] text-[#7b8494]">{originDate}</p>
+      <div className="mt-3 grid grid-cols-[minmax(0,1fr)_12px_minmax(0,1fr)] items-start px-3.5">
+        <div className="min-w-0 pr-1">
+          <p className="truncate text-[12px] font-semibold leading-tight">{origin}</p>
+          <p className="mt-0.5 text-[10px] text-[#7b8494]">{originCode}</p>
+          <p className="mt-1 text-[10px] leading-snug text-[#7b8494]">{originDate}</p>
         </div>
-        <div>
-          <p className="font-medium">{dest}</p>
-          <p className="text-[10px] text-[#7b8494]">{destDate}</p>
+        <span className="pt-0.5 text-center text-[11px] text-[#b0b8c4]" aria-hidden>
+          →
+        </span>
+        <div className="min-w-0 pl-1">
+          <p className="truncate text-[12px] font-semibold leading-tight">{dest}</p>
+          <p className="mt-0.5 text-[10px] text-[#7b8494]">{destCode}</p>
+          <p className="mt-1 text-[10px] leading-snug text-[#7b8494]">{destDate}</p>
         </div>
       </div>
-      <div className="mt-3 grid grid-cols-3 gap-1 border-t border-[#eef1f4] px-3 py-2 text-[9px] text-[#7b8494]">
-        <span>
-          Container
-          <br />
-          <span className="text-[10px] text-[#1c2a32]">{container}</span>
-        </span>
-        <span>
-          PO
-          <br />
-          <span className="text-[10px] text-[#1c2a32]">{po}</span>
-        </span>
-        <span>
-          MBOL
-          <br />
-          <span className="text-[10px] text-[#1c2a32]">{mbol}</span>
-        </span>
+      <div className="mt-3 grid grid-cols-3 gap-2.5 border-t border-[#eef1f4] px-3.5 py-2.5">
+        {[
+          ["Container", container],
+          ["PO", po],
+          ["MBOL", mbol],
+        ].map(([label, value]) => (
+          <div key={label} className="min-w-0">
+            <p className="text-[9px] font-medium uppercase tracking-[0.04em] text-[#8a93a1]">
+              {label}
+            </p>
+            <p
+              className="mt-0.5 truncate font-mono text-[9.5px] font-medium leading-snug text-[#1c2a32]"
+              title={value}
+            >
+              {value}
+            </p>
+          </div>
+        ))}
       </div>
-      <div className="h-1 bg-gradient-to-r from-[#3dba6e] via-[#3dba6e] to-transparent" />
+      <div className={`h-1 bg-gradient-to-r ${bar}`} />
     </button>
   );
 }

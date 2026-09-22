@@ -284,18 +284,19 @@ a {
 
 .proto-device button,
 .proto-btn {
+  cursor: pointer;
   transition:
-    transform 160ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 160ms ease,
-    filter 160ms ease,
-    background 160ms ease,
-    border-color 160ms ease,
-    color 160ms ease;
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 220ms ease,
+    filter 220ms ease,
+    background 220ms ease,
+    border-color 220ms ease,
+    color 220ms ease;
 }
 
 .proto-device button:hover {
   transform: translateY(-1px);
-  filter: brightness(1.07);
+  filter: brightness(1.04);
 }
 
 .proto-device button:active {
@@ -303,17 +304,35 @@ a {
   filter: brightness(0.98);
 }
 
-.proto-btn:hover,
-.proto-device button:hover .proto-btn {
-  transform: translateY(-1px);
-  background: linear-gradient(180deg, #ffffff 0%, #e7f2f4 100%);
-  border-color: #8aa8b0;
-  box-shadow: 0 4px 10px rgba(47, 95, 104, 0.16);
-  color: #2f5f68;
+@media (hover: hover) and (pointer: fine) {
+  .proto-btn:hover,
+  .proto-device button:hover .proto-btn {
+    transform: translateY(-2px) scale(1.04);
+    background: #2f5f68;
+    border-color: #2f5f68;
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(47, 95, 104, 0.28);
+  }
+
+  .proto-btn:active,
+  .proto-device button:active .proto-btn {
+    transform: translateY(0) scale(0.96);
+    box-shadow: 0 2px 6px rgba(47, 95, 104, 0.18);
+  }
 }
 
-.proto-btn:active {
-  transform: scale(0.97);
+.proto-rail {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  touch-action: pan-x;
+}
+
+.proto-rail::-webkit-scrollbar {
+  display: none;
+  height: 0;
 }
 
 .proto-device {
