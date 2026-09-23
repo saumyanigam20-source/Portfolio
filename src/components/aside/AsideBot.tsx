@@ -168,7 +168,7 @@ export function AsideBot() {
         <section
           id="aside-panel"
           role="dialog"
-          aria-label="Aside, a portfolio companion"
+          aria-label="So, Maya!, a portfolio companion"
           className="aside-panel mb-3 flex h-[min(72vh,540px)] w-[min(100vw-2rem,380px)] flex-col overflow-hidden rounded-[1.25rem] border border-line bg-[#121513] text-ink shadow-[0_24px_70px_rgba(0,0,0,0.45)]"
         >
           <header className="flex items-center justify-between border-b border-line px-4 py-3">
@@ -187,7 +187,7 @@ export function AsideBot() {
               )}
               <div>
                 <p className="font-display text-[15px] leading-none font-semibold tracking-[-0.03em]">
-                  Aside
+                  So, Maya!
                 </p>
                 <p className="mt-1 text-[10px] tracking-[0.16em] text-faint uppercase">
                   Portfolio margin
@@ -196,7 +196,7 @@ export function AsideBot() {
             </div>
             <button
               type="button"
-              aria-label="Close Aside"
+              aria-label="Close So, Maya!"
               onClick={() => setOpen(false)}
               className="flex h-8 w-8 items-center justify-center rounded-full text-muted hover:bg-white/5 hover:text-ink"
             >
@@ -227,7 +227,7 @@ export function AsideBot() {
           <form onSubmit={sendDraft} className="flex items-center gap-2 border-t border-line px-3 py-3">
             <input
               ref={inputRef}
-              aria-label="Ask Aside"
+              aria-label="Ask So, Maya!"
               value={draft}
               disabled={thinking}
               onChange={(event) => setDraft(event.target.value)}
@@ -273,7 +273,7 @@ export function AsideBot() {
           {open ? <CloseIcon /> : <Avatar cover />}
         </span>
         <span className="font-display text-sm font-semibold tracking-[-0.02em]">
-          {open ? "Close" : "Aside"}
+          {open ? "Close" : "So, Maya!"}
         </span>
       </button>
     </div>
@@ -567,7 +567,7 @@ function Avatar({ cover = false }: { cover?: boolean }) {
 
 function Typing() {
   return (
-    <div className="flex items-end gap-2" aria-label="Aside is thinking">
+    <div className="flex items-end gap-2" aria-label="So, Maya! is thinking">
       <Avatar />
       <div className="inline-flex items-center gap-1 rounded-2xl rounded-tl-md border border-line bg-[#1a1f1b] px-3 py-3">
         <span className="aside-typing flex items-center gap-1">
