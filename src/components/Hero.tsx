@@ -17,8 +17,12 @@ export function Hero() {
       />
 
       <div className="relative mx-auto w-full max-w-6xl">
-        <p className="animate-rise font-display text-[clamp(2rem,6vw,3.5rem)] font-semibold tracking-[-0.04em] text-accent">
-          Saumya
+        <p className="name-mark font-display text-[clamp(2rem,6vw,3.5rem)] font-semibold tracking-[-0.04em] text-accent" aria-label="Saumya">
+          {"Saumya".split("").map((letter, index) => (
+            <span key={letter + index} style={{ ["--i" as string]: index }} aria-hidden>
+              {letter}
+            </span>
+          ))}
         </p>
         <h1 className="animate-rise delay-1 mt-3 max-w-4xl font-display text-[clamp(2.2rem,6.5vw,4.4rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
           {profile.headline}

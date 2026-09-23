@@ -5,7 +5,7 @@ export const profile = {
   supporting:
     "I design logistics, operations, and conversational UX — dense systems, made easier to use.",
   currently:
-    "I'm a UX Designer III at KlearNow, designing enterprise experiences for logistics and operations. I specialise in user research, product design, and conversational UX — turning complex workflows into clear, scalable flows.",
+    "I'm a UX Designer III at KlearNow, designing enterprise experiences for logistics and operations. Thirteen years in — from visual systems to B2B product — I specialise in research, product design, and conversational UX, turning dense workflows into flows people can actually run.",
   role: "UX Designer III",
   company: "KlearNow",
   location: "Gurgaon, India",

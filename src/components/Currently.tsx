@@ -1,11 +1,9 @@
+import Link from "next/link";
 import { profile } from "@/lib/profile";
 
 export function Currently() {
   return (
-    <section
-      id="about"
-      className="mx-auto max-w-4xl px-6 py-24 sm:px-10 sm:py-32 lg:px-16"
-    >
+    <section className="mx-auto max-w-4xl px-6 py-24 sm:px-10 sm:py-32 lg:px-16">
       <p className="text-xs font-medium tracking-[0.22em] text-faint uppercase">
         Currently
       </p>
@@ -26,6 +24,13 @@ export function Currently() {
       <p className="mt-8 text-sm tracking-wide text-muted">
         {profile.role} · {profile.location}
       </p>
+      <Link
+        href="/about"
+        className="mt-8 inline-flex items-center gap-2 text-sm text-ink transition hover:text-accent"
+      >
+        The story, process, and how I design
+        <span aria-hidden>→</span>
+      </Link>
     </section>
   );
 }

@@ -37,7 +37,6 @@ export function getCaseStudySlugs(): string[] {
 const preferredOrder = [
   "track-and-trace",
   "klearassist",
-  "sso-configuration",
   "tracking-tool-redesign",
 ];
 

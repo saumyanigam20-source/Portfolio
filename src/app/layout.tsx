@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, Syne } from "next/font/google";
+import { AsideBot } from "@/components/aside/AsideBot";
 import { Nav } from "@/components/Nav";
 import { profile } from "@/lib/profile";
 import "./globals.css";
@@ -32,6 +33,7 @@ export default function RootLayout({
         <div className="noise" aria-hidden />
         <Nav />
         {children}
+        <AsideBot />
       </body>
     </html>
   );

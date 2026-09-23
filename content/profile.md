@@ -11,13 +11,12 @@ source: https://worried-swim-808.notion.site/Hi-I-am-Saumya-2f211403363580a7970e
 
 ## Currently
 
-I’m a UX Designer III at KlearNow with a background in digital and product design, currently focused on building intuitive enterprise experiences for logistics and operations platforms. I specialise in user research, product design, and conversational UX, translating complex business needs into simple, scalable user flows.
+I’m a UX Designer III at KlearNow with thirteen years of design behind me — NIFT, visual systems at HouseThis, now B2B product for customs and logistics. I specialise in user research, product design, and conversational UX, translating complex business needs into simple, scalable user flows. Full story: /about.
 
 ## Selected work (migrated)
 
 1. KlearAssist – Conversational AI Assistant
-2. SSO Configuration
-3. Klearnow Tracking Tool Redesign
+2. Klearnow Tracking Tool Redesign
 
 ## Other work still on Notion (not migrated yet)
 

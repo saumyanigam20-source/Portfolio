@@ -15,7 +15,7 @@ export function SelectedWork({ projects }: { projects: CaseStudyMeta[] }) {
           </h2>
         </div>
         <p className="hidden max-w-xs text-right text-sm leading-relaxed text-muted sm:block">
-          Selected work from KlearNow — mobile Track &amp; Trace, AI, identity, and logistics tooling.
+          Selected work from KlearNow — mobile Track &amp; Trace, AI, and logistics tooling.
         </p>
       </div>
 

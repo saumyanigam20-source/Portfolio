@@ -1,19 +1,26 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const links = [
   { href: "/#home", label: "Home", icon: HomeIcon },
   { href: "/#work", label: "Work", icon: WorkIcon },
-  { href: "/#about", label: "About", icon: AboutIcon },
+  { href: "/about", label: "About", icon: AboutIcon },
 ];
 
 export function Nav() {
-  const [active, setActive] = useState("/#home");
+  const pathname = usePathname();
+  const [active, setActive] = useState(pathname === "/about" ? "/about" : "/#home");
 
   useEffect(() => {
-    const sections = ["home", "work", "about"];
+    if (pathname === "/about") {
+      setActive("/about");
+      return;
+    }
+
+    const sections = ["home", "work"];
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
@@ -32,7 +39,7 @@ export function Nav() {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [pathname]);
 
   return (
     <nav
