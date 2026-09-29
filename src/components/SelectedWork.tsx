@@ -24,7 +24,7 @@ export function SelectedWork({ projects }: { projects: CaseStudyMeta[] }) {
           <li key={project.slug}>
             <Link
               href={`/work/${project.slug}`}
-              className="group block overflow-hidden rounded-2xl border border-line bg-canvas-elevated transition duration-500 hover:-translate-y-1 hover:border-[rgba(168,196,160,0.35)] hover:shadow-[0_24px_60px_rgba(0,0,0,0.35)]"
+              className="group block overflow-hidden rounded-2xl border border-line bg-canvas-elevated transition duration-500 hover:-translate-y-1 hover:border-[rgba(47,107,62,0.35)] hover:shadow-[0_18px_40px_rgba(28,36,28,0.08)]"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image

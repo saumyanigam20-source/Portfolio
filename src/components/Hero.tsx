@@ -9,11 +9,11 @@ export function Hero() {
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_20%,var(--hero-glow),transparent_55%),radial-gradient(ellipse_at_15%_85%,rgba(168,196,160,0.08),transparent_45%),linear-gradient(180deg,#141916_0%,var(--canvas)_70%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_20%,var(--hero-glow),transparent_55%),radial-gradient(ellipse_at_15%_85%,var(--hero-glow),transparent_45%),linear-gradient(180deg,var(--hero-top)_0%,var(--canvas)_70%)]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:linear-gradient(rgba(236,234,228,0.35)_1px,transparent_1px),linear-gradient(90deg,rgba(236,234,228,0.35)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_75%)]"
+        className="pointer-events-none absolute inset-0 opacity-[0.45] [background-image:linear-gradient(var(--line)_1px,transparent_1px),linear-gradient(90deg,var(--line)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_75%)]"
       />
 
       <div className="relative mx-auto w-full max-w-6xl">
@@ -33,7 +33,7 @@ export function Hero() {
         <div className="animate-rise delay-3 mt-10 flex flex-wrap items-center gap-4">
           <Link
             href="/#work"
-            className="inline-flex items-center rounded-full bg-[#eceae4] px-6 py-3 text-sm font-medium tracking-wide text-[#0e100f] transition hover:bg-accent"
+            className="inline-flex items-center rounded-full bg-ink px-6 py-3 text-sm font-medium tracking-wide text-canvas transition hover:bg-accent hover:text-canvas"
           >
             View selected work
           </Link>

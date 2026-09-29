@@ -78,8 +78,8 @@ export function ChapterRail({
             onClick={() => onPick(index)}
             className={`rounded-full px-2.5 py-1 text-[11px] transition ${
               active === index
-                ? "bg-accent text-[#0e100f]"
-                : "bg-white/5 text-muted hover:text-ink"
+                ? "bg-accent text-canvas"
+                : "bg-ink/5 text-muted hover:text-ink"
             }`}
           >
             {item.era}
@@ -137,7 +137,7 @@ export function ProjectCards({ highlight }: { highlight: string | null }) {
               className={`flex items-center gap-3 rounded-xl border px-2.5 py-2 transition hover:-translate-y-0.5 ${
                 hot
                   ? "border-accent bg-accent-soft"
-                  : "border-line bg-white/[0.03] hover:border-accent/50"
+                  : "border-line bg-ink/5 hover:border-accent/50"
               }`}
             >
               <WorkSketch id={project.id} />
@@ -209,7 +209,7 @@ export function StepRail({
             type="button"
             onClick={() => onPick(index)}
             className={`rounded-full px-2 py-1 text-[10px] tracking-wide transition ${
-              active === index ? "bg-accent text-[#0e100f]" : "bg-white/5 text-muted hover:text-ink"
+              active === index ? "bg-accent text-canvas" : "bg-ink/5 text-muted hover:text-ink"
             }`}
           >
             {item.step}

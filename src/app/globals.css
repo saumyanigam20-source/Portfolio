@@ -1,8 +1,28 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
+  color-scheme: light;
+  --canvas: #f4f6f1;
+  --canvas-elevated: #ffffff;
+  --canvas-tint: #e7eee4;
+  --ink: #1c241c;
+  --muted: #4e5a4e;
+  --faint: #7a8578;
+  --accent: #2f6b3e;
+  --accent-soft: rgba(47, 107, 62, 0.1);
+  --line: rgba(28, 36, 28, 0.1);
+  --hero-glow: rgba(47, 107, 62, 0.14);
+  --hero-top: #e7eee4;
+  --name-flash: #1c241c;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
   --canvas: #0e100f;
   --canvas-elevated: #161a17;
+  --canvas-tint: #121614;
   --ink: #eceae4;
   --muted: #9aa19a;
   --faint: #5c635c;
@@ -10,6 +30,13 @@
   --accent-soft: rgba(168, 196, 160, 0.14);
   --line: rgba(236, 234, 228, 0.08);
   --hero-glow: rgba(168, 196, 160, 0.18);
+  --hero-top: #141916;
+  --name-flash: #f4f6f1;
+}
+
+html[data-theme="dark"] .noise {
+  opacity: 0.04;
+  mix-blend-mode: normal;
 }
 
 @theme inline {
@@ -21,6 +48,7 @@
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-line: var(--line);
+  --color-canvas-tint: var(--canvas-tint);
   --font-display: var(--font-syne);
   --font-body: var(--font-dm-sans);
 }
@@ -45,7 +73,7 @@ body {
 
 ::selection {
   background: var(--accent);
-  color: var(--canvas);
+  color: #f7faf6;
 }
 
 a {
@@ -57,7 +85,8 @@ a {
   position: fixed;
   inset: 0;
   z-index: 50;
-  opacity: 0.04;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -191,7 +220,7 @@ a {
     color: var(--accent);
   }
   10% {
-    color: #f4f6f1;
+    color: var(--name-flash);
   }
 }
 
@@ -476,7 +505,7 @@ a {
   }
 }
 
-.about-theme {
+html:not([data-theme="dark"]) .about-theme {
   --canvas: #f3ece1;
   --canvas-elevated: #fffaf2;
   --ink: #1a1714;
@@ -493,17 +522,17 @@ a {
   color: var(--ink);
 }
 
-body:has(.about-theme) {
+html:not([data-theme="dark"]) body:has(.about-theme) {
   background: #f3ece1;
   color: #1a1714;
 }
 
-body:has(.about-theme) .noise {
+html:not([data-theme="dark"]) body:has(.about-theme) .noise {
   opacity: 0.07;
   mix-blend-mode: multiply;
 }
 
-body:has(.about-theme) ::selection {
+html:not([data-theme="dark"]) body:has(.about-theme) ::selection {
   background: #c45c26;
   color: #fffaf2;
 }
@@ -551,7 +580,7 @@ body:has(.about-theme) ::selection {
   height: 6px;
   margin: 0;
   border-radius: 99px;
-  background: #0e100f;
+  background: var(--ink);
   transform: translate(-50%, -50%);
   transition: left 420ms cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
@@ -727,7 +756,7 @@ body:has(.about-theme) ::selection {
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  scrollbar-color: rgba(236, 234, 228, 0.22) transparent;
+  scrollbar-color: rgba(28, 36, 28, 0.28) transparent;
 }
 
 @keyframes aside-pop {

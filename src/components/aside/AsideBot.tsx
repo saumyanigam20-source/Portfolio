@@ -169,7 +169,7 @@ export function AsideBot() {
           id="aside-panel"
           role="dialog"
           aria-label="So, Maya!, a portfolio companion"
-          className="aside-panel mb-3 flex h-[min(72vh,540px)] w-[min(100vw-2rem,380px)] flex-col overflow-hidden rounded-[1.25rem] border border-line bg-[#121513] text-ink shadow-[0_24px_70px_rgba(0,0,0,0.45)]"
+          className="aside-panel mb-3 flex h-[min(72vh,540px)] w-[min(100vw-2rem,380px)] flex-col overflow-hidden rounded-[1.25rem] border border-line bg-canvas-elevated text-ink shadow-[0_24px_70px_rgba(28,36,28,0.16)]"
         >
           <header className="flex items-center justify-between border-b border-line px-4 py-3">
             <div className="flex items-center gap-2">
@@ -178,7 +178,7 @@ export function AsideBot() {
                   type="button"
                   aria-label="Back to greeting"
                   onClick={goIdle}
-                  className="flex h-7 w-7 items-center justify-center rounded-full text-muted hover:bg-white/5 hover:text-ink"
+                  className="flex h-7 w-7 items-center justify-center rounded-full text-muted hover:bg-ink/5 hover:text-ink"
                 >
                   <BackIcon />
                 </button>
@@ -198,7 +198,7 @@ export function AsideBot() {
               type="button"
               aria-label="Close So, Maya!"
               onClick={() => setOpen(false)}
-              className="flex h-8 w-8 items-center justify-center rounded-full text-muted hover:bg-white/5 hover:text-ink"
+              className="flex h-8 w-8 items-center justify-center rounded-full text-muted hover:bg-ink/5 hover:text-ink"
             >
               <CloseIcon />
             </button>
@@ -232,7 +232,7 @@ export function AsideBot() {
               disabled={thinking}
               onChange={(event) => setDraft(event.target.value)}
               placeholder="Ask something, even if it's irrelevant…"
-              className="h-10 min-w-0 flex-1 rounded-xl border border-line bg-white/[0.03] px-3 text-[13px] text-ink outline-none placeholder:text-faint focus:border-accent disabled:opacity-60"
+              className="h-10 min-w-0 flex-1 rounded-xl border border-line bg-ink/5 px-3 text-[13px] text-ink outline-none placeholder:text-faint focus:border-accent disabled:opacity-60"
             />
             {thinking ? (
               <button
@@ -248,7 +248,7 @@ export function AsideBot() {
                 type="submit"
                 aria-label="Send"
                 disabled={!draft.trim()}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent text-[#0e100f] disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent text-canvas disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <SendIcon />
               </button>
@@ -263,11 +263,11 @@ export function AsideBot() {
         aria-expanded={open}
         aria-controls="aside-panel"
         onClick={() => setOpen((value) => !value)}
-        className="aside-launcher flex items-center gap-2 rounded-full border border-line bg-[#161a17]/90 py-1.5 pr-4 pl-1.5 text-ink shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+        className="aside-launcher flex items-center gap-2 rounded-full border border-line bg-canvas-elevated/90 py-1.5 pr-4 pl-1.5 text-ink shadow-[0_12px_40px_rgba(28,36,28,0.12)] backdrop-blur-xl"
       >
         <span
           className={`aside-launcher-mark grid h-9 w-9 place-items-center overflow-hidden rounded-full ${
-            open ? "bg-accent text-[#0e100f]" : "bg-[#e3ebe0]"
+            open ? "bg-accent text-canvas" : "bg-canvas-tint"
           }`}
         >
           {open ? <CloseIcon /> : <Avatar cover />}
@@ -300,7 +300,7 @@ function Idle({ onPick }: { onPick: (id: Exclude<Scene, "idle" | "lost">) => voi
             type="button"
             onClick={() => onPick(item.id)}
             style={{ animationDelay: `${120 + index * 70}ms` }}
-            className="aside-rise flex w-full items-center gap-3 rounded-xl border border-line bg-white/[0.03] px-3 py-2.5 text-left text-[13px] text-ink hover:border-accent/60 hover:bg-accent-soft"
+            className="aside-rise flex w-full items-center gap-3 rounded-xl border border-line bg-ink/5 px-3 py-2.5 text-left text-[13px] text-ink hover:border-accent/60 hover:bg-accent-soft"
           >
             <IntentMark index={index} />
             {item.label}
@@ -361,7 +361,7 @@ function Thread({
                   onClick={() => onFollowUp(chip.id)}
                   className={`rounded-full border px-3 py-1.5 text-[11px] transition ${
                     followUp === chip.id
-                      ? "border-accent bg-accent text-[#0e100f]"
+                      ? "border-accent bg-accent text-canvas"
                       : "border-line text-muted hover:border-accent hover:text-ink"
                   }`}
                 >
@@ -436,7 +436,7 @@ function AsideReply({ note, onShuffle }: { note: number; onShuffle: () => void }
         type="button"
         aria-label="Show another aside"
         onClick={onShuffle}
-        className="w-full rounded-xl border border-dashed border-line bg-white/[0.02] px-3 py-2 text-left"
+        className="w-full rounded-xl border border-dashed border-line bg-ink/[0.03] px-3 py-2 text-left"
       >
         <p key={item.kicker} className="aside-rise text-[10px] tracking-[0.16em] text-accent uppercase">
           {item.kicker}
@@ -492,7 +492,7 @@ function FollowReply({
         </p>
         <a
           href={`mailto:${profile.email}`}
-          className="inline-flex rounded-full bg-accent px-3 py-1.5 text-[12px] font-medium text-[#0e100f]"
+          className="inline-flex rounded-full bg-accent px-3 py-1.5 text-[12px] font-medium text-canvas"
         >
           {profile.email}
         </a>
@@ -537,7 +537,7 @@ function BotCard({ children }: { children: ReactNode }) {
   return (
     <div className="flex items-end gap-2">
       <Avatar />
-      <div className="aside-rise min-w-0 flex-1 space-y-2.5 rounded-2xl rounded-tl-md border border-line bg-[#1a1f1b] px-3 py-3 text-[13px] leading-relaxed text-ink">
+      <div className="aside-rise min-w-0 flex-1 space-y-2.5 rounded-2xl rounded-tl-md border border-line bg-canvas px-3 py-3 text-[13px] leading-relaxed text-ink">
         {children}
       </div>
     </div>
@@ -569,7 +569,7 @@ function Typing() {
   return (
     <div className="flex items-end gap-2" aria-label="So, Maya! is thinking">
       <Avatar />
-      <div className="inline-flex items-center gap-1 rounded-2xl rounded-tl-md border border-line bg-[#1a1f1b] px-3 py-3">
+      <div className="inline-flex items-center gap-1 rounded-2xl rounded-tl-md border border-line bg-canvas px-3 py-3">
         <span className="aside-typing flex items-center gap-1">
           <span />
           <span />
@@ -588,7 +588,7 @@ function IntentMark({ index }: { index: number }) {
     "M10 3.5 11.2 8 16 9.2 11.2 10.4 10 15 8.8 10.4 4 9.2 8.8 8Z",
   ];
   return (
-    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white/5 text-accent">
+    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent-soft text-accent">
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden>
         <path d={paths[index]} stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" strokeLinecap="round" />
       </svg>

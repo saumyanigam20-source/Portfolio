@@ -36,78 +36,115 @@ function Overview() {
       <h2 className="mt-3 max-w-3xl font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">
         {c.overview.title}
       </h2>
-      <div className="mt-6 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-        <div className="space-y-4 text-[0.98rem] leading-relaxed text-muted">
-          {c.overview.body.map((p) => (
-            <p key={p}>{p}</p>
-          ))}
-        </div>
-        <ModuleMap />
+      <div className="mt-6 max-w-3xl space-y-4 text-[0.98rem] leading-relaxed text-muted">
+        {c.overview.body.map((p) => (
+          <p key={p}>{p}</p>
+        ))}
       </div>
+      <ModuleMap />
     </section>
   );
 }
 
 function ModuleMap() {
   const modules = [
-    "Admin",
-    "Entity",
-    "Finance",
-    "Master data",
-    "Transactions",
-    "Payments",
-    "KlearHub",
+    {
+      name: "Admin",
+      plain: "Who can sign in, and what they are allowed to do.",
+      ask: "Show me all users",
+    },
+    {
+      name: "Entity",
+      plain: "The companies on an account, including smaller customers under a parent.",
+      ask: "Add a sub-customer",
+    },
+    {
+      name: "Finance",
+      plain: "Bills, what is late, and the dates on a contract.",
+      ask: "Which invoices are overdue?",
+    },
+    {
+      name: "Master data",
+      plain: "The standing lists everything else looks up — names, codes, addresses.",
+      ask: "What’s on file for this customer?",
+    },
+    {
+      name: "Transactions",
+      plain: "The paperwork for one move: the file you open for a single shipment.",
+      ask: "Open this shipment’s file",
+    },
+    {
+      name: "Payments",
+      plain: "Sending the money, once you can see what is owed.",
+      ask: "Pay this invoice",
+    },
+    {
+      name: "KlearHub",
+      plain: "Where the goods are right now — coming in, running late, or still moving.",
+      ask: "What’s arriving this week?",
+    },
   ];
+
   return (
-    <figure className="rounded-[1.6rem] border border-line bg-canvas-elevated p-5">
-      <svg viewBox="0 0 420 280" className="h-auto w-full" aria-hidden>
-        {modules.map((name, i) => {
-          const x = 18 + (i % 4) * 100;
-          const y = 18 + Math.floor(i / 4) * 70;
+    <figure className="@container relative mt-10 overflow-hidden rounded-[1.8rem] border border-line bg-canvas-elevated p-4 sm:p-6">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-[radial-gradient(ellipse_at_center,rgba(47,107,62,0.1),transparent_68%)]"
+      />
+      <div className="relative flex items-baseline justify-between gap-4">
+        <p className="text-[11px] font-medium tracking-[0.2em] text-faint uppercase">Seven doors</p>
+        <p className="text-[11px] text-faint">One question each</p>
+      </div>
+      <ul className="relative mt-4 grid gap-2.5 @min-[40rem]:grid-cols-2">
+        {modules.map((module, index) => {
+          const last = index === modules.length - 1;
           return (
-            <g key={name}>
-              <rect
-                x={x}
-                y={y}
-                width="88"
-                height="52"
-                rx="12"
-                fill="#1c2420"
-                stroke="rgba(168,196,160,0.28)"
-              />
-              <text
-                x={x + 44}
-                y={y + 31}
-                textAnchor="middle"
-                fill="#9aa19a"
-                fontSize="11"
-                fontFamily="system-ui, sans-serif"
+            <li
+              key={module.name}
+              className={`flex flex-col rounded-2xl border border-line bg-canvas-tint px-4 py-3.5 ${
+                last ? "@min-[40rem]:col-span-2 @min-[40rem]:flex-row @min-[40rem]:items-end @min-[40rem]:justify-between @min-[40rem]:gap-8" : ""
+              }`}
+            >
+              <div className={last ? "@min-[40rem]:max-w-md" : ""}>
+                <p className="font-display text-[11px] tracking-[0.14em] text-accent">
+                  {String(index + 1).padStart(2, "0")}
+                </p>
+                <p className="mt-1.5 font-display text-[1.05rem] font-semibold tracking-[-0.03em] text-ink">
+                  {module.name}
+                </p>
+                <p className="mt-1 text-[13px] leading-relaxed text-muted">{module.plain}</p>
+              </div>
+              <p
+                className={`mt-auto border-l border-accent/45 pt-3 pl-2.5 text-[12px] leading-snug text-accent ${
+                  last ? "@min-[40rem]:mt-0 @min-[40rem]:max-w-[16rem] @min-[40rem]:shrink-0 @min-[40rem]:pt-0" : ""
+                }`}
               >
-                {name}
-              </text>
-            </g>
+                “{module.ask}”
+              </p>
+            </li>
           );
         })}
-        <path
-          d="M210 155 C210 175 210 185 210 198"
-          stroke="#a8c4a0"
-          strokeWidth="1.5"
-          fill="none"
-        />
-        <rect x="118" y="198" width="184" height="58" rx="16" fill="#a8c4a0" fillOpacity="0.16" stroke="#a8c4a0" />
-        <text
-          x="210"
-          y="232"
-          textAnchor="middle"
-          fill="#eceae4"
-          fontSize="13"
-          fontFamily="system-ui, sans-serif"
-        >
-          One sentence in
-        </text>
+      </ul>
+      <svg viewBox="0 0 600 52" className="relative mt-1 h-12 w-full" aria-hidden>
+        {[70, 150, 230, 300, 370, 450, 530].map((x) => (
+          <path
+            key={x}
+            d={`M${x} 2 C ${x} 26, 300 26, 300 48`}
+            stroke="rgba(47,107,62,0.45)"
+            strokeWidth="1.25"
+            fill="none"
+          />
+        ))}
+        <circle cx="300" cy="48" r="3.5" fill="var(--accent)" />
       </svg>
-      <figcaption className="mt-3 text-xs leading-relaxed text-faint">
-        Seven product doors. Assist is the sentence that opens the right one.
+      <div className="relative mx-auto max-w-lg rounded-2xl border border-accent/35 bg-accent-soft px-5 py-4 text-center shadow-[0_0_40px_rgba(47,107,62,0.08)]">
+        <p className="font-display text-lg font-semibold tracking-[-0.03em] text-ink">One sentence in</p>
+        <p className="mt-1.5 text-sm leading-relaxed text-muted">
+          You ask in ordinary words. Assist opens the matching door — you never have to know its name.
+        </p>
+      </div>
+      <figcaption className="relative mt-4 text-center text-xs leading-relaxed text-faint">
+        Seven parts of the product. The line on each card is a question a new person could actually ask.
       </figcaption>
     </figure>
   );
@@ -197,21 +234,21 @@ function MethodMark({ title }: { title: string }) {
     <svg viewBox="0 0 64 40" className="h-10 w-16" aria-hidden>
       {title === "Interviews" ? (
         <>
-          <circle cx="20" cy="18" r="8" fill="#a8c4a0" fillOpacity="0.35" />
-          <circle cx="40" cy="18" r="8" fill="#a8c4a0" fillOpacity="0.7" />
-          <rect x="8" y="28" width="48" height="6" rx="3" fill="#a8c4a0" fillOpacity="0.25" />
+          <circle cx="20" cy="18" r="8" fill="var(--accent)" fillOpacity="0.35" />
+          <circle cx="40" cy="18" r="8" fill="var(--accent)" fillOpacity="0.7" />
+          <rect x="8" y="28" width="48" height="6" rx="3" fill="var(--accent)" fillOpacity="0.25" />
         </>
       ) : title === "Support and training" ? (
         <>
-          <rect x="10" y="8" width="28" height="24" rx="4" fill="#a8c4a0" fillOpacity="0.25" />
-          <rect x="24" y="12" width="28" height="24" rx="4" fill="#a8c4a0" fillOpacity="0.55" />
+          <rect x="10" y="8" width="28" height="24" rx="4" fill="var(--accent)" fillOpacity="0.25" />
+          <rect x="24" y="12" width="28" height="24" rx="4" fill="var(--accent)" fillOpacity="0.55" />
         </>
       ) : (
         <>
-          <circle cx="16" cy="20" r="5" fill="#a8c4a0" />
-          <circle cx="32" cy="20" r="5" fill="#a8c4a0" fillOpacity="0.6" />
-          <circle cx="48" cy="20" r="5" fill="#a8c4a0" fillOpacity="0.3" />
-          <path d="M21 20h6M37 20h6" stroke="#a8c4a0" strokeWidth="1.5" />
+          <circle cx="16" cy="20" r="5" fill="var(--accent)" />
+          <circle cx="32" cy="20" r="5" fill="var(--accent)" fillOpacity="0.6" />
+          <circle cx="48" cy="20" r="5" fill="var(--accent)" fillOpacity="0.3" />
+          <path d="M21 20h6M37 20h6" stroke="var(--accent)" strokeWidth="1.5" />
         </>
       )}
     </svg>
@@ -336,27 +373,27 @@ function Concepts() {
 function ConceptSketch({ id }: { id: string }) {
   return (
     <svg viewBox="0 0 260 110" className="h-auto w-full" aria-hidden>
-      <rect width="260" height="110" rx="16" fill="#121614" />
+      <rect width="260" height="110" rx="16" fill="var(--canvas)" />
       {id === "palette" ? (
         <>
-          <rect x="40" y="38" width="180" height="34" rx="10" fill="#1c2420" stroke="#a8c4a0" />
-          <text x="130" y="59" textAnchor="middle" fill="#9aa19a" fontSize="10">
+          <rect x="40" y="38" width="180" height="34" rx="10" fill="var(--canvas-elevated)" stroke="var(--accent)" />
+          <text x="130" y="59" textAnchor="middle" fill="var(--muted)" fontSize="10">
             ⌘K  Ask…
           </text>
         </>
       ) : id === "takeover" ? (
         <>
-          <rect x="30" y="16" width="200" height="78" rx="12" fill="#1c2420" />
-          <rect x="48" y="28" width="120" height="10" rx="4" fill="#a8c4a0" fillOpacity="0.35" />
-          <rect x="88" y="48" width="124" height="10" rx="4" fill="#eceae4" fillOpacity="0.12" />
-          <rect x="48" y="68" width="164" height="14" rx="7" fill="#a8c4a0" fillOpacity="0.2" />
+          <rect x="30" y="16" width="200" height="78" rx="12" fill="var(--canvas-elevated)" />
+          <rect x="48" y="28" width="120" height="10" rx="4" fill="var(--accent)" fillOpacity="0.35" />
+          <rect x="88" y="48" width="124" height="10" rx="4" fill="var(--ink)" fillOpacity="0.12" />
+          <rect x="48" y="68" width="164" height="14" rx="7" fill="var(--accent)" fillOpacity="0.16" />
         </>
       ) : (
         <>
-          <rect x="16" y="16" width="140" height="78" rx="10" fill="#1c2420" />
-          <rect x="24" y="24" width="50" height="8" rx="3" fill="#a8c4a0" fillOpacity="0.3" />
-          <rect x="24" y="40" width="124" height="44" rx="6" fill="#a8c4a0" fillOpacity="0.08" />
-          <rect x="168" y="28" width="76" height="66" rx="10" fill="#a8c4a0" fillOpacity="0.2" stroke="#a8c4a0" />
+          <rect x="16" y="16" width="140" height="78" rx="10" fill="var(--canvas-elevated)" />
+          <rect x="24" y="24" width="50" height="8" rx="3" fill="var(--accent)" fillOpacity="0.35" />
+          <rect x="24" y="40" width="124" height="44" rx="6" fill="var(--accent)" fillOpacity="0.08" />
+          <rect x="168" y="28" width="76" height="66" rx="10" fill="var(--accent)" fillOpacity="0.14" stroke="var(--accent)" />
         </>
       )}
     </svg>
@@ -440,7 +477,7 @@ function FigmaFlow() {
       <div className="mt-10 space-y-16">
         {c.figmaFlow.map((frame) => (
           <figure key={frame.src} className="space-y-4">
-            <div className="overflow-hidden rounded-[1.4rem] border border-line bg-[#0a0c0b]">
+            <div className="overflow-hidden rounded-[1.4rem] border border-line bg-canvas-elevated">
               <Image
                 src={frame.src}
                 alt={frame.title}
