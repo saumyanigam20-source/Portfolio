@@ -1,42 +1,8 @@
-"use client";
-
 import Link from "next/link";
-import { useRef } from "react";
 import { ExperimentCover } from "@/components/experiments/ExperimentCover";
 import { experiments } from "@/content/experiments";
 
 export function Experiments() {
-  const scroller = useRef<HTMLUListElement>(null);
-  const drag = useRef({ active: false, startX: 0, scrollLeft: 0, moved: false });
-
-  function onPointerDown(event: React.PointerEvent<HTMLUListElement>) {
-    const el = scroller.current;
-    if (!el) return;
-    drag.current = {
-      active: true,
-      startX: event.clientX,
-      scrollLeft: el.scrollLeft,
-      moved: false,
-    };
-    el.setPointerCapture(event.pointerId);
-  }
-
-  function onPointerMove(event: React.PointerEvent<HTMLUListElement>) {
-    const el = scroller.current;
-    if (!el || !drag.current.active) return;
-    const delta = event.clientX - drag.current.startX;
-    if (Math.abs(delta) > 6) drag.current.moved = true;
-    el.scrollLeft = drag.current.scrollLeft - delta;
-  }
-
-  function endDrag(event: React.PointerEvent<HTMLUListElement>) {
-    const el = scroller.current;
-    drag.current.active = false;
-    if (el?.hasPointerCapture(event.pointerId)) {
-      el.releasePointerCapture(event.pointerId);
-    }
-  }
-
   return (
     <section id="experiments" className="mx-auto max-w-6xl px-6 py-16 sm:px-10 sm:py-24 lg:px-16">
       <div className="mb-10 max-w-2xl">
@@ -57,26 +23,13 @@ export function Experiments() {
           className="pointer-events-none absolute inset-0 opacity-80 [background-image:linear-gradient(rgba(47,107,62,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(47,107,62,0.08)_1px,transparent_1px)] [background-size:28px_28px]"
         />
         <ul
-          ref={scroller}
           aria-label="Gen AI experiments"
-          className="relative flex cursor-grab gap-4 overflow-x-auto scroll-smooth px-4 py-6 select-none active:cursor-grabbing sm:gap-5 sm:px-6 sm:py-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={endDrag}
-          onPointerCancel={endDrag}
-          onClickCapture={(event) => {
-            if (drag.current.moved) {
-              event.preventDefault();
-              event.stopPropagation();
-              drag.current.moved = false;
-            }
-          }}
+          className="relative flex gap-4 overflow-x-auto px-4 py-6 sm:gap-5 sm:px-6 sm:py-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {experiments.map((experiment) => (
             <li key={experiment.slug} className="w-[min(400px,82vw)] shrink-0">
               <Link
                 href={`/experiments/${experiment.slug}`}
-                draggable={false}
                 className="group flex h-full flex-col rounded-[20px] border border-line bg-canvas-elevated p-4 shadow-[0_16px_40px_rgba(28,36,28,0.08)] transition duration-300 hover:-translate-y-0.5 hover:border-[rgba(47,107,62,0.35)] sm:p-5"
               >
                 <div className="relative aspect-[16/11] overflow-hidden rounded-2xl border border-line">

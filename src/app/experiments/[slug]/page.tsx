@@ -16,7 +16,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const experiment = getExperiment(slug);
-  if (!experiment) return { title: "Experiment · Saumya Nigam" };
+  if (!experiment) return { title: "Case study · Saumya Nigam" };
   return {
     title: `${experiment.title} · Saumya Nigam`,
     description: experiment.summary,
@@ -32,8 +32,8 @@ export default async function ExperimentPage({ params }: PageProps) {
   const next = experiments[(index + 1) % experiments.length];
 
   return (
-    <main className="pt-28">
-      <article className="mx-auto max-w-3xl px-6 pb-20 sm:px-10">
+    <main className="pt-24">
+      <article className="mx-auto max-w-5xl px-6 pb-24 sm:px-10">
         <Link
           href="/#experiments"
           className="inline-flex items-center gap-2 text-sm text-muted transition hover:text-accent"
@@ -41,50 +41,67 @@ export default async function ExperimentPage({ params }: PageProps) {
           ← Experiments
         </Link>
 
-        <header className="mt-8">
-          <p className="text-xs font-medium tracking-[0.22em] text-faint uppercase">
-            {experiment.kicker}
-          </p>
-          <h1 className="mt-4 font-display text-[clamp(2rem,5vw,3.25rem)] leading-[1.05] font-semibold tracking-[-0.04em]">
-            {experiment.title}
-          </h1>
+        <header className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end">
+          <div>
+            <p className="text-xs font-medium tracking-[0.22em] text-faint uppercase">
+              Gen AI experiment · {experiment.kicker}
+            </p>
+            <h1 className="mt-4 font-display text-[clamp(2.1rem,5vw,3.6rem)] leading-[1.04] font-semibold tracking-[-0.045em]">
+              {experiment.title}
+            </h1>
+            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">{experiment.summary}</p>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {experiment.tools.map((tool) => (
+                <li
+                  key={tool}
+                  className="rounded-full border border-line px-3 py-1 text-xs tracking-wide text-muted"
+                >
+                  {tool}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <dl className="grid grid-cols-1 gap-5 border-t border-line pt-5 sm:grid-cols-3 lg:grid-cols-1 lg:border-t-0 lg:border-l lg:pl-8 lg:pt-0">
+            <div>
+              <dt className="text-[10px] tracking-[0.16em] text-faint uppercase">Status</dt>
+              <dd className="mt-1 text-sm leading-snug text-ink">{experiment.status}</dd>
+            </div>
+            <div>
+              <dt className="text-[10px] tracking-[0.16em] text-faint uppercase">Role</dt>
+              <dd className="mt-1 text-sm leading-snug text-ink">{experiment.role}</dd>
+            </div>
+            <div>
+              <dt className="text-[10px] tracking-[0.16em] text-faint uppercase">Tools</dt>
+              <dd className="mt-1 text-sm leading-snug text-ink">{experiment.tools.join(" · ")}</dd>
+            </div>
+          </dl>
         </header>
 
-        <div className="relative mt-8 aspect-[16/10] overflow-hidden rounded-2xl border border-line">
+        <div className="relative mt-12 aspect-[16/9] overflow-hidden rounded-[1.8rem] border border-line">
           <ExperimentCover kind={experiment.cover} />
         </div>
 
-        <dl className="mt-8 grid gap-6 border-y border-line py-6 sm:grid-cols-3">
-          <div>
-            <dt className="text-[11px] tracking-[0.16em] text-faint uppercase">Status</dt>
-            <dd className="mt-2 text-sm text-ink">{experiment.status}</dd>
-          </div>
-          <div>
-            <dt className="text-[11px] tracking-[0.16em] text-faint uppercase">Role</dt>
-            <dd className="mt-2 text-sm text-ink">{experiment.role}</dd>
-          </div>
-          <div>
-            <dt className="text-[11px] tracking-[0.16em] text-faint uppercase">Tools</dt>
-            <dd className="mt-2 text-sm text-ink">{experiment.tools.join(" · ")}</dd>
-          </div>
-        </dl>
-
-        <div className="mt-4">
-          {experiment.sections.map((section) => (
-            <section key={section.title} className="border-b border-line py-10 last:border-b-0">
-              <p className="text-[11px] tracking-[0.16em] text-faint uppercase">{section.eyebrow}</p>
-              <h2 className="mt-3 font-display text-2xl font-semibold tracking-[-0.03em] text-ink">
+        <div className="mt-16 max-w-3xl space-y-16">
+          {experiment.sections.map((section, sectionIndex) => (
+            <section key={section.title}>
+              <p className="text-xs font-medium tracking-[0.22em] text-faint uppercase">
+                {String(sectionIndex + 1).padStart(2, "0")} · {section.eyebrow}
+              </p>
+              <h2 className="mt-3 font-display text-2xl font-semibold tracking-[-0.03em] text-ink sm:text-3xl">
                 {section.title}
               </h2>
-              {section.paragraphs.map((paragraph) => (
-                <p key={paragraph} className="mt-4 text-[1.02rem] leading-relaxed text-muted">
-                  {paragraph}
-                </p>
-              ))}
+              <div className="mt-5 space-y-4 text-[1.02rem] leading-relaxed text-muted">
+                {section.paragraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
               {section.points ? (
-                <ul className="mt-5 space-y-2">
+                <ul className="mt-6 space-y-3">
                   {section.points.map((point) => (
-                    <li key={point} className="flex gap-3 text-sm leading-relaxed text-muted">
+                    <li
+                      key={point}
+                      className="flex gap-3 rounded-2xl border border-line bg-canvas-elevated px-4 py-3 text-sm leading-relaxed text-ink"
+                    >
                       <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                       {point}
                     </li>
@@ -95,16 +112,62 @@ export default async function ExperimentPage({ params }: PageProps) {
           ))}
         </div>
 
+        <PortfolioEvidence />
+
         {next && next.slug !== experiment.slug ? (
           <Link
             href={`/experiments/${next.slug}`}
-            className="mt-4 inline-flex text-sm text-muted transition hover:text-accent"
+            className="mt-16 flex items-center justify-between gap-6 rounded-2xl border border-line bg-canvas-elevated px-6 py-5 transition hover:border-[rgba(47,107,62,0.35)]"
           >
-            Next → {next.title}
+            <span>
+              <span className="block text-[11px] tracking-[0.16em] text-faint uppercase">Next case study</span>
+              <span className="mt-2 block font-display text-xl font-semibold tracking-[-0.03em] text-ink">
+                {next.title}
+              </span>
+            </span>
+            <span aria-hidden className="text-accent">
+              →
+            </span>
           </Link>
         ) : null}
       </article>
       <Footer />
     </main>
+  );
+}
+
+function PortfolioEvidence() {
+  const links = [
+    { href: "/#home", label: "Home", note: "The system, as it shipped." },
+    { href: "/#work", label: "Selected work", note: "Case studies kept as content, not a prompt." },
+    { href: "/about", label: "About", note: "The writing that had to stay in my voice." },
+  ];
+
+  return (
+    <section className="mt-20">
+      <p className="text-xs font-medium tracking-[0.22em] text-faint uppercase">The artifact</p>
+      <h2 className="mt-3 font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">
+        This website is the case study
+      </h2>
+      <p className="mt-4 max-w-3xl text-[1.02rem] leading-relaxed text-muted">
+        The pages below are what the direction produced. Open them the way a reviewer would: type,
+        density, and whether the work is still the point.
+      </p>
+      <ul className="mt-6 grid gap-3 sm:grid-cols-3">
+        {links.map((item) => (
+          <li key={item.href}>
+            <Link
+              href={item.href}
+              className="block h-full rounded-2xl border border-line bg-canvas-elevated p-5 transition hover:border-[rgba(47,107,62,0.35)]"
+            >
+              <span className="font-display text-lg font-semibold tracking-[-0.03em] text-ink">
+                {item.label}
+              </span>
+              <span className="mt-2 block text-sm leading-relaxed text-muted">{item.note}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
