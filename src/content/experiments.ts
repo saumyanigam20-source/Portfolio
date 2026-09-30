@@ -81,6 +81,56 @@ export const experiments: Experiment[] = [
       },
     ],
   },
+  {
+    slug: "delivery-orders",
+    title: "A spec precise enough to generate the screen",
+    summary:
+      "Wrote the delivery-order product as requirements and a design prompt, then a desktop prototype a coordinator can click through.",
+    kicker: "Specification before pixels",
+    status: "Prototype",
+    role: "Product design and the written spec",
+    tools: ["PRD", "Design prompt", "HTML prototype"],
+    cover: "orders",
+    sections: [
+      {
+        eyebrow: "The question",
+        title: "What has to be true in writing before a tool should draw the UI?",
+        paragraphs: [
+          "A delivery order is the instruction that lets a truck pick up a container and take it to the right door. Coordinators already have the facts in KlearNow. They still leave the product to assemble a PDF.",
+          "I wrote the product twice before any screen: once as requirements, once as a design prompt with sample data, motion rules, and every state as its own frame. The prompt is the experiment. If a tool cannot build from it, the spec is not finished.",
+        ],
+      },
+      {
+        eyebrow: "The rules",
+        title: "Three gates, then a person",
+        paragraphs: [
+          "An order can be issued only when customs has released the cargo, freight has been released, and the terminal has the container available. Anything else stays a draft, with the reason in plain language.",
+          "The bill of lading is not the delivery address. Repeat lanes can send on their own. First-time doors, conflicts, and hazardous cargo wait for a yes. The prototype stops at the issued order. It does not pretend to dispatch a driver.",
+        ],
+        points: [
+          "Queue sorted by last free day, not by whichever row was typed last",
+          "One current version for the trucker, on a live link, not a thread of PDFs",
+          "Conflicts show the old value and the new one before anything is sent",
+        ],
+      },
+      {
+        eyebrow: "What the prompt had to carry",
+        title: "Constraints, not a mood",
+        paragraphs: [
+          "The design prompt names the width, the type of shadow, the single action colour, and what must not appear: no map, no fleet dashboard, no cost-per-mile. Sample data is specific — a container, a terminal, a last free day — so the screen cannot hide behind lorem ipsum.",
+          "Motion is specified as behaviour. A gate opening changes a pill and a reason line. It does not celebrate. That is the difference between directing a tool and asking it to invent a product.",
+        ],
+      },
+      {
+        eyebrow: "The artifact",
+        title: "A prototype you can argue with",
+        paragraphs: [
+          "The result is a desktop prototype: a queue, an order that cannot be issued until the gates are open, and a carrier page that shows one current version. It is there to be corrected against the requirements, not to be a finished product.",
+          "The useful outcome is the method. Operational rules written tightly enough that a generated screen can be checked, rejected, and rebuilt — instead of designed from a blank frame.",
+        ],
+      },
+    ],
+  },
 ];
 
 export function getExperiment(slug: string) {

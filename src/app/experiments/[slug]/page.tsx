@@ -112,7 +112,7 @@ export default async function ExperimentPage({ params }: PageProps) {
           ))}
         </div>
 
-        <PortfolioEvidence />
+        {experiment.slug === "delivery-orders" ? <DeliveryPrototype /> : <PortfolioEvidence />}
 
         {next && next.slug !== experiment.slug ? (
           <Link
@@ -168,6 +168,40 @@ function PortfolioEvidence() {
           </li>
         ))}
       </ul>
+    </section>
+  );
+}
+
+function DeliveryPrototype() {
+  return (
+    <section className="mt-20">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="text-xs font-medium tracking-[0.22em] text-faint uppercase">The artifact</p>
+          <h2 className="mt-3 font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">
+            Click through the order
+          </h2>
+        </div>
+        <a
+          href="/prototypes/delivery-orders/index.html"
+          target="_blank"
+          rel="noreferrer"
+          className="text-sm text-muted transition hover:text-accent"
+        >
+          Open the prototype →
+        </a>
+      </div>
+      <p className="mt-4 max-w-3xl text-[1.02rem] leading-relaxed text-muted">
+        A desktop queue for a coordinator. Customs, freight, and the terminal have to be open before
+        an order can be issued. The carrier page keeps one current version.
+      </p>
+      <div className="mt-6 overflow-hidden rounded-[1.8rem] border border-line bg-canvas-elevated">
+        <iframe
+          title="Delivery order prototype"
+          src="/prototypes/delivery-orders/index.html"
+          className="h-[min(78vh,760px)] w-full bg-white"
+        />
+      </div>
     </section>
   );
 }

@@ -26,7 +26,7 @@ export function Currently() {
       </p>
       <Link
         href="/about"
-        className="mt-8 inline-flex items-center gap-2 text-sm text-ink transition hover:text-accent"
+        className="mt-8 inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-medium tracking-wide text-muted transition hover:border-accent hover:text-ink"
       >
         The story, process, and how I design
         <span aria-hidden>→</span>

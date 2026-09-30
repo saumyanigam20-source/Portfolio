@@ -170,6 +170,91 @@ a {
   font-weight: 600;
 }
 
+.hero-field {
+  overflow: hidden;
+}
+
+.hero-grid {
+  animation: hero-grid-drift 32s linear infinite;
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 34%, transparent), transparent 68%);
+  filter: blur(2px);
+}
+
+.hero-orb-a {
+  top: 6%;
+  right: 4%;
+  width: min(46vw, 440px);
+  height: min(46vw, 440px);
+  animation: hero-orb-a 18s ease-in-out infinite;
+}
+
+.hero-orb-b {
+  bottom: 8%;
+  left: -6%;
+  width: min(38vw, 340px);
+  height: min(38vw, 340px);
+  opacity: 0.7;
+  animation: hero-orb-b 22s ease-in-out infinite;
+}
+
+.hero-sweep {
+  position: absolute;
+  top: 32%;
+  left: -30%;
+  width: 34%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  animation: hero-sweep 16s ease-in-out infinite;
+}
+
+@keyframes hero-grid-drift {
+  to {
+    background-position: 48px 48px;
+  }
+}
+
+@keyframes hero-orb-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-10%, 14%, 0) scale(1.16);
+  }
+}
+
+@keyframes hero-orb-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(12%, -10%, 0) scale(1.1);
+  }
+}
+
+@keyframes hero-sweep {
+  0%,
+  18% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  32% {
+    opacity: 0.55;
+  }
+  68%,
+  100% {
+    transform: translateX(420%);
+    opacity: 0;
+  }
+}
+
 @keyframes rise {
   from {
     opacity: 0;
@@ -475,8 +560,14 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .name-mark span {
+  .name-mark span,
+  .hero-grid,
+  .hero-orb,
+  .hero-sweep {
     animation: none;
+  }
+
+  .name-mark span {
     color: var(--accent);
   }
 

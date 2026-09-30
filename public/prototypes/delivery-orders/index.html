@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Delivery Orders · KlearNow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --ink: #1b2333;
+      --muted: #8b94a7;
+      --soft: #5d6880;
+      --line: rgba(27, 35, 51, 0.08);
+      --blue: #2f6fed;
+      --blue-deep: #2457c5;
+      --green: #178a49;
+      --green-bg: #e7f7ee;
+      --amber: #a56a00;
+      --amber-bg: #fff4df;
+      --red: #d14343;
+      --red-bg: #fdecec;
+      --shadow: 0 10px 30px rgba(28, 39, 68, 0.06);
+      --sans: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body { font-family: var(--sans); color: var(--ink); background: var(--bg); }
+    button, input, select, textarea { font-family: inherit; }
+    button { cursor: pointer; }
+    [hidden] { display: none !important; }
+    .app { min-height: 100vh; display: flex; background: #f5f6f8; }
+    .side {
+      width: 248px; flex: none; background: #fff; border-right: 1px solid #eceef2;
+      display: flex; flex-direction: column; padding: 18px 12px 14px;
+      position: sticky; top: 0; height: 100vh;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 18px; font-weight: 700; letter-spacing: -0.03em; }
+    .brand small { display: block; font-weight: 500; color: var(--muted); letter-spacing: 0; font-size: 12px; }
+    .mark {
+      width: 34px; height: 34px; border-radius: 10px; background: #1b2333; color: #fff;
+      display: grid; place-items: center; flex: none;
+    }
+    .side-label { margin: 8px 10px 6px; color: #9aa3b2; font-size: 13px; font-weight: 500; }
+    .menu { display: flex; flex-direction: column; gap: 2px; }
+    .menu button {
+      display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+      border: 0; background: transparent; color: #3c4658; border-radius: 10px;
+      padding: 10px 10px; font-size: 14px; font-weight: 500;
+    }
+    .menu button svg { flex: none; color: #6b7587; }
+    .menu button.on { background: #f3f4f6; color: var(--ink); font-weight: 600; }
+    .menu button.on svg { color: var(--ink); }
+    .side-user {
+      margin-top: auto; display: flex; align-items: center; gap: 10px;
+      padding: 10px 8px; border-radius: 12px; background: transparent; border: 0; text-align: left;
+    }
+    .side-user strong { display: block; font-size: 14px; }
+    .side-user small { color: var(--muted); font-size: 12px; }
+    .avatar {
+      width: 36px; height: 36px; border-radius: 50%; background: #ece7e1; color: #6b5344;
+      display: grid; place-items: center; font-size: 12px; font-weight: 700; flex: none;
+    }
+    .workspace { flex: 1; min-width: 0; }
+    .topbar {
+      height: 64px; display: flex; align-items: center; gap: 16px; padding: 0 22px;
+      background: #fff; border-bottom: 1px solid #eceef2; position: sticky; top: 0; z-index: 4;
+    }
+    .crumb { display: flex; align-items: center; gap: 8px; color: var(--soft); font-size: 14px; font-weight: 500; min-width: 0; }
+    .crumb strong { color: var(--ink); font-weight: 600; }
+    .crumb svg { color: #9aa3b2; flex: none; }
+    .search-wrap { margin-left: auto; position: relative; }
+    .search-wrap svg { position: absolute; left: 12px; top: 11px; color: #9aa3b2; }
+    .search {
+      width: 230px; border: 1px solid #e6e8ee; background: #fff; border-radius: 12px;
+      padding: 9px 12px 9px 34px; font-size: 14px; color: var(--ink);
+    }
+    .iconbtn {
+      width: 36px; height: 36px; border: 0; border-radius: 10px; background: transparent; color: #5c677a;
+      display: grid; place-items: center;
+    }
+    .iconbtn:hover { background: #f3f4f6; }
+    .textlink, .chip, .btn, .btn-secondary, .btn-ink { border-radius: 999px; font-weight: 600; }
+    .main { width: min(1120px, calc(100% - 64px)); margin: 0 auto; padding: 32px 0 64px; }
+    .main.enter { animation: slideIn 200ms ease-out; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+    .fade { animation: fade 180ms ease-out; }
+    @media (prefers-reduced-motion: reduce) {
+      .main.enter, .fade { animation: none; }
+    }
+    .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 22px; }
+    h1 { margin: 0; font-size: 32px; letter-spacing: -0.04em; font-weight: 650; }
+    .sub { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+    .back { border: 0; background: transparent; color: var(--soft); padding: 0 0 8px; font-size: 13px; font-weight: 600; }
+    .version { background: #fff; border-radius: 999px; padding: 8px 12px; box-shadow: var(--shadow); font-size: 13px; font-weight: 600; color: var(--soft); }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .chip { border: 0; background: #fff; color: var(--soft); padding: 8px 14px; box-shadow: var(--shadow); font-size: 14px; }
+    .chip.on { background: var(--blue); color: #fff; }
+    .list { display: flex; flex-direction: column; gap: 12px; }
+    .row {
+      width: 100%; text-align: left; border: 0; background: #fff; border-radius: 20px;
+      box-shadow: var(--shadow); padding: 18px 22px; display: grid; grid-template-columns: 1fr auto; gap: 4px 24px;
+      transition: box-shadow 200ms ease-out;
+    }
+    .row:hover { box-shadow: 0 14px 34px rgba(28, 39, 68, 0.09); }
+    .action { font-weight: 650; letter-spacing: -0.02em; }
+    .meta, .reason, .fine { color: var(--muted); font-size: 13px; margin: 0; }
+    .lfd { text-align: right; }
+    .lfd strong { display: block; font-size: 14px; }
+    .lfd span, .lock { color: var(--muted); font-size: 12px; font-weight: 600; }
+    .note { color: var(--amber); font-size: 13px; font-weight: 600; }
+    .empty { background: #fff; border-radius: 20px; box-shadow: var(--shadow); padding: 28px; color: var(--soft); }
+    .pill { display: inline-flex; align-items: center; border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 650; }
+    .pill.green { background: var(--green-bg); color: var(--green); }
+    .pill.amber { background: var(--amber-bg); color: var(--amber); }
+    .pill.red { background: var(--red-bg); color: var(--red); }
+    .pill.gray { background: #f1f3f7; color: var(--soft); }
+    .gates { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px; }
+    .gate, .card, .banner { background: #fff; box-shadow: var(--shadow); }
+    .gate { border-radius: 18px; padding: 16px; }
+    .gate strong { display: block; margin: 10px 0 4px; font-size: 14px; }
+    .gate p { margin: 0; color: var(--muted); font-size: 13px; }
+    .banner { border-radius: 16px; padding: 12px 16px; margin-bottom: 14px; font-size: 14px; font-weight: 600; }
+    .banner.amber { background: var(--amber-bg); color: #8a5800; }
+    .banner.red { background: var(--red-bg); color: #a23232; }
+    .banner.green { background: var(--green-bg); color: #0f6b36; }
+    .banner.blue { background: #eef3ff; color: var(--blue-deep); }
+    .split { display: grid; grid-template-columns: 1.35fr 0.9fr; gap: 14px; }
+    .card { border-radius: 20px; padding: 20px 22px 22px; }
+    .card h2 { margin: 0; font-size: 13px; font-weight: 650; color: var(--soft); display: flex; justify-content: space-between; align-items: center; }
+    .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; margin: 16px 0 0; }
+    .facts dt { font-size: 12px; color: var(--muted); margin-bottom: 3px; }
+    .facts dd { margin: 0; font-size: 14px; font-weight: 650; letter-spacing: -0.02em; }
+    .old { display: block; color: var(--muted); font-weight: 500; text-decoration: line-through; }
+    .new { color: var(--blue); }
+    .stack { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+    .party, .ghost, .suggest { border-radius: 16px; padding: 14px; }
+    .party { background: #f7f8fb; }
+    .party strong { display: block; margin: 8px 0 4px; }
+    .party p, .ghost p { margin: 0; color: var(--soft); font-size: 13px; line-height: 1.45; }
+    .ghost { border: 1px dashed #d5dbe8; }
+    .ghost span { font-size: 12px; font-weight: 650; color: var(--muted); }
+    .suggest { background: #fff8ee; color: #8a5800; font-size: 13px; font-weight: 600; border: 0; text-align: left; }
+    #actionbar, .stack .field { margin-top: 16px; }
+    .btn { border: 0; background: var(--blue); color: #fff; padding: 12px 18px; font-size: 14px; }
+    .btn:disabled { background: #e7ebf2; color: #a0a8b8; cursor: not-allowed; }
+    .btn-secondary, .btn-ink { border: 1px solid var(--line); background: #fff; color: var(--ink); padding: 10px 14px; font-size: 14px; }
+    .btn-ink { background: #1b2333; color: #fff; border-color: #1b2333; }
+    .row-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .textlink { border: 0; background: transparent; color: var(--blue); padding: 0; font-size: 14px; }
+    .field { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 650; color: var(--muted); }
+    .field input, .field select, .field textarea {
+      border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; font-size: 14px;
+      color: var(--ink); font-weight: 500; background: #fff;
+    }
+    .field textarea { min-height: 72px; resize: vertical; }
+    .switch { width: 44px; height: 26px; border: 0; border-radius: 99px; background: #e3e6ee; position: relative; padding: 0; }
+    .switch i { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform 200ms ease-out; box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+    .switch.on { background: var(--blue); }
+    .switch.on i { transform: translateX(18px); }
+    .switch-row, .lane { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .lane { padding: 12px 0; border-top: 1px solid var(--line); font-size: 14px; }
+    .history { margin-top: 14px; }
+    .history ul { list-style: none; margin: 12px 0 0; padding: 0; }
+    .history li { padding: 10px 0; border-top: 1px solid var(--line); font-size: 14px; }
+    .public { min-height: 100%; display: flex; align-items: center; justify-content: center; padding: 48px 20px; }
+    .doc { width: min(680px, 100%); background: #fff; border-radius: 24px; box-shadow: var(--shadow); padding: 32px; }
+    .kicker { margin: 0 0 8px; color: var(--muted); font-size: 12px; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; }
+    .doc.ended .facts dd { color: var(--muted); }
+    @media (max-width: 900px) {
+      .split, .gates { grid-template-columns: 1fr; }
+      .search { display: none; }
+      .main { width: calc(100% - 32px); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    const account = {
+      name: "Northline Home",
+      autoIssue: false,
+      lanes: [
+        { door: "Northline DC, 4100 Alameda Street, Los Angeles", carrier: "Pacific Drayage", correct: 2 },
+        { door: "Northline DC, 4100 Alameda Street, Los Angeles", carrier: "Harbor Cartage", correct: 3 },
+        { door: "200 Commerce Blvd, Los Angeles", carrier: "", correct: 0 }
+      ]
+    };
+
+    const orders = [
+      order({ id: "MSCU4451290", hbl: "NL-22841", sort: 1, lfd: "Thu 26 Sep, 17:00", lfdShort: "Thu 26 Sep", lfdTime: "17:00", gates: { customs: "open", freight: "closed", terminal: "open" }, warn: true }),
+      order({ id: "TCLU3199201", hbl: "NL-22841", sort: 2, lfd: "Fri 27 Sep, 17:00", lfdShort: "Fri 27 Sep", lfdTime: "17:00", gates: { customs: "open", freight: "closed", terminal: "open" } }),
+      order({ id: "TCLU8821044", hbl: "NL-22890", sort: 2, lfd: "Fri 27 Sep, 17:00", lfdShort: "Fri 27 Sep", lfdTime: "17:00", gates: { customs: "open", freight: "open", terminal: "open" }, needsDoor: true }),
+      order({ id: "CAIU7741208", hbl: "NL-22841", sort: 4, lfd: "Mon 29 Sep, 17:00", lfdShort: "Mon 29 Sep", lfdTime: "17:00", gates: { customs: "open", freight: "open", terminal: "closed" } }),
+      order({ id: "CAIU2201983", hbl: "NL-19002", sort: 4, lfd: "Mon 29 Sep, 17:00", lfdShort: "Mon 29 Sep", lfdTime: "17:00", gates: openGates(), verified: true }),
+      order({ id: "HLXU5501200", hbl: "NL-44110", sort: 3, lfd: "Sat 28 Sep, 17:00", lfdShort: "Sat 28 Sep", lfdTime: "17:00", gates: openGates(), verified: true, hazmat: true, cargo: "Furniture · hazardous" }),
+      order({ id: "OOLU6602331", hbl: "NL-44188", sort: 5, lfd: "Tue 30 Sep, 17:00", lfdShort: "Tue 30 Sep", lfdTime: "17:00", gates: openGates(), verified: true, split: true }),
+      order({ id: "MSCU7712004", hbl: "NL-30011", sort: 1, lfd: "Thu 26 Sep, 17:00", lfdShort: "Thu 26 Sep", lfdTime: "17:00", gates: { customs: "closed", freight: "open", terminal: "open" }, hold: "Pending exam" }),
+      order({ id: "FCIU3309122", hbl: "NL-11820", sort: 9, lfd: "", lfdShort: "Not published", lfdTime: "", gates: { customs: "open", freight: "open", terminal: "closed" }, onVessel: true }),
+      order({ id: "TEMU9188271", hbl: "NL-22001", sort: 1, lfd: "Thu 26 Sep, 17:00", lfdShort: "Thu 26 Sep", lfdTime: "17:00", gates: openGates(), verified: true, status: "issued", version: 1, carrierName: "Pacific Drayage", history: ["Version 1 · Issued to Pacific Drayage · 09:14"] }),
+      order({ id: "MSKU1029384", hbl: "NL-22044", sort: 1, lfd: "Thu 26 Sep, 17:00", lfdShort: "Thu 26 Sep", lfdTime: "17:00", gates: { customs: "closed", freight: "open", terminal: "open" }, verified: true, status: "paused", version: 1, carrierName: "Pacific Drayage", history: ["Paused · Hold placed after release", "Version 1 · Issued to Pacific Drayage · 08:40"] }),
+      order({ id: "NYKU4402188", hbl: "NL-22910", sort: 2, lfd: "Fri 27 Sep, 17:00", lfdShort: "Fri 27 Sep", lfdTime: "17:00", gates: openGates(), verified: true, status: "issued", version: 1, carrierName: "Pacific Drayage", firmConflict: "Y124", history: ["Version 1 · Issued to Pacific Drayage · yesterday"] }),
+      order({ id: "TRHU2201984", hbl: "NL-22940", sort: 0, lfd: "Wed 25 Sep, 17:00", lfdShort: "Wed 25 Sep", lfdTime: "17:00", gates: openGates(), verified: true, status: "issued", version: 1, carrierName: "Pacific Drayage", lfdWas: "Thu 26 Sep, 17:00", history: ["Version 1 · Issued to Pacific Drayage · yesterday"] })
+    ];
+
+    function openGates() { return { customs: "open", freight: "open", terminal: "open" }; }
+    function order(extra) {
+      return Object.assign({
+        customer: "Northline Home", port: "Los Angeles", terminal: "TraPac", firm: "Y258",
+        mbl: "MSCUMA441902", size: "40' HC", seal: "SL229184", pieces: "420 cartons", weight: "18,420 kg",
+        cargo: "Furniture", vessel: "MSC IRINA", voyage: "214E", status: "draft", version: 0, history: [],
+        carrierName: "", hours: "08:00–15:00", contact: "Priya Shah", door: "", hazmat: false, split: false,
+        special: "", service: "Live unload"
+      }, extra);
+    }
+
+    const ui = { page: "queue", orderId: null, filter: "all", query: "", amending: false, confirmVoid: false, notice: "", public: false, anim: false };
+
+    function $(id) { return orders.find((item) => item.id === id); }
+    function gateOpen(o) { return o.gates.customs === "open" && o.gates.freight === "open" && o.gates.terminal === "open"; }
+    function laneFor(door, carrier) { return account.lanes.find((lane) => lane.door === door && lane.carrier === carrier); }
+    function laneCount(door, carrier) { return (laneFor(door, carrier) || { correct: 0 }).correct; }
+    function eligible(o) {
+      if (!account.autoIssue || !o.verified || o.hazmat || o.split || o.firmConflict || o.lfdWas || !o.lfd || !gateOpen(o)) return false;
+      if (o.status === "issued" || o.status === "void" || o.status === "paused") return false;
+      return laneCount(o.door || "Northline DC, 4100 Alameda Street, Los Angeles", o.carrierName || "Pacific Drayage") >= 3;
+    }
+    function bucket(o) {
+      if (o.status === "issued") return "issued";
+      if (o.status === "void") return "void";
+      if (gateOpen(o) && !o.firmConflict && !o.lfdWas && o.status !== "paused" && !o.hold) return "ready";
+      return "review";
+    }
+    function nextAction(o) {
+      if (o.status === "void") return ["Void", "gray", "Shipment cancelled"];
+      if (o.status === "paused") return ["Paused", "red", "Paused after issue"];
+      if (o.firmConflict || o.lfdWas) return ["Needs review", "amber", o.firmConflict ? "Firm code changed" : "Last free day brought forward"];
+      if (o.status === "issued") return ["Issued", "green", "Version " + o.version + " · " + o.carrierName];
+      if (o.hold) return ["Blocked", "red", "Customs hold"];
+      if (o.onVessel || o.gates.terminal === "closed") return ["Needs review", "amber", "Not yet available"];
+      if (o.gates.freight === "closed") return ["Needs review", "amber", "Waiting on freight release"];
+      if (o.gates.customs === "closed") return ["Blocked", "red", "Customs hold"];
+      if (!o.verified && !o.door) return ["Needs review", "amber", "Confirm delivery door"];
+      if (o.hazmat && !o.special) return ["Needs review", "amber", "Hazardous · instruction required"];
+      if (o.split) return ["Ready", "green", "Split delivery · issue manually"];
+      if (eligible(o)) return ["Ready", "green", "Ready — will auto-send"];
+      return ["Ready", "green", "Ready to issue"];
+    }
+    function visible() {
+      const q = ui.query.trim().toLowerCase();
+      return orders.filter((o) => {
+        if (ui.filter === "review" && bucket(o) !== "review") return false;
+        if (ui.filter === "ready" && bucket(o) !== "ready") return false;
+        if (ui.filter === "issued" && bucket(o) !== "issued") return false;
+        if (ui.filter === "customer" && o.customer !== "Northline Home") return false;
+        if (ui.filter === "port" && o.port !== "Los Angeles") return false;
+        if (!q) return true;
+        return [o.id, o.customer, o.port, o.hbl, o.terminal, o.carrierName].join(" ").toLowerCase().includes(q);
+      }).sort((a, b) => a.sort - b.sort || a.id.localeCompare(b.id));
+    }
+
+    function pill(tone, text) { return `<span class="pill ${tone}">${text}</span>`; }
+    function icon(name) {
+      const paths = {
+        queue: '<path d="M4 6h12M4 10h12M4 14h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+        review: '<circle cx="10" cy="10" r="6.2" stroke="currentColor" stroke-width="1.6"/><path d="M10 7.2V10l1.8 1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+        ready: '<path d="M5 10.5l3 3 7-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+        issued: '<rect x="4" y="3.5" width="12" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+        account: '<path d="M4 15.5c.6-2.2 2.4-3.3 6-3.3s5.4 1.1 6 3.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="7.2" r="2.4" stroke="currentColor" stroke-width="1.6"/>',
+        search: '<circle cx="8" cy="8" r="4.2" stroke="currentColor" stroke-width="1.6"/><path d="M11.2 11.2L14 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+        bell: '<path d="M6 14.5h8M10 4.2a3.2 3.2 0 0 1 3.2 3.2c0 2.2.6 3.2 1.1 3.8H5.7c.5-.6 1.1-1.6 1.1-3.8A3.2 3.2 0 0 1 10 4.2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>'
+      };
+      return `<svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">${paths[name]}</svg>`;
+    }
+    function menuOn(id) {
+      if (ui.page === "account") return id === "account";
+      if (id === "queue") return ui.filter === "all";
+      return ui.filter === id;
+    }
+    function menuItem(id, label, glyph) {
+      return `<button type="button" data-nav="${id}" class="${menuOn(id) ? "on" : ""}">${icon(glyph)}<span>${label}</span></button>`;
+    }
+    function chrome(crumbs, body) {
+      const trail = crumbs.map((part, index) => index === crumbs.length - 1 ? `<strong>${part}</strong>` : `<span>${part}</span><span>›</span>`).join("");
+      return `<div class="app">
+        <aside class="side">
+          <div class="brand"><span class="mark">${icon("issued").replace('width="18" height="18"', 'width="16" height="16"')}</span><span>KlearNow<small>Delivery Orders</small></span></div>
+          <div class="side-label">Operations</div>
+          <div class="menu">
+            ${menuItem("queue", "Queue", "queue")}
+            ${menuItem("review", "Needs review", "review")}
+            ${menuItem("ready", "Ready", "ready")}
+            ${menuItem("issued", "Issued", "issued")}
+          </div>
+          <div class="side-label">Customers</div>
+          <div class="menu">${menuItem("account", "Accounts", "account")}</div>
+          <button type="button" class="side-user" data-nav="account">
+            <span class="avatar">AM</span>
+            <span><strong>Asha Menon</strong><small>asha.menon@klearnow.ai</small></span>
+          </button>
+        </aside>
+        <div class="workspace">
+          <header class="topbar">
+            <div class="crumb">${icon("queue")}${trail}</div>
+            <label class="search-wrap">${icon("search")}<input class="search" id="search" placeholder="Search" value="${escapeAttr(ui.query)}" /></label>
+            <button type="button" class="iconbtn" aria-label="Notifications">${icon("bell")}</button>
+          </header>
+          ${body}
+        </div>
+      </div>`;
+    }
+    function escapeAttr(value) { return String(value).replace(/"/g, "&quot;"); }
+
+    function queuePage() {
+      const rows = visible();
+      const chips = [["all", "All"], ["review", "Needs review"], ["ready", "Ready"], ["issued", "Issued"], ["customer", "Northline Home"], ["port", "Los Angeles"]];
+      const list = rows.length ? rows.map((o) => {
+        const [tone, label, action] = [nextAction(o)[1], nextAction(o)[0], nextAction(o)[2]];
+        const detail = o.gates.freight === "closed" ? "Freight not released" : o.hold ? "Pending exam · not issuable" : o.onVessel ? "Container still on vessel" : "HBL " + o.hbl;
+        return `<button type="button" class="row" data-open="${o.id}">
+          <div>${pill(tone, label)} <span class="action">${action}</span>
+            <div style="height:6px"></div><strong>${o.id}</strong>
+            <div class="meta">${o.customer} · ${o.terminal} · ${o.port}</div>
+            <div class="meta">${detail}</div>
+            ${o.warn && o.gates.freight === "closed" ? `<div class="note">Last free day inside two days.</div>` : ""}
+          </div>
+          <div class="lfd"><strong>${o.lfdShort}</strong><span>${o.lfdTime ? o.lfdTime + " · last free day" : "Last free day"}</span></div>
+        </button>`;
+      }).join("") : `<div class="empty">Nothing in this view. <div style="margin-top:12px"><button type="button" class="btn-secondary" data-filter="all">Show all</button></div></div>`;
+      return chrome(["Delivery orders", ui.filter === "all" ? "Queue" : ui.filter === "review" ? "Needs review" : ui.filter === "ready" ? "Ready" : ui.filter === "issued" ? "Issued" : "Queue"], `<main class="main ${ui.anim ? "enter" : ""}">
+        <div class="head"><div><h1>Delivery orders</h1><p class="sub">Sorted by last free day. ${rows.length} in this view.</p></div></div>
+        <div class="chips">${chips.map(([id, name]) => `<button type="button" class="chip ${ui.filter === id ? "on" : ""}" data-filter="${id}">${name}</button>`).join("")}</div>
+        <div class="list fade">${list}</div>
+      </main>`);
+    }
+
+    function gateCards(o) {
+      const map = {
+        customs: ["Customs released", o.gates.customs === "open" ? "Entry cleared" : (o.status === "paused" ? "Hold placed after release" : "Pending exam")],
+        freight: ["Freight released", o.gates.freight === "open" ? "Express release on file" : "Freight not released"],
+        terminal: ["Terminal available", o.gates.terminal === "open" ? "Available for pickup" : "Not yet available"]
+      };
+      return `<div class="gates">${["customs", "freight", "terminal"].map((key) => {
+        const open = o.gates[key] === "open";
+        return `<article class="gate">${pill(open ? "green" : "red", open ? "Open" : "Closed")}<strong>${map[key][0]}</strong><p>${map[key][1]}</p></article>`;
+      }).join("")}</div>`;
+    }
+
+    function fact(label, value) { return `<div><dt>${label}</dt><dd>${value}</dd></div>`; }
+    function party(title, lines, tone, text) {
+      return `<div class="party">${tone ? pill(tone, text) : ""}<strong>${title}</strong>${lines.map((line) => `<p>${line}</p>`).join("")}</div>`;
+    }
+
+    function blocker(o) {
+      if (o.status === "issued" || o.status === "void" || o.status === "paused") return "";
+      if (o.firmConflict || o.lfdWas) return "";
+      if (!gateOpen(o)) {
+        if (o.gates.freight === "closed") return "Freight is not released.";
+        if (o.gates.customs === "closed") return "Customs has not released this container.";
+        return "The terminal does not have this container yet.";
+      }
+      if (!o.verified && !ui.door) return "Set the delivery door and the carrier.";
+      if (o.hazmat && !ui.special) return "Hazardous cargo is never sent automatically.";
+      if (o.split) return "Split deliveries are issued by a person. They are never sent automatically.";
+      if (!o.lfd) return "You can issue this order. It will not auto-send until a last free day is published.";
+      if (o.door && !o.verified) return "This door will not auto-send until the lane has been issued correctly three times.";
+      if (account.autoIssue && o.verified && laneCount("Northline DC, 4100 Alameda Street, Los Angeles", "Pacific Drayage") < 3) return "Auto-issue is on. This lane has " + laneCount("Northline DC, 4100 Alameda Street, Los Angeles", o.carrierName || "Pacific Drayage") + " of 3 correct issues.";
+      return "";
+    }
+    function canIssue(o) {
+      if (o.status === "issued" || o.status === "void" || o.status === "paused" || o.firmConflict || o.lfdWas) return false;
+      if (!gateOpen(o)) return false;
+      if (o.hazmat && !ui.special.trim()) return false;
+      if (!o.verified && !(ui.door && ui.carrier)) return false;
+      return true;
+    }
+
+    function orderPage(o) {
+      const banners = [];
+      if (ui.notice) banners.push(`<div class="banner green">${ui.notice}</div>`);
+      if (o.status === "paused") banners.push(`<div class="banner red">Paused. Hold placed after release. ${o.carrierName} has been notified.</div>`);
+      if (o.status === "void") banners.push(`<div class="banner red">Shipment cancelled. ${o.carrierName || "The carrier"} has been notified.</div>`);
+      if (o.firmConflict) banners.push(`<div class="banner amber">This order was issued. Accepting the new value notifies ${o.carrierName}.</div>`);
+      if (o.lfdWas) banners.push(`<div class="banner amber">Last free day moved earlier. This is a material change.</div>`);
+      if (eligible(o)) banners.push(`<div class="banner blue">Will send to ${o.carrierName || "Pacific Drayage"} when you leave this order.</div>`);
+
+      const firm = o.firmConflict ? `<div class="swap"><span class="old">${o.firm}</span><span class="new">${o.firmConflict}</span></div>` : o.firm;
+      const lfd = o.lfdWas ? `<div class="swap"><span class="old">${o.lfdWas}</span><span class="new">${o.lfd}</span></div>` : (o.lfd || "Not published yet");
+      const cargo = `<section class="card"><h2>Cargo <span class="lock">Locked · from the shipment</span></h2><dl class="facts">
+        ${fact("Master bill", o.mbl)}${fact("House bill", o.hbl)}${fact("Container", o.id)}${fact("Size", o.size)}
+        ${fact("Seal", o.seal)}${fact("Pieces", o.pieces)}${fact("Weight", o.weight)}${fact("Cargo", o.cargo)}
+        ${fact("Vessel", o.vessel)}${fact("Voyage", o.voyage)}${fact("Port", o.port)}${fact("Terminal", o.terminal)}
+        ${fact("Firm code", firm)}${fact("Last free day", lfd)}
+      </dl></section>`;
+
+      let side = "";
+      if (o.firmConflict || o.lfdWas) {
+        const oldValue = o.firmConflict ? "Y258" : "Thursday 17:00";
+        const newValue = o.firmConflict ? o.firmConflict : "Wednesday 17:00";
+        const label = o.firmConflict ? "Firm code" : "Last free day";
+        side = `<h2>Conflict</h2><div class="stack"><div class="party"><span class="old">${label} was ${oldValue}</span><span class="new">${newValue}</span><p style="margin-top:8px">Auto-issue is off while this is open.</p></div></div>
+          <div id="actionbar"><div class="row-actions"><button type="button" class="btn-ink" data-act="accept">Accept new value</button><button type="button" class="btn-secondary" data-act="flag">Flag source as wrong</button></div></div>`;
+      } else if (o.status === "issued" || o.status === "paused" || o.status === "void") {
+        const door = o.door || "Northline DC, 4100 Alameda Street, Los Angeles";
+        side = `<h2>Delivery</h2><div class="stack">${party(door.split(",")[0], [door, "Receiving " + o.hours + " · " + o.contact], "green", "Verified")}${party(o.carrierName, ["Current carrier"], "green", o.status === "issued" ? "Issued" : "Verified")}</div>`;
+        if (o.status === "issued" && ui.confirmVoid) {
+          side += `<div id="actionbar"><p class="reason" style="color:var(--ink)">Void this order. ${o.carrierName} will be told the pickup is cancelled.</p><button type="button" class="btn-ink" data-act="void">Void order</button></div>`;
+        } else if (o.status === "issued" && ui.amending) {
+          side += `<div class="stack"><label class="field">Receiving hours<input id="hours" value="${escapeAttr(ui.hours)}" /></label>
+            <label class="field">Carrier<select id="carrier"><option ${ui.carrier === "Pacific Drayage" ? "selected" : ""}>Pacific Drayage</option><option ${ui.carrier === "Harbor Cartage" ? "selected" : ""}>Harbor Cartage</option></select></label></div>
+            <div id="actionbar"><button type="button" class="btn" data-act="save">Save version</button></div>`;
+        } else if (o.status === "issued") {
+          side += `<div id="actionbar"><div class="row-actions"><button type="button" class="btn-secondary" data-act="amend">Amend</button><button type="button" class="btn-secondary" data-act="askvoid">Void</button><button type="button" class="textlink" data-act="carrier">View the carrier page</button></div></div>`;
+        }
+      } else if (o.verified) {
+        side = `<h2>Delivery</h2><div class="stack">${party("Northline DC", ["4100 Alameda Street, Los Angeles", "Receiving " + o.hours + " · " + o.contact], "green", "Verified")}${party(o.carrierName || "Pacific Drayage", ["Saved carrier for this door"], "green", "Verified")}
+          ${o.split ? party("Stop 2 · Northline Store 14", ["8800 Sunset Blvd, Los Angeles", "Drop"], "amber", "Manual") : ""}
+          ${o.hazmat ? `<label class="field">Special instruction<textarea id="special" placeholder="Required before this order can be issued">${ui.special}</textarea></label>` : ""}
+        </div><div id="actionbar">${eligible(o) ? "" : `<button type="button" class="btn" data-act="issue" ${canIssue(o) ? "" : "disabled"}>Issue to carrier</button>`}<p class="reason">${blocker(o)}</p></div>`;
+      } else if (ui.door && ui.carrier) {
+        side = `<h2>To confirm</h2><div class="stack">${party(ui.door.split(",")[0], [ui.door, "Lane unconfirmed"], "amber", "Unconfirmed")}${party(ui.carrier, ["Set by Asha Menon"], "amber", "Unconfirmed")}</div>
+          <div id="actionbar"><button type="button" class="btn" data-act="issue">Issue to carrier</button><p class="reason">${blocker(o)}</p></div>`;
+      } else {
+        side = `<h2>To confirm</h2><div class="stack">
+          <label class="field">Delivery location<input id="door" placeholder="Warehouse name and street" value="${escapeAttr(ui.door)}" /></label>
+          ${o.needsDoor || !o.verified ? `<button type="button" class="suggest" data-act="suggest">Bill of lading shows 200 Commerce Blvd — unconfirmed.</button>` : ""}
+          <label class="field">Carrier<select id="carrier"><option value="">Choose a carrier</option><option ${ui.carrier === "Pacific Drayage" ? "selected" : ""}>Pacific Drayage</option><option ${ui.carrier === "Harbor Cartage" ? "selected" : ""}>Harbor Cartage</option></select></label>
+        </div><div id="actionbar"><button type="button" class="btn" data-act="issue" disabled>Issue to carrier</button><p class="reason">${blocker(o)}</p></div>`;
+      }
+
+      const history = o.history.length ? `<section class="card history"><h2>History</h2><ul>${o.history.map((item) => `<li>${item}</li>`).join("")}</ul></section>` : "";
+      return chrome(["Delivery orders", o.id], `<main class="main ${ui.anim ? "enter" : ""}">
+        <div class="head"><div><button type="button" class="back" data-go="queue">← Queue</button><h1>${o.id}</h1><p class="sub">${o.customer} · ${o.size} · HBL ${o.hbl}</p></div>${o.version ? `<div class="version">Version ${o.version}</div>` : ""}</div>
+        ${gateCards(o)}${banners.join("")}
+        <div class="split">${cargo}<section class="card">${side}</section></div>
+        ${history}
+      </main>`);
+    }
+
+    function accountPage() {
+      return chrome(["Accounts", account.name], `<main class="main">
+        <div class="head"><div><h1>${account.name}</h1><p class="sub">Auto-issue for this account. Off until a lead turns it on.</p></div></div>
+        <section class="card">
+          <div class="switch-row"><div><h2 style="font-size:16px;color:var(--ink)">Auto-issue</h2><p class="sub">${account.autoIssue ? "On" : "Default off"}</p></div>
+            <button type="button" class="switch ${account.autoIssue ? "on" : ""}" data-act="switch" aria-label="Auto-issue"><i></i></button>
+          </div>
+          <p class="reason" style="margin-top:14px">Sends only on lanes issued correctly three times, with all three gates open, a known door, and a known carrier. Never sends hazardous, split, or conflicting orders. Stays manual when last free day is missing.</p>
+          ${account.autoIssue ? `<p class="banner blue">Auto-issue is on. Lanes under three correct issues stay manual.</p>` : ""}
+          <div>${account.lanes.map((lane) => `<div class="lane"><div><strong>${lane.door.split(",")[0]} · ${lane.carrier || "No carrier"}</strong><div class="meta">${lane.door}</div></div>${lane.correct >= 3 ? pill("green", "3 of 3") : `<span class="note">${lane.correct} of 3 correct issues</span>`}</div>`).join("")}</div>
+        </section>
+      </main>`);
+    }
+
+    function carrierPage(o) {
+      const ended = o.status === "void";
+      const paused = o.status === "paused";
+      const banner = ended
+        ? `<div class="banner red">This link has ended. The last version is here for reference, not as an instruction to pick up.</div>`
+        : paused
+          ? `<div class="banner red">Do not dispatch. Customs hold after release. Wait until this page clears.</div>`
+          : (o.history[0] && o.history[0].includes("hours") ? `<div class="banner blue">${o.history[0].replace("Version " + o.version + " · ", "")}</div>` : "");
+      return `<div class="public"><article class="doc ${ended ? "ended" : ""}">
+        ${banner}<p class="kicker">Delivery order · version ${o.version || 1}</p>
+        <h1>${o.id}</h1>
+        <p class="sub">${o.size} · ${o.terminal}, ${o.port} · firm code ${o.firmConflict || o.firm}</p>
+        <dl class="facts">
+          ${fact("Delivery", o.door || "Northline DC, 4100 Alameda Street, Los Angeles")}
+          ${fact("Hours", o.hours)}${fact("Contact", o.contact + " · (213) 555-0194")}
+          ${fact("Last free day", o.lfd || "Not published")}${fact("Carrier", o.carrierName || "Pacific Drayage")}${fact("Cargo", o.cargo + " · " + o.weight)}
+        </dl>
+        <section class="history"><h2>History</h2><ul>${(o.history.length ? o.history : ["Version 1 · Issued"]).map((item) => `<li>${item}</li>`).join("")}</ul></section>
+        <div style="margin-top:18px"><button type="button" class="textlink" data-act="pdf">Download PDF</button><p class="fine" id="pdfnote">The PDF is stamped with version and time. It is only current at the moment of download.</p>
+          <p style="margin-top:18px"><button type="button" class="textlink" data-go="order">Back to the order</button></p>
+        </div>
+      </article></div>`;
+    }
+
+    function render() {
+      const root = document.getElementById("app");
+      const o = ui.orderId ? $(ui.orderId) : null;
+      root.innerHTML = ui.public && o ? carrierPage(o) : ui.page === "account" ? accountPage() : o ? orderPage(o) : queuePage();
+    }
+
+    function openOrder(id) {
+      const o = $(id);
+      ui.page = "queue";
+      ui.orderId = id;
+      ui.public = false;
+      ui.amending = false;
+      ui.confirmVoid = false;
+      ui.notice = "";
+      ui.anim = true;
+      ui.door = o.door || "";
+      ui.carrier = o.carrierName || "";
+      ui.hours = o.hours;
+      ui.special = o.special || "";
+      render();
+    }
+
+    function leaveOrder(page) {
+      const o = !ui.public && ui.orderId ? $(ui.orderId) : null;
+      if (o && eligible(o)) issue(o, true);
+      ui.orderId = null;
+      ui.public = false;
+      ui.page = page;
+      ui.notice = "";
+      ui.anim = false;
+    }
+
+    function issue(o, automatic) {
+      const door = o.verified ? "Northline DC, 4100 Alameda Street, Los Angeles" : ui.door;
+      const carrier = o.verified ? (o.carrierName || "Pacific Drayage") : ui.carrier;
+      o.door = door;
+      o.carrierName = carrier;
+      o.hours = ui.hours || o.hours;
+      o.special = ui.special;
+      o.status = "issued";
+      o.version = (o.version || 0) + 1;
+      o.verified = o.verified || false;
+      const stamp = automatic ? "Sent automatically" : "Issued";
+      o.history.unshift(`Version ${o.version} · ${stamp} to ${carrier}`);
+      const lane = laneFor(door, carrier) || account.lanes[account.lanes.push({ door, carrier, correct: 0 }) - 1];
+      if (!o.hazmat && !o.split && !o.firmConflict) lane.correct += 1;
+      ui.notice = automatic
+        ? `Sent automatically to ${carrier} · version ${o.version}.`
+        : `Issued to ${carrier} · version ${o.version}.`;
+    }
+
+    document.getElementById("app").addEventListener("click", (event) => {
+      const navBtn = event.target.closest("[data-nav]");
+      if (navBtn) {
+        const id = navBtn.dataset.nav;
+        if (id === "account") leaveOrder("account");
+        else { leaveOrder("queue"); ui.filter = id === "queue" ? "all" : id; }
+        render();
+        return;
+      }
+      const filter = event.target.closest("[data-filter]");
+      if (filter) { ui.filter = filter.dataset.filter; ui.anim = false; render(); return; }
+      const go = event.target.closest("[data-go]");
+      if (go) {
+        if (go.dataset.go === "order") { ui.public = false; ui.anim = true; render(); return; }
+        leaveOrder(go.dataset.go === "account" ? "account" : "queue");
+        render();
+        return;
+      }
+      const open = event.target.closest("[data-open]");
+      if (open) { openOrder(open.dataset.open); return; }
+      const act = event.target.closest("[data-act]");
+      if (!act) return;
+      const o = $(ui.orderId);
+      const name = act.dataset.act;
+      if (name === "suggest") { ui.door = "200 Commerce Blvd, Los Angeles"; ui.carrier = ui.carrier || "Pacific Drayage"; render(); return; }
+      if (name === "issue" && o && canIssue(o)) { issue(o, false); ui.anim = false; render(); return; }
+      if (name === "amend") { ui.amending = true; ui.carrier = o.carrierName; ui.hours = o.hours; render(); return; }
+      if (name === "save" && o) {
+        const hours = document.getElementById("hours").value.trim() || o.hours;
+        const carrier = document.getElementById("carrier").value;
+        const changedCarrier = carrier !== o.carrierName;
+        o.hours = hours;
+        o.carrierName = carrier;
+        o.version += 1;
+        o.history.unshift(changedCarrier
+          ? `Version ${o.version} · ${o.history.length ? "Previous carrier" : "Carrier"} was told this order is no longer theirs · ${carrier} received the current version`
+          : `Version ${o.version} · delivery hours changed to ${hours} · carrier notified`);
+        ui.amending = false;
+        ui.notice = o.history[0];
+        render();
+        return;
+      }
+      if (name === "askvoid") { ui.confirmVoid = true; render(); return; }
+      if (name === "void" && o) {
+        o.status = "void";
+        o.history.unshift("Void · Pickup cancelled");
+        ui.confirmVoid = false;
+        ui.notice = "Void. The carrier link has ended.";
+        render();
+        return;
+      }
+      if ((name === "accept" || name === "flag") && o) {
+        if (name === "accept") {
+          if (o.firmConflict) o.firm = o.firmConflict;
+          o.firmConflict = "";
+          o.lfdWas = "";
+          o.version += 1;
+          o.history.unshift(`Version ${o.version} · New value accepted · ${o.carrierName} notified`);
+          ui.notice = `New value accepted. ${o.carrierName} will be notified.`;
+        } else ui.notice = "Flagged. The field stays on the previous value until the source is corrected.";
+        render();
+        return;
+      }
+      if (name === "switch") { account.autoIssue = !account.autoIssue; render(); return; }
+      if (name === "carrier") { ui.public = true; ui.anim = false; render(); return; }
+      if (name === "pdf") {
+        const note = document.getElementById("pdfnote");
+        note.textContent = "Downloaded. Stamped with the current version and time. A later download replaces it.";
+      }
+    });
+
+    document.getElementById("app").addEventListener("input", (event) => {
+      if (event.target.id === "search") { ui.query = event.target.value; ui.anim = false; const pos = event.target.selectionStart; render(); const field = document.getElementById("search"); if (field) { field.focus(); field.setSelectionRange(pos, pos); } return; }
+      if (event.target.id === "door") ui.door = event.target.value;
+      if (event.target.id === "carrier") ui.carrier = event.target.value;
+      if (event.target.id === "special") ui.special = event.target.value;
+      if (event.target.id === "hours") ui.hours = event.target.value;
+      const button = document.querySelector("[data-act=issue]");
+      const current = $(ui.orderId);
+      if (button && current) button.disabled = !canIssue(current);
+      const reason = document.querySelector("#actionbar .reason");
+      if (reason && current) reason.textContent = blocker(current);
+    });
+
+    document.getElementById("app").addEventListener("change", (event) => {
+      if (event.target.id === "carrier") {
+        ui.carrier = event.target.value;
+        const current = $(ui.orderId);
+        if (current && !current.verified && ui.door && ui.carrier) render();
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>

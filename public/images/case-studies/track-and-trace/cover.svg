@@ -1,20 +1,72 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" fill="none">
-  <rect width="1600" height="1000" fill="#141916"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200" fill="none">
+  <rect width="1600" height="1200" fill="#141916"/>
   <defs>
-    <radialGradient id="g" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1100 220) rotate(90) scale(700 900)">
-      <stop stop-color="#a8c4a0" stop-opacity="0.28"/>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1180 280) rotate(90) scale(720 860)">
+      <stop stop-color="#a8c4a0" stop-opacity="0.32"/>
       <stop offset="1" stop-color="#141916" stop-opacity="0"/>
     </radialGradient>
     <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
       <path d="M48 0H0V48" stroke="#eceae4" stroke-opacity="0.06"/>
     </pattern>
   </defs>
-  <rect width="1600" height="1000" fill="url(#g)"/>
-  <rect width="1600" height="1000" fill="url(#grid)"/>
-  <rect x="980" y="180" width="320" height="640" rx="48" stroke="#a8c4a0" stroke-opacity="0.45" stroke-width="3"/>
-  <rect x="1000" y="210" width="280" height="560" rx="36" fill="#0e100f" stroke="#eceae4" stroke-opacity="0.12"/>
-  <circle cx="1140" cy="236" r="4" fill="#5c635c"/>
-  <text x="120" y="420" fill="#a8c4a0" font-family="system-ui,sans-serif" font-size="28" letter-spacing="6">KLEARNOW</text>
-  <text x="120" y="500" fill="#eceae4" font-family="system-ui,sans-serif" font-size="72" font-weight="600">Track &amp; Trace</text>
-  <text x="120" y="560" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="28">Mobile status, documents, and clarity on the go</text>
+  <rect width="1600" height="1200" fill="url(#glow)"/>
+  <rect width="1600" height="1200" fill="url(#grid)"/>
+
+  <text x="96" y="430" fill="#a8c4a0" font-family="system-ui,sans-serif" font-size="22" letter-spacing="5">KLEARNOW</text>
+  <text x="96" y="520" fill="#eceae4" font-family="system-ui,sans-serif" font-size="68" font-weight="650">Track &amp; Trace</text>
+  <text x="96" y="578" fill="#9aa19a" font-family="system-ui,sans-serif" font-size="26">One lookup. A status you can trust. Docs in the same flow.</text>
+
+  <g font-family="system-ui,sans-serif" font-size="22" font-weight="600">
+    <rect x="96" y="640" width="168" height="52" rx="26" fill="#1c2820" stroke="#a8c4a0" stroke-opacity="0.45"/>
+    <text x="128" y="673" fill="#d7e6d2">MBL</text>
+    <rect x="280" y="640" width="168" height="52" rx="26" fill="#1c2820" stroke="#eceae4" stroke-opacity="0.16"/>
+    <text x="312" y="673" fill="#eceae4">HAWB</text>
+    <rect x="464" y="640" width="210" height="52" rx="26" fill="#1c2820" stroke="#eceae4" stroke-opacity="0.16"/>
+    <text x="496" y="673" fill="#eceae4">Container</text>
+  </g>
+
+  <g font-family="system-ui,sans-serif">
+    <circle cx="112" cy="760" r="5" fill="#3dba6e"/>
+    <text x="132" y="768" fill="#c5cfc6" font-size="24">Status readable in one glance</text>
+    <circle cx="112" cy="812" r="5" fill="#a8c4a0"/>
+    <text x="132" y="820" fill="#c5cfc6" font-size="24">ABI documents, still on the phone</text>
+  </g>
+
+  <rect x="980" y="150" width="460" height="900" rx="64" stroke="#a8c4a0" stroke-opacity="0.4" stroke-width="3"/>
+  <rect x="1004" y="184" width="412" height="832" rx="48" fill="#f4f6f8"/>
+  <circle cx="1210" cy="214" r="5" fill="#c5cdc8"/>
+
+  <text x="1036" y="280" fill="#1c2a32" font-family="system-ui,sans-serif" font-size="32" font-weight="700">Track</text>
+  <rect x="1036" y="308" width="348" height="64" rx="18" fill="#ffffff" stroke="#d8dee8"/>
+  <text x="1056" y="348" fill="#1c2a32" font-family="ui-monospace,monospace" font-size="22">MSCU4451290</text>
+
+  <g font-family="system-ui,sans-serif" font-size="16" font-weight="650">
+    <rect x="1036" y="392" width="78" height="36" rx="18" fill="#1c2820"/>
+    <text x="1054" y="416" fill="#d7e6d2">MBL</text>
+    <rect x="1124" y="392" width="86" height="36" rx="18" fill="#ffffff" stroke="#d8dee8"/>
+    <text x="1140" y="416" fill="#3d4d63">HAWB</text>
+    <rect x="1220" y="392" width="120" height="36" rx="18" fill="#ffffff" stroke="#d8dee8"/>
+    <text x="1236" y="416" fill="#3d4d63">Container</text>
+  </g>
+
+  <rect x="1036" y="456" width="348" height="250" rx="24" fill="#ffffff"/>
+  <text x="1060" y="504" fill="#1c2a32" font-family="system-ui,sans-serif" font-size="22" font-weight="700">Schlumberger</text>
+  <rect x="1236" y="476" width="124" height="36" rx="18" fill="#fff4df"/>
+  <text x="1256" y="500" fill="#8a5a10" font-family="system-ui,sans-serif" font-size="16" font-weight="700">In transit</text>
+  <text x="1060" y="568" fill="#1c2a32" font-family="system-ui,sans-serif" font-size="22" font-weight="650">Charleston</text>
+  <text x="1288" y="568" fill="#1c2a32" font-family="system-ui,sans-serif" font-size="22" font-weight="650">Hamburg</text>
+  <text x="1208" y="568" fill="#9aa3b2" font-family="system-ui,sans-serif" font-size="20">→</text>
+  <text x="1060" y="608" fill="#7b8494" font-family="system-ui,sans-serif" font-size="16">ETD Aug 21</text>
+  <text x="1288" y="608" fill="#7b8494" font-family="system-ui,sans-serif" font-size="16">ETA Sep 22</text>
+  <line x1="1060" y1="640" x2="1348" y2="640" stroke="#eef1f4"/>
+  <text x="1060" y="676" fill="#8a93a1" font-family="system-ui,sans-serif" font-size="13" letter-spacing="1">CONTAINER</text>
+  <text x="1060" y="700" fill="#1c2a32" font-family="ui-monospace,monospace" font-size="16">HLBU8168248</text>
+
+  <rect x="1036" y="728" width="348" height="92" rx="22" fill="#e7f6ee"/>
+  <circle cx="1076" cy="774" r="8" fill="#178a49"/>
+  <text x="1100" y="768" fill="#1c2a32" font-family="system-ui,sans-serif" font-size="22" font-weight="700">ABI documents</text>
+  <text x="1100" y="796" fill="#3d5c48" font-family="system-ui,sans-serif" font-size="18">Ready to email from this shipment</text>
+
+  <rect x="1036" y="844" width="348" height="64" rx="18" fill="#2f5f68"/>
+  <text x="1148" y="884" fill="#ffffff" font-family="system-ui,sans-serif" font-size="20" font-weight="700">Open shipment</text>
 </svg>

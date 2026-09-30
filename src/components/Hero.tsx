@@ -11,9 +11,14 @@ export function Hero() {
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_20%,var(--hero-glow),transparent_55%),radial-gradient(ellipse_at_15%_85%,var(--hero-glow),transparent_45%),linear-gradient(180deg,var(--hero-top)_0%,var(--canvas)_70%)]"
       />
+      <div aria-hidden className="hero-field pointer-events-none absolute inset-0">
+        <span className="hero-orb hero-orb-a" />
+        <span className="hero-orb hero-orb-b" />
+        <span className="hero-sweep" />
+      </div>
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.45] [background-image:linear-gradient(var(--line)_1px,transparent_1px),linear-gradient(90deg,var(--line)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_75%)]"
+        className="hero-grid pointer-events-none absolute inset-0 opacity-[0.45] [background-image:linear-gradient(var(--line)_1px,transparent_1px),linear-gradient(90deg,var(--line)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_75%)]"
       />
 
       <div className="relative mx-auto w-full max-w-6xl">
