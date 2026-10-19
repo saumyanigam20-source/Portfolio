@@ -9,13 +9,87 @@ import {
   type RefObject,
 } from "react";
 
-type Scene = "idle" | "users" | "role" | "status";
-type FollowUp = "edit" | "invite" | "create-role" | "deactivate" | null;
+type Scene =
+  | "idle"
+  | "track"
+  | "etas"
+  | "delays"
+  | "customs"
+  | "pol"
+  | "docs"
+  | "invoices"
+  | "missing"
+  | "contract"
+  | "entity"
+  | "users"
+  | "role"
+  | "status";
+
+type FollowUp =
+  | "preview-docs"
+  | "preview-bol"
+  | "preview-missing"
+  | "request-drayage"
+  | "accept-eta"
+  | "pay-ok"
+  | "pay-blocked"
+  | "edit"
+  | "invite"
+  | "create-role"
+  | "deactivate"
+  | null;
+
+type FollowResult =
+  | { kind: "note" | "done"; text: string }
+  | { kind: "error"; text: string }
+  | { kind: "preview"; intro: string; docs: { title: string; lines: string[] }[] };
+
+type IconName = "box" | "calendar" | "alert" | "file" | "pin" | "card" | "building" | "user-plus" | "shield" | "user";
 
 const captions: Record<Scene, { title: string; body: string }> = {
   idle: {
     title: "Hi Brooke — what would you like to know?",
-    body: "Jobs sit first, in her language. Add a user, add a role, or manage status — she does not have to invent the prompt.",
+    body: "The first turn is a few questions from the case study. A real answer can open a document or take the next action. A miss comes back as an error she can act on.",
+  },
+  track: {
+    title: "One shipment, one detail",
+    body: "What’s the ETA returns where it is, the date, and the last free day. Documents and drayage stay on this turn.",
+  },
+  etas: {
+    title: "Upcoming ETAs, as a list",
+    body: "Arrivals come back as a short list. Documents on the shipment open from the same turn.",
+  },
+  delays: {
+    title: "What is slipping",
+    body: "Delays are called out on their own. She can accept the new ETA here.",
+  },
+  customs: {
+    title: "What is held, and why",
+    body: "Customs status is the hold, the container, and the place. Not a paragraph.",
+  },
+  pol: {
+    title: "Port of lading, across shipments",
+    body: "The question that started this. Lading and unlading for the open shipments, then the bill of lading opens here.",
+  },
+  docs: {
+    title: "Documents, in the chat",
+    body: "If the file is on the shipment, she previews it here. If it isn’t ready, the chat says so.",
+  },
+  missing: {
+    title: "Nothing to show",
+    body: "A bad id doesn’t invent a shipment. The error names what to try next.",
+  },
+  invoices: {
+    title: "Overdue, then pay",
+    body: "Finance answers with the overdue set and a payment step in the panel.",
+  },
+  contract: {
+    title: "One date",
+    body: "A contract expiry is a single line. No table for one fact.",
+  },
+  entity: {
+    title: "Add a sub-customer here",
+    body: "Entity asks for the company, then files it. She does not walk the menu.",
   },
   users: {
     title: "Add a user, in one turn",
@@ -32,32 +106,42 @@ const captions: Record<Scene, { title: string; body: string }> = {
 };
 
 const intents: {
-  id: Scene;
+  id: Exclude<Scene, "idle">;
   label: string;
-  icon: "user-plus" | "shield" | "user";
+  icon: IconName;
   threadTitle: string;
 }[] = [
-  {
-    id: "users",
-    label: "How to add a new user?",
-    icon: "user-plus",
-    threadTitle: "Add a new user",
-  },
-  {
-    id: "role",
-    label: "How to add a new role?",
-    icon: "shield",
-    threadTitle: "Add a new role",
-  },
-  {
-    id: "status",
-    label: "How to manage User Status (Active/ Inactive)?",
-    icon: "user",
-    threadTitle: "Manage user status",
-  },
+  { id: "track", label: "What's the ETA?", icon: "calendar", threadTitle: "ETA" },
+  { id: "pol", label: "What's the port of lading?", icon: "pin", threadTitle: "Port of lading" },
+  { id: "delays", label: "What's delayed?", icon: "alert", threadTitle: "Delayed shipments" },
+  { id: "docs", label: "Any documents to check?", icon: "file", threadTitle: "Documents" },
+  { id: "invoices", label: "Which invoices are overdue?", icon: "card", threadTitle: "Overdue invoices" },
+  { id: "missing", label: "Where is shipment KX-0000?", icon: "box", threadTitle: "Shipment not found" },
 ];
 
-const followUps: Record<Exclude<Scene, "idle">, { id: FollowUp; label: string }[]> = {
+const followUps: Record<Exclude<Scene, "idle">, { id: Exclude<FollowUp, null>; label: string }[]> = {
+  track: [
+    { id: "preview-docs", label: "Preview documents" },
+    { id: "request-drayage", label: "Request drayage" },
+  ],
+  etas: [{ id: "preview-docs", label: "Preview documents" }],
+  delays: [
+    { id: "accept-eta", label: "Accept new ETA" },
+    { id: "preview-docs", label: "Preview documents" },
+  ],
+  customs: [{ id: "preview-missing", label: "Preview hold notice" }],
+  pol: [{ id: "preview-bol", label: "Preview bill of lading" }],
+  docs: [
+    { id: "preview-bol", label: "Preview bill of lading" },
+    { id: "preview-missing", label: "Preview delivery order" },
+  ],
+  invoices: [
+    { id: "pay-ok", label: "Pay INV-1042" },
+    { id: "pay-blocked", label: "Pay INV-1130" },
+  ],
+  missing: [],
+  contract: [],
+  entity: [],
   users: [
     { id: "edit", label: "Edit A. Mehta" },
     { id: "invite", label: "Invite a user" },
@@ -66,7 +150,185 @@ const followUps: Record<Exclude<Scene, "idle">, { id: FollowUp; label: string }[
   status: [{ id: "deactivate", label: "Deactivate J. Cole" }],
 };
 
-export function ChatPrototype() {
+const replies: Record<
+  Exclude<Scene, "idle">,
+  { text: string; tone?: "error"; table?: { headers: string[]; rows: string[][] } }
+> = {
+  track: {
+    text: "KX-A7J4-73 is at Charleston. ETA Hamburg is Sep 22. Last free day is in 2 days.",
+  },
+  etas: {
+    text: "Three shipments are arriving. Here’s the ETA for each.",
+    table: {
+      headers: ["Shipment", "ETA", "Destination"],
+      rows: [
+        ["KX-A7J4-73", "Sep 22", "Hamburg"],
+        ["KX-UIC8-900", "Sep 28", "Rotterdam"],
+        ["KX-U1C6-8389", "Oct 10", "Genoa"],
+      ],
+    },
+  },
+  delays: {
+    text: "One shipment is delayed. The new ETA is on the row.",
+    table: {
+      headers: ["Shipment", "Status", "ETA"],
+      rows: [["KX-U1C6-8389", "Delayed", "Oct 10"]],
+    },
+  },
+  customs: {
+    text: "Three containers are held. Here’s why, and where.",
+    table: {
+      headers: ["Container", "Hold", "Where"],
+      rows: [
+        ["MSKU7654321", "Exam hold", "Los Angeles"],
+        ["TCLU4567890", "Document review", "Long Beach"],
+        ["GESU9876543", "Agriculture inspection", "Long Beach"],
+      ],
+    },
+  },
+  pol: {
+    text: "Port of lading and unlading, across the open shipments. The bill of lading is on the file.",
+    table: {
+      headers: ["Shipment", "Lading", "Unlading"],
+      rows: [
+        ["KX-A7J4-73", "Charleston", "Hamburg"],
+        ["KX-U1C6-8389", "Houston", "Genoa"],
+        ["KX-UIC8-900", "Los Angeles", "Rotterdam"],
+      ],
+    },
+  },
+  docs: {
+    text: "KX-A7J4-73 has three files ready to preview. A delivery order is not on this shipment.",
+    table: {
+      headers: ["Document", "Ingested", "Status"],
+      rows: [
+        ["Bill of Lading", "Sep 18", "Ready"],
+        ["Commercial Invoice", "Sep 19", "Ready"],
+        ["Packing List", "Sep 18", "Ready"],
+      ],
+    },
+  },
+  invoices: {
+    text: "Two invoices are overdue. INV-1130 is on hold — you can try the payment from here.",
+    table: {
+      headers: ["Invoice", "Due", "Status"],
+      rows: [
+        ["INV-1042", "Sep 2", "Overdue"],
+        ["INV-1108", "Sep 9", "Overdue"],
+        ["INV-1130", "Sep 18", "On hold"],
+      ],
+    },
+  },
+  missing: {
+    tone: "error",
+    text: "I can’t find shipment KX-0000. Check the id, or ask about KX-A7J4-73.",
+  },
+  contract: {
+    text: "This contract expires 12 Nov.",
+  },
+  entity: {
+    text: "Add a sub-customer on this account. Send the company name and I’ll file it under Entity.",
+  },
+  users: {
+    text: "12 users in this tenant. Here’s the active set — you can edit or deactivate from here.",
+    table: {
+      headers: ["Name", "Role", "Status"],
+      rows: [
+        ["A. Mehta", "Super admin", "Active"],
+        ["J. Cole", "Finance", "Active"],
+        ["R. Singh", "Ops", "Invited"],
+      ],
+    },
+  },
+  role: {
+    text: "Let’s add a new role. Select the type — Super admin, Finance, or Ops — then I’ll show who already has it.",
+    table: {
+      headers: ["Role", "People", "Access"],
+      rows: [
+        ["Super admin", "2", "Full"],
+        ["Finance", "4", "Billing"],
+        ["Ops", "6", "KlearHub"],
+      ],
+    },
+  },
+  status: {
+    text: "User status is Active or Inactive. Here’s the current set — you can toggle from this list.",
+    table: {
+      headers: ["Name", "Role", "Status"],
+      rows: [
+        ["A. Mehta", "Super admin", "Active"],
+        ["J. Cole", "Finance", "Active"],
+        ["P. Rao", "Ops", "Inactive"],
+      ],
+    },
+  },
+};
+
+const shipmentDocs: { title: string; lines: string[] }[] = [
+  {
+    title: "Bill of Lading",
+    lines: ["KX-A7J4-73 · HLCUOS1250801516", "Charleston → Hamburg", "Container HLBU8168248", "Ingested Sep 18, 2025"],
+  },
+  {
+    title: "Commercial Invoice",
+    lines: ["KX-A7J4-73 · PO 4514710485", "Ingested Sep 19, 2025"],
+  },
+  {
+    title: "Packing List",
+    lines: ["KX-A7J4-73 · container HLBU8168248", "Ingested Sep 18, 2025"],
+  },
+];
+
+const followResults: Record<Exclude<FollowUp, null>, FollowResult> = {
+  "preview-docs": {
+    kind: "preview",
+    intro: "Three files are on KX-A7J4-73. The preview stays in this chat.",
+    docs: shipmentDocs,
+  },
+  "preview-bol": {
+    kind: "preview",
+    intro: "Bill of lading for KX-A7J4-73.",
+    docs: [shipmentDocs[0]],
+  },
+  "preview-missing": {
+    kind: "error",
+    text: "This file isn’t ready to preview yet. It isn’t on the shipment.",
+  },
+  "request-drayage": {
+    kind: "done",
+    text: "Drayage requested for KX-A7J4-73. Last free day is in 2 days. The request stays in this chat.",
+  },
+  "accept-eta": {
+    kind: "done",
+    text: "New ETA Oct 10 is saved on KX-U1C6-8389.",
+  },
+  "pay-ok": {
+    kind: "done",
+    text: "Payment started for INV-1042. You’ll confirm it here.",
+  },
+  "pay-blocked": {
+    kind: "error",
+    text: "INV-1130 can’t be paid yet. Billing has to release the hold first.",
+  },
+  edit: {
+    kind: "note",
+    text: "Editing A. Mehta. Role is Super admin, status Active. Change either field and I’ll save it here.",
+  },
+  invite: {
+    kind: "note",
+    text: "Send an invite with name, email, and role. They’ll land in this table as Invited until they accept.",
+  },
+  "create-role": {
+    kind: "done",
+    text: "New Ops role saved: access to KlearHub, no billing.",
+  },
+  deactivate: {
+    kind: "done",
+    text: "J. Cole is now Inactive. They keep their Finance role, but they can’t sign in until you turn them back on.",
+  },
+};
+
+export function ChatPrototype({ embedded = false }: { embedded?: boolean }) {
   const [scene, setScene] = useState<Scene>("idle");
   const [asked, setAsked] = useState("");
   const [askedAt, setAskedAt] = useState("9:13 PM");
@@ -74,6 +336,7 @@ export function ChatPrototype() {
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [aborted, setAborted] = useState(false);
+  const [started, setStarted] = useState(false);
   const [followUp, setFollowUp] = useState<FollowUp>(null);
   const [followLoading, setFollowLoading] = useState(false);
   const timerRef = useRef<number | null>(null);
@@ -92,7 +355,8 @@ export function ChatPrototype() {
   useEffect(() => {
     const node = scrollerRef.current;
     if (!node) return;
-    node.scrollTo({ top: node.scrollHeight, behavior: "smooth" });
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    node.scrollTo({ top: node.scrollHeight, behavior: reduce ? "auto" : "smooth" });
   }, [scene, loading, followUp, followLoading, expanded, aborted]);
 
   function clearTimer() {
@@ -128,6 +392,7 @@ export function ChatPrototype() {
     setAborted(false);
     setDraft("");
     setLoading(true);
+    setStarted(true);
     timerRef.current = window.setTimeout(() => {
       setLoading(false);
       timerRef.current = null;
@@ -161,18 +426,33 @@ export function ChatPrototype() {
 
   const thinking = loading || followLoading;
 
+  const Shell = embedded ? "div" : "section";
+
   return (
-    <section className="space-y-6">
+    <Shell
+      data-guide={embedded ? undefined : "try"}
+      className="max-w-full space-y-6 scroll-mt-60"
+    >
+      {embedded ? null : (
+        <div>
+          <p className="text-xs font-medium tracking-[0.22em] text-faint uppercase">
+            Prototype
+          </p>
+          <h2 className="mt-3 font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">
+            Try the prototype
+          </h2>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
+            Ask it a question the way you&apos;d ask a coworker.
+          </p>
+        </div>
+      )}
       <div>
-        <p className="text-xs font-medium tracking-[0.22em] text-faint uppercase">
-          Prototype
-        </p>
-        <h2 className="mt-3 font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">
-          Walk the assistant
-        </h2>
-        <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
-          The compact panel keeps jobs close. Expand it for the workspace — suggested
-          prompts in the center, then a thread with history once a chat starts.
+        <p className="max-w-xl rounded-2xl border border-dashed border-accent/40 bg-accent-soft px-4 py-3 text-sm leading-relaxed text-ink">
+          {scene === "idle"
+            ? "Tip — start with a suggested question. A real answer can open a document or take an action. A miss comes back as an error."
+            : expanded
+              ? "You are in the workspace. Preview a document or take the next action from the chips under the answer."
+              : "The answer stayed in the panel. Preview a document or take the next action from the chips."}
         </p>
       </div>
 
@@ -246,12 +526,13 @@ export function ChatPrototype() {
                 onDraft={setDraft}
                 onSend={sendDraft}
                 onStop={stopReply}
+                nudge={!started}
               />
             ) : (
               <div className="flex h-[480px] flex-col bg-[#fbfcfd]">
                 <div ref={scrollerRef} className="proto-scroll min-h-0 flex-1 px-5 py-6">
                   {scene === "idle" ? (
-                    <IdlePanel onPick={ask} layout="dock" />
+                    <IdlePanel onPick={ask} layout="dock" nudge={!started} />
                   ) : (
                     <Thread
                       scene={scene}
@@ -303,7 +584,7 @@ export function ChatPrototype() {
           </div>
         </div>
       </div>
-    </section>
+    </Shell>
   );
 }
 
@@ -325,6 +606,7 @@ function WorkspaceBody({
   onDraft,
   onSend,
   onStop,
+  nudge,
 }: {
   scene: Scene;
   asked: string;
@@ -343,6 +625,7 @@ function WorkspaceBody({
   onDraft: (value: string) => void;
   onSend: (event?: FormEvent) => void;
   onStop: () => void;
+  nudge: boolean;
 }) {
   const inThread = scene !== "idle";
 
@@ -378,7 +661,7 @@ function WorkspaceBody({
           }`}
         >
           {scene === "idle" ? (
-            <IdlePanel onPick={onPick} layout="workspace" />
+            <IdlePanel onPick={onPick} layout="workspace" nudge={nudge} />
           ) : (
             <Thread
               scene={scene}
@@ -463,21 +746,37 @@ function Composer({
   );
 }
 
-function resolveScene(text: string): Scene {
+function resolveScene(text: string): Exclude<Scene, "idle"> {
   const value = text.toLowerCase();
-  if (value.includes("role")) return "role";
-  if (value.includes("status") || value.includes("inactive") || value.includes("active")) {
-    return "status";
+  if (value.includes("kx-0000") || value.includes("not found") || value.includes("can't find") || value.includes("cant find")) {
+    return "missing";
   }
-  return "users";
+  if (value.includes("document") || value.includes("preview") || value.includes("bill of lading") || value.includes("packing")) {
+    return "docs";
+  }
+  if (value.includes("port") || value.includes("lading") || value.includes("unlading") || value.includes("pol")) {
+    return "pol";
+  }
+  if (value.includes("customs") || value.includes("clearance") || value.includes("hold")) return "customs";
+  if (value.includes("delay")) return "delays";
+  if (value.includes("eta") || value.includes("upcoming") || value.includes("arriving")) return "etas";
+  if (value.includes("invoice") || value.includes("overdue") || value.includes("pay")) return "invoices";
+  if (value.includes("contract") || value.includes("expir")) return "contract";
+  if (value.includes("sub-customer") || value.includes("entity") || value.includes("customer")) return "entity";
+  if (value.includes("role")) return "role";
+  if (value.includes("status") || value.includes("inactive") || value.includes("active")) return "status";
+  if (value.includes("user")) return "users";
+  return "track";
 }
 
 function IdlePanel({
   onPick,
   layout,
+  nudge,
 }: {
   onPick: (id: Scene) => void;
   layout: "dock" | "workspace";
+  nudge: boolean;
 }) {
   const workspace = layout === "workspace";
 
@@ -485,7 +784,7 @@ function IdlePanel({
     <div
       className={
         workspace
-          ? "flex h-full flex-col items-center justify-center"
+          ? "flex h-full flex-col items-center justify-start py-4"
           : "flex h-full flex-col"
       }
     >
@@ -508,7 +807,11 @@ function IdlePanel({
             type="button"
             onClick={() => onPick(item.id)}
             style={{ animationDelay: `${index * 70}ms` }}
-            className={`proto-sheet flex w-full items-center gap-3 border border-[#d8e0e6] bg-white text-left leading-snug text-[#3d4d5c] ${
+            className={`proto-sheet flex w-full items-center gap-3 border bg-white text-left leading-snug text-[#3d4d5c] ${
+              nudge && index === 0
+                ? "border-[#33657c] ring-2 ring-[#33657c]/30"
+                : "border-[#d8e0e6]"
+            } ${
               workspace
                 ? "rounded-2xl px-3 py-2.5 text-[13px]"
                 : "rounded-xl px-3 py-3 text-[13px] shadow-[0_0_0_1px_rgba(51,101,124,0.02)]"
@@ -568,9 +871,7 @@ function Thread({
       ) : null}
       {showReply ? (
         <>
-          {scene === "users" ? <UsersReply /> : null}
-          {scene === "role" ? <RoleReply /> : null}
-          {scene === "status" ? <StatusReply /> : null}
+          <SceneReply scene={scene} />
           <div className="flex flex-wrap gap-2 pt-1">
             {chips.map((chip) => (
               <button
@@ -601,35 +902,65 @@ function Thread({
 }
 
 function FollowUpReply({ id }: { id: Exclude<FollowUp, null> }) {
-  if (id === "edit") {
+  const result = followResults[id];
+  if (result.kind === "error") return <ErrorLine>{result.text}</ErrorLine>;
+  if (result.kind === "preview") {
+    return (
+      <div className="proto-sheet max-w-[94%] space-y-2">
+        <BotLine>{result.intro}</BotLine>
+        {result.docs.map((doc) => (
+          <DocCard key={doc.title} title={doc.title} lines={doc.lines} />
+        ))}
+      </div>
+    );
+  }
+  if (result.kind === "done") {
     return (
       <BotLine>
-        Editing A. Mehta. Role is Super admin, status Active. Change either field and
-        I’ll save it here — no trip back to Administration.
+        <span className="mb-1 block text-[10px] font-medium tracking-[0.12em] text-[#33657c] uppercase">
+          Done
+        </span>
+        {result.text}
       </BotLine>
     );
   }
-  if (id === "invite") {
-    return (
-      <BotLine>
-        Send an invite with name, email, and role. They’ll land in this table as Invited
-        until they accept.
-      </BotLine>
-    );
-  }
-  if (id === "create-role") {
-    return (
-      <BotLine>
-        New Ops role: access to KlearHub, no billing. Six people already have it — I can
-        attach this role to a user next.
-      </BotLine>
-    );
-  }
+  return <BotLine>{result.text}</BotLine>;
+}
+
+function SceneReply({ scene }: { scene: Exclude<Scene, "idle"> }) {
+  const reply = replies[scene];
+  if (reply.tone === "error") return <ErrorLine>{reply.text}</ErrorLine>;
   return (
-    <BotLine>
-      J. Cole is now Inactive. They keep their Finance role, but they can’t sign in until
-      you turn them back on.
-    </BotLine>
+    <div className="proto-sheet max-w-[92%] space-y-2">
+      <BotLine>{reply.text}</BotLine>
+      {reply.table ? <DataTable headers={reply.table.headers} rows={reply.table.rows} /> : null}
+    </div>
+  );
+}
+
+function ErrorLine({ children }: { children: ReactNode }) {
+  return (
+    <div
+      role="alert"
+      className="proto-screen max-w-[94%] rounded-2xl rounded-tl-md border border-[#e7c4c0] bg-[#fdf6f5] px-3 py-2.5 text-[12px] leading-relaxed text-[#7a3b34]"
+    >
+      <span className="mb-1 block text-[10px] font-medium tracking-[0.12em] uppercase">Error</span>
+      {children}
+    </div>
+  );
+}
+
+function DocCard({ title, lines }: { title: string; lines: string[] }) {
+  return (
+    <div className="rounded-xl bg-white px-3 py-2.5 shadow-[0_0_0_1px_rgba(51,101,124,0.1)]">
+      <p className="text-[10px] tracking-[0.14em] text-[#8a93a0] uppercase">Preview</p>
+      <p className="mt-1 text-[12px] font-medium text-[#2c3b46]">{title}</p>
+      {lines.map((line) => (
+        <p key={line} className="mt-1 text-[11px] leading-relaxed text-[#465161]">
+          {line}
+        </p>
+      ))}
+    </div>
   );
 }
 
@@ -651,63 +982,6 @@ function UserLine({
           {askedAt}
         </p>
       ) : null}
-    </div>
-  );
-}
-
-function UsersReply() {
-  return (
-    <div className="proto-sheet max-w-[92%] space-y-2">
-      <BotLine>
-        12 users in this tenant. Here’s the active set — you can edit or deactivate from
-        here.
-      </BotLine>
-      <DataTable
-        headers={["Name", "Role", "Status"]}
-        rows={[
-          ["A. Mehta", "Super admin", "Active"],
-          ["J. Cole", "Finance", "Active"],
-          ["R. Singh", "Ops", "Invited"],
-        ]}
-      />
-    </div>
-  );
-}
-
-function RoleReply() {
-  return (
-    <div className="proto-sheet max-w-[92%] space-y-2">
-      <BotLine>
-        Let’s add a new role. Select the type — Super admin, Finance, or Ops — then I’ll
-        show who already has it.
-      </BotLine>
-      <DataTable
-        headers={["Role", "People", "Access"]}
-        rows={[
-          ["Super admin", "2", "Full"],
-          ["Finance", "4", "Billing"],
-          ["Ops", "6", "KlearHub"],
-        ]}
-      />
-    </div>
-  );
-}
-
-function StatusReply() {
-  return (
-    <div className="proto-sheet max-w-[92%] space-y-2">
-      <BotLine>
-        User status is Active or Inactive. Here’s the current set — you can toggle from
-        this list.
-      </BotLine>
-      <DataTable
-        headers={["Name", "Role", "Status"]}
-        rows={[
-          ["A. Mehta", "Super admin", "Active"],
-          ["J. Cole", "Finance", "Active"],
-          ["P. Rao", "Ops", "Inactive"],
-        ]}
-      />
     </div>
   );
 }
@@ -773,8 +1047,8 @@ function DataTable({
         <tbody className="text-[#1c2a32]">
           {rows.map((row) => (
             <tr key={row.join("-")} className="border-t border-[#eef1f3]">
-              {row.map((cell) => (
-                <td key={cell} className="px-2.5 py-1.5">
+              {row.map((cell, index) => (
+                <td key={`${index}-${cell}`} className="px-2.5 py-1.5">
                   {cell}
                 </td>
               ))}
@@ -786,13 +1060,69 @@ function DataTable({
   );
 }
 
-function IntentIcon({
-  name,
-  size = 18,
-}: {
-  name: "user-plus" | "shield" | "user";
-  size?: number;
-}) {
+function Glyph({ name, size }: { name: Exclude<IconName, "user-plus" | "shield" | "user">; size: number }) {
+  const common = { width: size, height: size, viewBox: "0 0 24 24", fill: "none", "aria-hidden": true as const };
+  if (name === "box") {
+    return (
+      <svg {...common}>
+        <path d="M4 8.5 12 4.5l8 4v9L12 21.5 4 17.5v-9Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+        <path d="M12 12.5V21M4.5 8.8 12 12.5l7.5-3.7" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+  if (name === "calendar") {
+    return (
+      <svg {...common}>
+        <rect x="4" y="5.5" width="16" height="14" rx="2" stroke="currentColor" strokeWidth="1.7" />
+        <path d="M8 3.5v4M16 3.5v4M4 10h16" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+      </svg>
+    );
+  }
+  if (name === "alert") {
+    return (
+      <svg {...common}>
+        <path d="M12 4.5 20.5 19H3.5L12 4.5Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+        <path d="M12 10v4.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        <circle cx="12" cy="16.6" r="0.8" fill="currentColor" />
+      </svg>
+    );
+  }
+  if (name === "file") {
+    return (
+      <svg {...common}>
+        <path d="M7 3.5h7l4 4V20.5H7v-17Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+        <path d="M14 3.5V8h4.5" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+  if (name === "pin") {
+    return (
+      <svg {...common}>
+        <path d="M12 21s6-5.2 6-10a6 6 0 1 0-12 0c0 4.8 6 10 6 10Z" stroke="currentColor" strokeWidth="1.7" />
+        <circle cx="12" cy="11" r="2" stroke="currentColor" strokeWidth="1.7" />
+      </svg>
+    );
+  }
+  if (name === "card") {
+    return (
+      <svg {...common}>
+        <rect x="3.5" y="6" width="17" height="12" rx="2" stroke="currentColor" strokeWidth="1.7" />
+        <path d="M3.5 10h17" stroke="currentColor" strokeWidth="1.7" />
+      </svg>
+    );
+  }
+  return (
+    <svg {...common}>
+      <path d="M5 20.5V9.5L12 5l7 4.5v11" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+      <path d="M10 20.5v-6h4v6" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IntentIcon({ name, size = 18 }: { name: IconName; size?: number }) {
+  if (name === "box" || name === "calendar" || name === "alert" || name === "file" || name === "pin" || name === "card" || name === "building") {
+    return <Glyph name={name} size={size} />;
+  }
   if (name === "shield") {
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>

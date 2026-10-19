@@ -10,226 +10,148 @@ export const klearassistMeta = {
     "An assistant that lives on the KlearNow desktop — not a separate app. People ask in plain language, see the right record, and take the next step without learning ten modules.",
 } as const;
 
+export const klearassistLead =
+  "A small assistant that takes you straight to the one detail you need, so nobody has to hunt through tables to find it.";
+
+/** Paste a prototype URL here. A Figma link is embedded; any other URL is iframed as-is. */
+export const klearassistPrototypeUrl = "";
+
 export const klearassistContent = {
   meta: klearassistMeta,
   snapshot: [
-    { label: "Platform", value: "Desktop · embedded in KlearNow" },
     { label: "Role", value: "End-to-end UX" },
-    { label: "Collaborators", value: "PM, engineering, support" },
-    { label: "Focus", value: "Intent → data → action" },
+    { label: "Team", value: "PM, engineering, support" },
+    { label: "Product", value: "Desktop, embedded in KlearNow" },
+    { label: "Timeline", value: "Research to live release" },
   ],
-  overview: {
-    eyebrow: "What this is",
-    title: "A way into a huge system, in ordinary words",
-    body: [
-      "KlearNow helps companies move goods across borders. The product is strong. It is also dense. Administration, entity, finance, master data, transactions, payments, and KlearHub each have their own menus.",
-      "KlearAssist is not a chatbot for chatting. It is a small panel on the dashboard that understands a request, fetches the right record, and shows it as text, a card, or a table — then offers a real next step.",
-      "Track & Trace was a phone for people away from a desk. This work is the opposite job: people already at the desktop, lost inside the desktop.",
+  impact: {
+    body: "KlearAssist is live for customers. People who use it every day say it fits the way they already work: they no longer hunt through tables for one detail or wade through clutter.",
+    bullets: [
+      "Status: live, with customer reviews.",
+      "Expected to move: clicks to reach a detail, and “where do I find...?” questions to support.",
     ],
+    note: "These are the metrics I expected to move; they weren’t formally measured.",
   },
   problem: {
-    eyebrow: "The problem, simply",
-    title: "The data was there. The door was not.",
-    body: "Operators did not fail the task. They failed at finding where the task lived. A question like “what is arriving this week?” meant a map of the product, not a sentence. Training and Slack became the real interface.",
-    points: [
+    body: "To find one small detail in KlearNow, like a port of lading or an ETA, you had to go to a table, set filters or use global search, and click several times. The data was there, but there was no direct way to it.",
+    aside:
+      "It's like asking a shopkeeper 'Bhaiya, Maggi hai?' and being handed the whole stock register to search.",
+    before: ["Need an ETA", "Open table", "Set filters", "Global search", "Several clicks"],
+    after: ["Need an ETA", "Ask, get it"],
+    caption: "The data was never missing. The path to it was.",
+  },
+  started: {
+    paragraphs: [
+      "A small complaint came in through customer support. One customer wanted to see the port of lading or unlading across multiple shipments, and the only way was to open each shipment and look for it.",
+      "It could have been a quick patch. But I noticed it wasn’t new: people had been running into the same thing for a long time, and nobody had properly addressed it.",
+    ],
+    pull: "One small detail shouldn’t cost you a journey through the product.",
+  },
+  firstIdea: {
+    cards: [
       {
-        title: "Ten doors, one question",
-        body: "Each module taught a different mental model. People remembered jobs, not navigation labels.",
+        label: "First idea",
+        body: "A customizable dashboard, built on research and user interviews, so users could choose the data they cared about.",
       },
       {
-        title: "Onboarding as a crutch",
-        body: "Even experienced users kept manuals open. The product assumed they would learn the map.",
+        label: "What I realised",
+        body: "Every user has their own way of getting things done, so no single dashboard could fit everyone.",
+      },
+    ],
+    close:
+      "I stopped asking “where should the data sit?” and started asking “what does this person want to do?” The answer was to let people go from a small detail to an action in one step, the way we already use AI tools.",
+  },
+  modules: {
+    paragraphs: [
+      "KlearNow isn’t one product. It’s many modules, each with its own users and its own linked data. A generic chatbot would have been noisy and often wrong.",
+      "I used user interviews and module research to sort what mattered: major data from minor data, and read-only information from things people can act on. Then I designed the assistant around the module the user is in.",
+    ],
+    names: ["Admin", "Entity", "Finance", "Master data", "Transactions", "Payments", "KlearHub"],
+    active: "KlearHub",
+    panel: "You’re in KlearHub, so suggestions are only about KlearHub",
+    chips: ["Track a shipment", "Upcoming ETAs", "Delays"],
+    caption: "Move to another module and the suggestions change with it.",
+  },
+  solution: {
+    body: "It looks like a chatbot, but it works like a shortcut. A chat icon sits at the bottom right of the screen. At login a short intro explains what it does, and after that the icon stays quietly in place until needed.",
+    screens: [
+      {
+        src: "/images/case-studies/klearassist/flow-01-launcher.png",
+        alt: "KlearNow dashboard with the KlearAssist chat icon at the bottom right. The panel is closed.",
+        caption: "The entry point is small, always there and never in the way.",
       },
       {
-        title: "Answers that don’t act",
-        body: "A paragraph about overdue invoices is not a payment. The assistant had to change the screen, not only talk.",
+        src: "/images/case-studies/klearassist/flow-02-intents.png",
+        alt: "KlearAssist panel open on the KlearHub dashboard, with suggestions to track a shipment, show upcoming ETAs, and view delayed shipments.",
+        caption: "Suggestions come from the module you’re in.",
       },
     ],
   },
-  research: {
-    eyebrow: "User research",
-    title: "Who we listened to, and what they actually do",
-    intro:
-      "I treated this as a finding problem, not a “make AI sound friendly” problem. The work started with how people already get answers today — then we designed the shortcut.",
-    methods: [
-      {
-        title: "Interviews",
-        body: "Sat with super admins, finance managers, and ops / trade leads. Asked them to narrate the last time they hunted for a record, including who they pinged when they got stuck.",
-      },
-      {
-        title: "Support and training",
-        body: "Read internal how-to notes and support patterns. Recurring tickets were not bugs — they were missing doors: users, invoices, contract dates, shipments this week.",
-      },
-      {
-        title: "Task walkthroughs",
-        body: "Mapped live clicks for “show users,” “overdue invoices,” and “arriving shipments.” Counted how many modules a single sentence crossed.",
-      },
-    ],
-    findings: [
-      {
-        quote: "I know it’s in there. I don’t know which filter.",
-        who: "Finance manager",
-      },
-      {
-        quote: "If I have to train every new hire on KlearHub, we will never scale ops.",
-        who: "Operations lead",
-      },
-      {
-        quote: "Show me the list. Don’t send me to a page I have to rebuild.",
-        who: "Super admin",
-      },
-    ],
-    insights: [
-      "Jobs are sentences. Interfaces are trees. The gap is the product.",
-      "People trust a table they can scan more than a confident paragraph.",
-      "If an AI action is wrong, they will not try a second time — errors needed a next step, not a stack trace.",
-      "The assistant must stay inside KlearNow chrome. A new product would be another thing to learn.",
-    ],
+  customers: {
+    body: "Customers who use it daily told us it goes with their workflow. They don’t need to hunt inside table structures for one specific detail or deal with cluttered details.",
+    pull: "It goes with our workflow. We don’t have to hunt through a table for one detail.",
+    caption: "Customer using KlearAssist daily, feedback condensed.",
   },
-  personas: [
-    {
-      id: "brooke",
-      name: "Brooke Nation",
-      role: "Trade operations coordinator",
-      goal: "Know what is arriving this week, and what is late, without rebuilding a KlearHub view.",
-      context:
-        "Brooke lives in exceptions. Her morning is ETAs, delays, and a Slack thread that starts with a screenshot. She is the person the Figma flow greets by name.",
-      says: "Just tell me what’s coming, and what’s slipping.",
-      needs: ["Upcoming ETAs as a list", "Delayed shipments in one tap", "Stay on the dashboard"],
-      not: ["A second tracking app", "Another dashboard of KPIs"],
-    },
-    {
-      id: "jordan",
-      name: "Jordan Cole",
-      role: "Finance manager",
-      goal: "See overdue invoices as risk, then start payment from the same turn.",
-      context:
-        "Jordan’s week is credits, contracts, and aging. She can work Billing — she should not have to remember its IA every Monday.",
-      says: "If it’s overdue, show me red rows. Then let me pay.",
-      needs: ["Counts she can trust", "Highlighted risk", "A payment action"],
-      not: ["A chatty summary with no numbers"],
-    },
-    {
-      id: "asha",
-      name: "Asha Mehta",
-      role: "Super admin",
-      goal: "Find and manage users without Administration → User Management → hunt.",
-      context:
-        "Asha onboards tenants and cleans access. She is asked “who has access?” daily. Four clicks for a list is four clicks too many.",
-      says: "Show me all users. Then let me edit.",
-      needs: ["Searchable tables", "Role-aware results", "Clear permission errors"],
-      not: ["A bot that invents access it cannot grant"],
-    },
+  forward: [
+    "A small complaint can point to a big problem. Look for the pattern before fixing the ticket.",
+    "Let go of an idea you’ve invested in when the evidence says it won’t fit everyone.",
+    "Design AI around what people want to do, not around where the data sits.",
   ],
-  concepts: [
+  prototypeIntro: "Ask it the way you’d ask a colleague.",
+  guide: [
     {
-      id: "palette",
-      title: "A. Command palette only",
-      verdict: "Too hidden",
-      body: "⌘K already sat on the dashboard. Turning Assist into a search overlay was fast for power users and invisible to everyone else. No room for suggested jobs, tables, or history.",
+      id: "problem",
+      label: "Problem",
+      title: "The problem, simply",
+      body: "The data was there. The path to it was not.",
     },
     {
-      id: "takeover",
-      title: "B. Full-page chatbot",
-      verdict: "Too much product",
-      body: "Replace the dashboard with a chat canvas. It photographed well and failed the brief: people still needed Critical Alerts and KlearHub behind them. Assist would compete with the home they already trust.",
+      id: "started",
+      label: "Start",
+      title: "How it started",
+      body: "One support complaint, and a pattern behind it.",
     },
     {
-      id: "dock",
-      title: "C. Docked panel, then a workspace",
-      verdict: "Shipped direction",
-      body: "A launcher on the live dashboard. A compact KlearAssist panel with greetings and jobs. A table inside the panel when the answer is a list. Maximize into a full workspace with saved conversations. This is the Figma flow.",
-    },
-  ],
-  process: [
-    {
-      step: "01",
-      title: "Map the modules to sentences",
-      body: "Wrote an intent table: Admin “show all users,” Finance “overdue invoices,” Entity “add a sub-customer,” KlearHub “shipments arriving this week.” If a sentence had no home, the assistant should not pretend.",
+      id: "idea",
+      label: "Idea",
+      title: "The first idea didn’t hold",
+      body: "No single dashboard could fit every way of working.",
     },
     {
-      step: "02",
-      title: "Watch the real path",
-      body: "Walked the live clicks beside operators. The conversation design did not invent jobs — it shortened paths people already paid for in time.",
+      id: "modules",
+      label: "Modules",
+      title: "Many modules",
+      body: "Suggestions follow the module you’re in.",
     },
     {
-      step: "03",
-      title: "Sketch three homes for the AI",
-      body: "Palette, takeover, docked panel. We kept the dashboard and put Assist on it, because Brooke’s job starts with alerts, not a blank chat.",
+      id: "solution",
+      label: "Solution",
+      title: "The solution",
+      body: "A shortcut that looks like a chat.",
     },
     {
-      step: "04",
-      title: "Design how answers look",
-      body: "Single value → text. Summary → card. Many records → table. Risk → highlight. Action → confirmable control. This is a UI controller, not a novelist.",
+      id: "customers",
+      label: "Customers",
+      title: "What customers said",
+      body: "It goes with the way they already work.",
     },
     {
-      step: "05",
-      title: "Prototype the Figma path",
-      body: "Launcher → “Hi Brooke” jobs → typed question → shipment table → expand to a workspace with history. Same enterprise language as the rest of KlearNow.",
+      id: "forward",
+      label: "Forward",
+      title: "What I’d take forward",
+      body: "Pattern first. Evidence over a pet idea. Design for the job.",
     },
     {
-      step: "06",
-      title: "Error as a next step",
-      body: "Session, permission, missing input, network. Each failure says what happened and what to do. Trust is a designed state.",
-    },
-  ],
-  patterns: [
-    { data: "One number", ui: "Plain text", example: "Contract expires 12 Nov" },
-    { data: "A summary", ui: "Card", example: "3 overdue · $48,210" },
-    { data: "Many records", ui: "Table", example: "Upcoming shipments 16–22 Sept" },
-    { data: "Risk", ui: "Highlight", example: "Delayed rows, LFD" },
-    { data: "A task", ui: "Action", example: "Make payment / edit user" },
-  ],
-  figmaFlow: [
-    {
-      src: "/images/case-studies/klearassist/flow-01-launcher.png",
-      title: "01 · Stay on the dashboard",
-      body: "Assist does not replace home. Brooke still sees greeting, critical work, and KlearHub. A launcher sits on the canvas she already uses — same idea as the Chatbot icon in Figma.",
+      id: "try",
+      label: "Try",
+      title: "Try the prototype",
+      body: "Ask it the way you’d ask a colleague.",
     },
     {
-      src: "/images/case-studies/klearassist/flow-02-intents.png",
-      title: "02 · Open a panel, not a new product",
-      body: "The panel is named KlearAssist. It greets Brooke and offers jobs in her language: track a shipment, upcoming ETAs, delayed shipments. Suggested intents mean she does not have to invent the prompt.",
+      id: "impact",
+      label: "Impact",
+      title: "What changed",
+      body: "Live for customers. The numbers I expected to move.",
     },
-    {
-      src: "/images/case-studies/klearassist/panel-intents.png",
-      title: "03 · Jobs before a blank box",
-      body: "Track, ETAs, delays. Each row is a real KlearHub question. The composer still lets her type — “Ask about shipments…” — but the first screen teaches the vocabulary.",
-    },
-    {
-      src: "/images/case-studies/klearassist/flow-03-table.png",
-      title: "04 · Lists become tables",
-      body: "“Upcoming Shipments (16–22 Sept)” is not a paragraph. It is Shipment ID, container, origin, ETA, status — KX-A7J4-73 at POL, KX-U1C6-8389 in transit. Scan like the rest of the platform.",
-    },
-    {
-      src: "/images/case-studies/klearassist/flow-04-workspace.png",
-      title: "05 · Maximize into a workspace",
-      body: "When the thread needs room, the panel expands. History on the left (“No saved conversations yet”), jobs on the right. Same intents, more canvas. Minimize returns her to the dashboard.",
-    },
-  ],
-  iaCaption:
-    "Every module had to earn a sentence. If we could not say the job in one line, the assistant had no business answering it.",
-  conversationCaption:
-    "Deep menus became follow-ups. “Let’s add a new user. Select the type.” is the same work as Administration → User Management — without the tree.",
-  principles: [
-    {
-      title: "Progressive disclosure",
-      body: "Show the next useful thing. Tables wait until the question needs a list.",
-    },
-    {
-      title: "Context before cleverness",
-      body: "Role, permissions, and current module shape the answer. The bot does not over-promise.",
-    },
-    {
-      title: "Visual hierarchy",
-      body: "Critical → cards. Volume → tables. Status → color. Action → a control she can press.",
-    },
-  ],
-  impact: [
-    "User lookup: a four-step admin path becomes one prompt and a table.",
-    "Finance: overdue invoices show as risk, with payment in the same turn.",
-    "Ops: arriving and delayed shipments stay on the dashboard instead of a KlearHub rebuild.",
-    "Errors speak in next steps, so a failed export does not kill trust.",
-    "The assistant steers UI. It is not a second product to learn.",
   ],
 };

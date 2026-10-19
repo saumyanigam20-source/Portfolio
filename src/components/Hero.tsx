@@ -38,7 +38,7 @@ export function Hero() {
         <div className="animate-rise delay-3 mt-10 flex flex-wrap items-center gap-4">
           <Link
             href="/#work"
-            className="inline-flex items-center rounded-full bg-ink px-6 py-3 text-sm font-medium tracking-wide text-canvas transition hover:bg-accent hover:text-canvas"
+            className="hero-cta inline-flex items-center rounded-full px-6 py-3 text-sm font-medium tracking-wide"
           >
             View selected work
           </Link>

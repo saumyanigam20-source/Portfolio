@@ -5,7 +5,7 @@ subhead: Logistics, operations, and conversational UX — dense systems, made ea
 role: UX Designer III at KlearNow
 location: Gurgaon, India
 email: saumyanigam20@gmail.com
-linkedin: https://www.linkedin.com/
+linkedin: https://www.linkedin.com/in/saumya-nigam-48585393/
 source: https://worried-swim-808.notion.site/Hi-I-am-Saumya-2f211403363580a7970edd08d49879d9
 ---
 

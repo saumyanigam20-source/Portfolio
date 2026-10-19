@@ -255,6 +255,36 @@ a {
   }
 }
 
+.hero-cta {
+  color: var(--canvas);
+  background-image: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--accent) 55%, var(--ink)) 0%,
+    var(--accent) 48%,
+    color-mix(in srgb, var(--accent) 78%, var(--ink)) 100%
+  );
+  background-size: 180% 100%;
+  background-position: 0% 50%;
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--accent) 26%, transparent);
+  animation: hero-cta-shift 7s ease-in-out infinite;
+  transition: transform 280ms ease, box-shadow 280ms ease;
+}
+
+.hero-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--accent) 36%, transparent);
+}
+
+@keyframes hero-cta-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
 @keyframes rise {
   from {
     opacity: 0;
@@ -563,8 +593,13 @@ a {
   .name-mark span,
   .hero-grid,
   .hero-orb,
-  .hero-sweep {
+  .hero-sweep,
+  .hero-cta {
     animation: none;
+  }
+
+  .hero-cta:hover {
+    transform: none;
   }
 
   .name-mark span {

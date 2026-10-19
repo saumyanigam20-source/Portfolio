@@ -49,9 +49,16 @@ export function SelectedWork({ projects }: { projects: CaseStudyMeta[] }) {
                   </span>
                 </div>
                 <p className="text-sm leading-relaxed text-muted">{project.summary}</p>
-                <p className="text-xs tracking-[0.14em] text-faint uppercase">
-                  {project.company} · {project.tags.slice(0, 2).join(" · ")}
-                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {[project.company, ...project.tags.slice(0, 2)].map((keyword) => (
+                    <span
+                      key={keyword}
+                      className="rounded-full border border-line bg-accent-soft px-2.5 py-1 text-[10px] font-medium tracking-[0.12em] text-ink uppercase"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                </div>
               </div>
             </Link>
           </li>
