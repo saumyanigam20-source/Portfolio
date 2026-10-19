@@ -1,9 +1,8 @@
 export const profile = {
   name: "Saumya Nigam",
   firstName: "Saumya",
-  headline: "UX designer shaping products of all kinds",
-  supporting:
-    "I design logistics, operations, and conversational UX — dense systems, made easier to use.",
+  headline: "I make dense, complex systems easy to use.",
+  supporting: "UX designer for logistics, operations, and conversational AI.",
   currently:
     "I'm a UX Designer III at KlearNow, designing enterprise experiences for logistics and operations. Thirteen years in — from visual systems to B2B product — I specialise in research, product design, and conversational UX, turning dense workflows into flows people can actually run.",
   role: "UX Designer III",
