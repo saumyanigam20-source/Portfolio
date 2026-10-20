@@ -1,23 +1,11 @@
-export type DialogueMessage = {
-  id: string;
-  speaker: "saumya" | "ops" | "system";
-  label: string;
-  text: string;
-};
-
 export type ProblemReveal = {
   id: string;
   label: string;
   detail: string;
 };
 
-export type ProcessStep = {
-  title: string;
-  body: string;
-};
-
 export const trackAndTraceMeta = {
-  title: "Track & Trace Mobile App",
+  title: "Track & Trace Mobile",
   slug: "track-and-trace",
   company: "KlearNow.AI",
   role: "UX Designer",
@@ -25,107 +13,63 @@ export const trackAndTraceMeta = {
   category: "work",
   cover: "/images/case-studies/track-and-trace/cover.svg",
   summary:
-    "A mobile Track & Trace experience for logistics teams — clear shipment status, multi-format lookup, and documents on the go.",
+    "A mobile app that shows brokers, truckers and ops teams what needs attention, so a status check never has to wait for a laptop.",
 } as const;
 
 export const trackAndTraceContent = {
   meta: trackAndTraceMeta,
-  problemDialogue: [
-    {
-      id: "p1",
-      speaker: "ops",
-      label: "Ops lead",
-      text: "We’re still jumping between desktop tools just to answer one question — where is this shipment, and is it clearable?",
-    },
-    {
-      id: "p2",
-      speaker: "saumya",
-      label: "Saumya",
-      text: "So the pain isn’t “tracking exists” — it’s that tracking isn’t usable when people are away from their desk.",
-    },
-    {
-      id: "p3",
-      speaker: "ops",
-      label: "Ops lead",
-      text: "Exactly. Numbers come in as MBL, HAWB, railbill… and status language is inconsistent. Then someone has to dig for ABI docs.",
-    },
-    {
-      id: "p4",
-      speaker: "saumya",
-      label: "Saumya",
-      text: "Let’s map the failure points. Tap below if you want the detail behind each one.",
-    },
-  ] satisfies DialogueMessage[],
-  problemReveals: [
-    {
-      id: "formats",
-      label: "Too many formats",
-      detail:
-        "Teams track with MBL, HAWB, railbill, PARS/PAPS — but the old flow assumed one mental model. Wrong format = dead end or support tickets.",
-    },
-    {
-      id: "status",
-      label: "Unclear status",
-      detail:
-        "Admissible, declaration, and PGA signals were hard to scan. People re-checked desktop tools to trust what they saw.",
-    },
-    {
-      id: "docs",
-      label: "Docs not on the go",
-      detail:
-        "ABI documents lived in separate paths. On a warehouse floor or in transit, that delay blocked decisions.",
-    },
-    {
-      id: "mobile",
-      label: "Desktop-first friction",
-      detail:
-        "The experience wasn’t designed for quick, one-handed checks. Mobile was an afterthought, not a primary job.",
-    },
-  ] satisfies ProblemReveal[],
-  solutionDialogue: [
-    {
-      id: "s1",
-      speaker: "saumya",
-      label: "Saumya",
-      text: "What if Track & Trace were a phone-first flow: one input, clear validation, status you can trust in three seconds?",
-    },
-    {
-      id: "s2",
-      speaker: "ops",
-      label: "Ops lead",
-      text: "And if I need the ABI packet, I shouldn’t leave the same screen tree.",
-    },
-    {
-      id: "s3",
-      speaker: "saumya",
-      label: "Saumya",
-      text: "That’s the product bet — multi-format lookup, scannable compliance status, and document actions without the desktop detour.",
-    },
-    {
-      id: "s4",
-      speaker: "system",
-      label: "Prototype",
-      text: "Walk the redesigned phone flow below — home, shipment, drayage, documents.",
-    },
-  ] satisfies DialogueMessage[],
-  process: [
-    {
-      title: "Research",
-      body: "Mapped how ops, brokers, and coordinators chase status on mobile — and where formats + docs create rework.",
-    },
-    {
-      title: "Flows",
-      body: "One home, one shipment list, then a workspace: status, move, documents. Drayage is a task, not a landing page.",
-    },
-    {
-      title: "UI",
-      body: "Job chips instead of Overview vs Visibility. Cards answer where it is, which one, and what’s next. Share is one sheet.",
-    },
-  ] satisfies ProcessStep[],
-  impact: [
-    "Faster status checks away from desktop",
-    "Fewer format-related dead ends through guided input",
-    "Documents reachable inside the same mobile journey",
-    "Clearer trust in compliance signals on a small screen",
+  snapshot: [
+    { label: "Role", value: "UX designer, from research to final UI" },
+    { label: "Team", value: "Product manager, engineers" },
+    { label: "Product", value: "KlearNow, mobile app" },
+  ],
+  goals: {
+    intro:
+      "Shipment status is something people need while they’re moving. These are the results the app is designed to move:",
+    bullets: [
+      "Fewer missed or late pickups",
+      "Lower demurrage charges",
+      "Faster time to find a shipment’s status",
+      "More status checks done on a phone instead of a laptop",
+    ],
+  },
+  problem: {
+    lead: "The people who most need a shipment’s status are rarely sitting at a desk. They’re moving between a truck, a port and a warehouse. But the status lived on a laptop.",
+    stakes:
+      "That matters because a late status can mean a truck arriving too late to collect a container, or a container sitting at the port past its free days and costing demurrage charges.",
+    aside: "It’s like being able to check your Zomato order only on a laptop at home.",
+    before: ["On the move", "Find a laptop", "Log in", "Search", "See status"],
+    after: ["On the move", "Open, see it"],
+    caption: "The status was never missing. It was just not where people were.",
+    pull: "The answer should reach people where they are.",
+  },
+  audience: {
+    body: "Brokers, truckers and operational people. Different jobs, same situation: they’re on the move and need an answer in seconds.",
+    labels: ["Brokers", "Truckers", "Operations"],
+  },
+  scope: {
+    body: "The desktop has room for big tables. A phone doesn’t. So I didn’t shrink the desktop. I interviewed each group, listed what each persona really needs, and kept only what earned its place.",
+    steps: ["Interview", "List what each persona needs", "Keep only what earns space"],
+  },
+  home: {
+    body: "A Visibility Overview. Each tile is one number you can read at a glance, and the tiles were chosen from what people said in interviews.",
+    notes: [
+      "Numbers you can scan: active shipments, shipments at risk and journey statuses, one number each.",
+      "Direction, not just count: a small trend sits under every label.",
+      "Red means act: tiles like “LFD in 48 hours” (last free day) are marked “Action needed”, so a demurrage risk stands out before it costs money.",
+    ],
+  },
+  rule: {
+    body: "The number on a tile is the list behind it. Tap 12 and you see exactly 12 shipments. No extra filtering, no surprises.",
+  },
+  deeper: {
+    body: "Open any shipment and you get what you need to act on it, without calling anyone.",
+    journey: "Further details of where the shipment has been and where it is.",
+    documents: "The shipment’s documents, right there on the phone.",
+  },
+  forward: [
+    "On a small screen, prioritising is the design work. The interviews decided what stayed.",
+    "A number should always match the list behind it, so people can trust what they see.",
+    "Design for where people are, not where the software is.",
   ],
 };
