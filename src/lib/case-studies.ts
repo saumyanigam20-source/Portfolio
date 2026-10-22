@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import html from "remark-html";
 import { trackAndTraceMeta } from "@/content/track-and-trace";
 import { klearassistMeta } from "@/content/klearassist";
+import { odoMeta } from "@/content/odo";
 
 const caseStudiesDirectory = path.join(process.cwd(), "content/case-studies");
 
@@ -38,6 +39,7 @@ const preferredOrder = [
   "track-and-trace",
   "klearassist",
   "tracking-tool-redesign",
+  "odo",
 ];
 
 const interactiveStudies: CaseStudyMeta[] = [
@@ -60,6 +62,16 @@ const interactiveStudies: CaseStudyMeta[] = [
     category: klearassistMeta.category,
     cover: klearassistMeta.cover,
     summary: klearassistMeta.summary,
+  },
+  {
+    title: odoMeta.title,
+    slug: odoMeta.slug,
+    company: odoMeta.company,
+    role: odoMeta.role,
+    tags: [...odoMeta.tags],
+    category: odoMeta.category,
+    cover: odoMeta.cover,
+    summary: odoMeta.summary,
   },
 ];
 
