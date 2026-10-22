@@ -1,4 +1,4 @@
-import type { FuelRecord, InsuranceRecord, PartRecord, RecordItem, ServiceRecord, Vehicle } from "./types";
+import type { FuelRecord, FuelType, InsuranceRecord, PartRecord, RecordItem, ServiceRecord, Vehicle } from "./types";
 
 const carId = "mint";
 const scooterId = "zip";
@@ -12,13 +12,14 @@ function fuel(
   amount: number,
   odometer: number,
   fullTank: boolean,
+  fuelType: FuelType = "petrol",
 ): FuelRecord {
   return {
     id,
     vehicleId,
     kind: "fuel",
     date,
-    fuelType: "petrol",
+    fuelType,
     quantity,
     pricePerUnit,
     amount,
@@ -71,7 +72,12 @@ const vehicles: Vehicle[] = [
     nickname: "Mint",
     make: "Maruti",
     model: "Wagon R",
+    variant: "VXI CNG",
     fuelType: "petrol",
+    fuels: ["petrol", "cng"],
+    fuelSetup: "petrol-cng",
+    plate: "HR26ZZ1001",
+    plateDisplay: "HR 26 ZZ 1001",
     odometer: 23980,
   },
   {
@@ -80,7 +86,12 @@ const vehicles: Vehicle[] = [
     nickname: "Zip",
     make: "Honda",
     model: "Dio",
+    variant: "STD",
     fuelType: "petrol",
+    fuels: ["petrol"],
+    fuelSetup: "single",
+    plate: "TS09ZZ2002",
+    plateDisplay: "TS 09 ZZ 2002",
     odometer: 9120,
   },
 ];
@@ -106,7 +117,10 @@ const records: RecordItem[] = [
   fuel("f-m-13", carId, "2026-04-28", 32, 103, 3296, 21522, true),
   fuel("f-m-14", carId, "2026-05-16", 5, 100, 500, 21700, false),
   fuel("f-m-15", carId, "2026-06-08", 28, 103, 2884, 22034, true),
+  fuel("f-m-c1", carId, "2026-06-20", 8, 90, 720, 22150, true, "cng"),
+  fuel("f-m-c2", carId, "2026-06-28", 5, 100, 500, 22220, false, "cng"),
   fuel("f-m-16", carId, "2026-07-01", 10, 100, 1000, 22280, false),
+  fuel("f-m-c3", carId, "2026-07-10", 8, 90, 720, 22400, true, "cng"),
   fuel("f-m-17", carId, "2026-07-26", 30, 103, 3090, 22654, true),
   fuel("f-m-18", carId, "2026-08-14", 5, 100, 500, 22820, false),
   fuel("f-m-19", carId, "2026-09-06", 31, 103, 3193, 23212, true),

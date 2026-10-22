@@ -1,6 +1,6 @@
-import { averageTitle, mileagePhrase, mileageUnit } from "./format";
+import { fuelLabel, mileageUnit, vehicleFuels } from "./format";
 import { averageLatestMileage, mileageReadings } from "./mileage";
-import type { FuelRecord, FuelType, RecordItem, ServiceRecord, Vehicle, VehicleKind } from "./types";
+import type { FuelRecord, FuelType, RecordItem, ServiceRecord, Vehicle } from "./types";
 
 export function insightSentence(thisYear: number, lastYear: number): string | null {
   if (lastYear <= 0) return null;
@@ -28,11 +28,21 @@ function fuelsFor(records: readonly RecordItem[], vehicleId: string): FuelRecord
   return records.filter((record): record is FuelRecord => record.kind === "fuel" && record.vehicleId === vehicleId);
 }
 
+export function averageForFuel(records: readonly RecordItem[], vehicleId: string, fuel: FuelType): number | null {
+  const fills = fuelsFor(records, vehicleId).filter((record) => record.fuelType === fuel);
+  const fulls = fills.filter((record) => record.fullTank && record.odometer != null).length;
+  if (fulls < 2) return null;
+  return averageLatestMileage(mileageReadings(fills));
+}
+
 export function averageForVehicles(vehicles: readonly Vehicle[], records: readonly RecordItem[]): number | null {
+  const fuels = [...new Set(vehicles.flatMap((vehicle) => vehicleFuels(vehicle)))];
+  if (fuels.length !== 1) return null;
+  const fuel = fuels[0];
+  if (!fuel) return null;
   const averages: number[] = [];
   for (const vehicle of vehicles) {
-    const readings = mileageReadings(fuelsFor(records, vehicle.id));
-    const average = averageLatestMileage(readings);
+    const average = averageForFuel(records, vehicle.id, fuel);
     if (average != null) averages.push(average);
   }
   if (averages.length === 0) return null;
@@ -49,19 +59,24 @@ export function lastFuel(records: readonly RecordItem[], vehicleId: string): Fue
   return latestOf<FuelRecord>(records, "fuel", [vehicleId]);
 }
 
+export type FuelStat = {
+  fuel: FuelType;
+  label: string;
+  average: number | null;
+  unit: string;
+  spend: number;
+};
+
 export type HomeSnapshot = {
   ids: string[];
-  title: string;
-  phrase: string;
-  unit: string;
-  average: number | null;
   spend: number;
   lastYearSpend: number;
   insight: string | null;
   ratio: number | null;
   lastFill: FuelRecord | null;
   lastService: ServiceRecord | null;
-  art: VehicleKind | "both";
+  fuels: FuelStat[];
+  costPerKm: number | null;
 };
 
 export function homeSnapshot(
@@ -72,24 +87,56 @@ export function homeSnapshot(
 ): HomeSnapshot {
   const scoped = scopedVehicles([...vehicles], selectedId);
   const ids = scoped.map((vehicle) => vehicle.id);
-  const fuels = [...new Set(scoped.map((vehicle) => vehicle.fuelType))] as FuelType[];
-  const representative = fuels.length === 1 ? fuels[0] : "petrol";
   const spend = spendInYear(records, ids, year);
   const lastYearSpend = spendInYear(records, ids, year - 1);
+  const active = scoped.length === 1 ? scoped[0] : null;
   return {
     ids,
-    title: averageTitle(fuels),
-    phrase: fuels.length === 1 ? mileagePhrase(representative) : "km per unit",
-    unit: fuels.length === 1 ? mileageUnit(representative) : "km/unit",
-    average: averageForVehicles(scoped, records),
     spend,
     lastYearSpend,
     insight: insightSentence(spend, lastYearSpend),
     ratio: lastYearSpend > 0 ? spend / lastYearSpend : null,
     lastFill: latestOf<FuelRecord>(records, "fuel", ids),
     lastService: latestOf<ServiceRecord>(records, "service", ids),
-    art: scoped.length === 1 ? scoped[0].kind : "both",
+    fuels: active ? fuelStats(active, records, year) : [],
+    costPerKm: costPerKm(records, ids, year),
   };
+}
+
+export function fuelStats(vehicle: Vehicle, records: readonly RecordItem[], year: number): FuelStat[] {
+  return vehicleFuels(vehicle).map((fuel) => {
+    const fills = fuelsFor(records, vehicle.id).filter((record) => record.fuelType === fuel);
+    const spend = fills.reduce((sum, record) => (record.date.startsWith(String(year)) ? sum + record.amount : sum), 0);
+    return {
+      fuel,
+      label: fuelLabel(fuel),
+      average: averageForFuel(records, vehicle.id, fuel),
+      unit: mileageUnit(fuel),
+      spend,
+    };
+  });
+}
+
+export function costPerKm(records: readonly RecordItem[], ids: readonly string[], year: number): number | null {
+  const fills = records.filter(
+    (record): record is FuelRecord => record.kind === "fuel" && ids.includes(record.vehicleId) && record.date.startsWith(String(year)),
+  );
+  const odos = fills.flatMap((record) => (record.odometer == null ? [] : [record.odometer]));
+  if (odos.length < 2) return null;
+  const distance = Math.max(...odos) - Math.min(...odos);
+  if (distance <= 0) return null;
+  const spend = fills.reduce((sum, record) => sum + record.amount, 0);
+  return spend / distance;
+}
+
+export function fuelSpend(records: readonly RecordItem[], year: number, vehicleId?: string): { fuel: FuelType; amount: number }[] {
+  const totals = new Map<FuelType, number>();
+  for (const record of records) {
+    if (record.kind !== "fuel" || !record.date.startsWith(String(year))) continue;
+    if (vehicleId && vehicleId !== "all" && record.vehicleId !== vehicleId) continue;
+    totals.set(record.fuelType, (totals.get(record.fuelType) ?? 0) + record.amount);
+  }
+  return [...totals.entries()].map(([fuel, amount]) => ({ fuel, amount }));
 }
 
 export function categoryTotals(records: readonly RecordItem[], year: number) {
@@ -111,6 +158,8 @@ export function yearsIn(records: readonly RecordItem[], todayYear: number): numb
 }
 
 export function segmentForFill(records: readonly RecordItem[], vehicleId: string, fillId: string): number | null {
-  const readings = mileageReadings(fuelsFor(records, vehicleId));
-  return readings.find((reading) => reading.fillId === fillId)?.kmPerUnit ?? null;
+  const fill = records.find((record) => record.id === fillId);
+  const fuel = fill && fill.kind === "fuel" ? fill.fuelType : null;
+  const fills = fuelsFor(records, vehicleId).filter((record) => fuel == null || record.fuelType === fuel);
+  return mileageReadings(fills).find((reading) => reading.fillId === fillId)?.kmPerUnit ?? null;
 }

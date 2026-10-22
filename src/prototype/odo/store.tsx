@@ -3,9 +3,9 @@
 import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { mileageUnit } from "./format";
 import { createSample } from "./sample-data";
-import { averageForVehicles, segmentForFill } from "./stats";
-import { applyAppearance, clearAppearance, loadData, loadTheme, saveData, saveTheme, uid } from "./storage";
-import type { ExpenseInput, FuelInput, RecordItem, Screen, ThemeMode, Vehicle, VehicleInput } from "./types";
+import { averageForFuel, segmentForFill } from "./stats";
+import { applyAppearance, clearAppearance, loadData, loadSession, loadTheme, saveData, saveSession, saveTheme, uid, type Session } from "./storage";
+import type { ExpenseInput, FuelInput, FuelType, RecordItem, Screen, ThemeMode, Vehicle, VehicleInput } from "./types";
 
 type OdoStore = {
   ready: boolean;
@@ -20,6 +20,11 @@ type OdoStore = {
   plusOpen: boolean;
   setPlusOpen: (open: boolean) => void;
   toast: string | null;
+  session: Session;
+  signIn: (phone: string) => void;
+  setName: (name: string) => void;
+  signOut: () => void;
+  setFuels: (id: string, fuels: FuelType[]) => void;
   startSample: () => void;
   resetDemo: () => void;
   addVehicle: (input: VehicleInput) => void;
@@ -45,8 +50,10 @@ export function OdoProvider({ children }: { children: React.ReactNode }) {
   const [selectedId, setSelectedId] = useState<string | "all">("all");
   const [plusOpen, setPlusOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [session, setSession] = useState<Session>({ signedIn: false, phone: "", name: "" });
 
   useLayoutEffect(() => {
+    setSession(loadSession());
     const savedTheme = loadTheme();
     setThemeState(savedTheme);
     applyAppearance(savedTheme);
@@ -55,7 +62,7 @@ export function OdoProvider({ children }: { children: React.ReactNode }) {
       setStarted(true);
       setVehicles(saved.vehicles);
       setRecords(saved.records);
-      setSelectedId(saved.vehicles[0]?.id ?? "all");
+      setSelectedId(saved.vehicles.some((vehicle) => vehicle.id === saved.selectedId) ? saved.selectedId ?? saved.vehicles[0]?.id ?? "all" : saved.vehicles[0]?.id ?? "all");
       setScreen({ name: "home" });
     }
     setReady(true);
@@ -72,12 +79,12 @@ export function OdoProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!toast) return;
-    const timer = window.setTimeout(() => setToast(null), 2600);
+    const timer = window.setTimeout(() => setToast(null), 2500);
     return () => window.clearTimeout(timer);
   }, [toast]);
 
-  const persist = (nextVehicles: Vehicle[], nextRecords: RecordItem[], nextStarted = true) => {
-    saveData({ started: nextStarted, vehicles: nextVehicles, records: nextRecords });
+  const persist = (nextVehicles: Vehicle[], nextRecords: RecordItem[], nextStarted = true, nextSelected = selectedId) => {
+    saveData({ started: nextStarted, vehicles: nextVehicles, records: nextRecords, selectedId: nextSelected });
   };
 
   const value = useMemo<OdoStore>(() => {
@@ -113,10 +120,43 @@ export function OdoProvider({ children }: { children: React.ReactNode }) {
       screen,
       go,
       selectedId,
-      setSelectedId,
+      setSelectedId: (id) => {
+        setSelectedId(id);
+        saveData({ started, vehicles, records, selectedId: id });
+      },
       plusOpen,
       setPlusOpen,
       toast,
+      session,
+      signIn: (phone) => {
+        const next = { ...session, signedIn: true, phone };
+        setSession(next);
+        saveSession(next);
+      },
+      setName: (name) => {
+        const next = { ...session, signedIn: true, name: name.trim() };
+        setSession(next);
+        saveSession(next);
+      },
+      signOut: () => {
+        const next = { ...session, signedIn: false };
+        setSession(next);
+        saveSession(next);
+      },
+      setFuels: (id, fuels) => {
+        const nextVehicles = vehicles.map((vehicle) =>
+          vehicle.id === id
+            ? {
+                ...vehicle,
+                fuels,
+                fuelType: fuels[0] ?? vehicle.fuelType,
+                fuelSetup: fuels.includes("cng") ? ("petrol-cng" as const) : fuels.includes("lpg") ? ("petrol-lpg" as const) : ("single" as const),
+              }
+            : vehicle,
+        );
+        setVehicles(nextVehicles);
+        persist(nextVehicles, records, started);
+      },
       startSample: loadSample,
       resetDemo: loadSample,
       addVehicle: (input) => {
@@ -125,8 +165,7 @@ export function OdoProvider({ children }: { children: React.ReactNode }) {
         setVehicles(nextVehicles);
         setStarted(true);
         setSelectedId(vehicle.id);
-        setScreen({ name: "home" });
-        persist(nextVehicles, records, true);
+        persist(nextVehicles, records, true, vehicle.id);
       },
       addFuel: (input) => {
         const fuelId = uid("fuel");
@@ -146,11 +185,10 @@ export function OdoProvider({ children }: { children: React.ReactNode }) {
         setRecords(nextRecords);
         setVehicles(nextVehicles);
         persist(nextVehicles, nextRecords, started);
-        const scoped = nextVehicles.filter((vehicle) => vehicle.id === input.vehicleId);
         go({
           name: "fuel-saved",
           segment: segmentForFill(nextRecords, input.vehicleId, fuelId),
-          average: averageForVehicles(scoped, nextRecords),
+          average: averageForFuel(nextRecords, input.vehicleId, input.fuelType),
           unit: mileageUnit(input.fuelType),
         });
       },
@@ -175,7 +213,7 @@ export function OdoProvider({ children }: { children: React.ReactNode }) {
         go({ name: "home" });
       },
     };
-  }, [plusOpen, ready, records, screen, selectedId, started, theme, toast, vehicles]);
+  }, [plusOpen, ready, records, screen, selectedId, session, started, theme, toast, vehicles]);
 
   return <OdoContext.Provider value={value}>{children}</OdoContext.Provider>;
 }

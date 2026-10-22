@@ -1,13 +1,13 @@
 import { useOdo } from "../store";
 import { Logo } from "../ui/Logo";
-import { VehicleArt } from "../ui/Marks";
+import { VehicleIcon } from "../ui/VehicleIcon";
 
 export function WelcomeScreen() {
   const { startSample, go } = useOdo();
 
   return (
     <section className="odo-welcome">
-      <Logo on="blue" />
+      <Logo />
       <h1>Let&apos;s get started</h1>
       <p>Fuel, services and parts for your car or scooter, in one place.</p>
       <div className="odo-welcome-actions">
@@ -19,7 +19,7 @@ export function WelcomeScreen() {
         </button>
       </div>
       <div className="odo-welcome-art">
-        <VehicleArt kind="car" />
+        <VehicleIcon type="car" size={48} label="Car" />
       </div>
     </section>
   );

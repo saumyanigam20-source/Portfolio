@@ -1,13 +1,14 @@
-import { useState } from "react";
-import { fuelLabel, parseNumber, quantityUnit, round2, todayISO } from "../format";
+import { useRef, useState } from "react";
+import { deriveFuel, fuelLabel, parseNumber, quantityUnit, round2, todayISO, vehicleFuels, vehicleTitle } from "../format";
 import { lastFuel } from "../stats";
 import { useOdo } from "../store";
 import type { FuelType } from "../types";
 import { Field } from "../ui/Field";
+import { CheckIcon } from "../ui/Icons";
+import { VehicleIcon } from "../ui/VehicleIcon";
+import { prefersReducedMotion } from "../ui/motion";
 import { ScreenHeader } from "../ui/ScreenHeader";
 import { Toggle } from "../ui/Toggle";
-
-const fuels: FuelType[] = ["petrol", "diesel", "cng", "electric"];
 
 type Draft = {
   date: string;
@@ -19,16 +20,9 @@ type Draft = {
   fullTank: boolean;
 };
 
-function draftFrom(vehicleFuel: FuelType, previous: ReturnType<typeof lastFuel>): Draft {
-  return {
-    date: todayISO(),
-    fuelType: previous?.fuelType ?? vehicleFuel,
-    quantity: previous ? String(previous.quantity) : "",
-    price: previous ? String(previous.pricePerUnit) : "",
-    amount: previous ? String(previous.amount) : "",
-    odometer: "",
-    fullTank: previous?.fullTank ?? true,
-  };
+function draftFrom(fuels: FuelType[], previous: ReturnType<typeof lastFuel>): Draft {
+  const fuelType = previous && fuels.includes(previous.fuelType) ? previous.fuelType : fuels[0] ?? "petrol";
+  return { date: todayISO(), fuelType, quantity: "", price: "", amount: "", odometer: "", fullTank: false };
 }
 
 export function AddFuelScreen() {
@@ -37,8 +31,10 @@ export function AddFuelScreen() {
     selectedId !== "all" && vehicles.some((vehicle) => vehicle.id === selectedId) ? selectedId : vehicles[0]?.id ?? "";
   const [vehicleId, setVehicleId] = useState(initialId);
   const vehicle = vehicles.find((item) => item.id === vehicleId) ?? vehicles[0];
-  const [form, setForm] = useState<Draft>(() => draftFrom(vehicle?.fuelType ?? "petrol", lastFuel(records, initialId)));
+  const [form, setForm] = useState<Draft>(() => draftFrom(vehicle ? vehicleFuels(vehicle) : ["petrol"], lastFuel(records, initialId)));
   const [error, setError] = useState("");
+  const [checked, setChecked] = useState(false);
+  const saving = useRef(false);
 
   if (!vehicle) {
     return (
@@ -52,43 +48,30 @@ export function AddFuelScreen() {
   const chooseVehicle = (id: string) => {
     const next = vehicles.find((item) => item.id === id);
     setVehicleId(id);
-    setForm(draftFrom(next?.fuelType ?? "petrol", lastFuel(records, id)));
+    setForm(draftFrom(next ? vehicleFuels(next) : ["petrol"], lastFuel(records, id)));
   };
 
   const applyLast = () => {
     const previous = lastFuel(records, vehicle.id);
     if (!previous) return;
-    setForm(draftFrom(vehicle.fuelType, previous));
+    const fuels = vehicleFuels(vehicle);
+    const fuelType = fuels.includes(previous.fuelType) ? previous.fuelType : fuels[0] ?? "petrol";
+    const price = String(previous.pricePerUnit);
+    const amount = String(previous.amount);
+    const derived = deriveFuel("amount", { quantity: "", price, amount });
+    setForm({ ...form, fuelType, price, amount, quantity: derived.quantity || String(previous.quantity), fullTank: false });
   };
 
   const setQuantity = (quantity: string) => {
-    const price = parseNumber(form.price);
-    const qty = parseNumber(quantity);
-    setForm({
-      ...form,
-      quantity,
-      amount: price != null && qty != null ? String(round2(price * qty)) : form.amount,
-    });
+    setForm({ ...form, ...deriveFuel("quantity", { ...form, quantity }) });
   };
 
   const setPrice = (price: string) => {
-    const qty = parseNumber(form.quantity);
-    const rate = parseNumber(price);
-    setForm({
-      ...form,
-      price,
-      amount: rate != null && qty != null ? String(round2(rate * qty)) : form.amount,
-    });
+    setForm({ ...form, ...deriveFuel("price", { ...form, price }) });
   };
 
   const setAmount = (amount: string) => {
-    const rate = parseNumber(form.price);
-    const total = parseNumber(amount);
-    setForm({
-      ...form,
-      amount,
-      quantity: rate != null && rate > 0 && total != null ? String(round2(total / rate)) : form.quantity,
-    });
+    setForm({ ...form, ...deriveFuel("amount", { ...form, amount }) });
   };
 
   const save = () => {
@@ -100,7 +83,10 @@ export function AddFuelScreen() {
       setError("Add a date, quantity and price per unit.");
       return;
     }
-    addFuel({
+    if (saving.current) return;
+    saving.current = true;
+    setChecked(true);
+    const payload = {
       vehicleId: vehicle.id,
       date: form.date,
       fuelType: form.fuelType,
@@ -109,10 +95,13 @@ export function AddFuelScreen() {
       amount: amount ?? round2(quantity * price),
       odometer,
       fullTank: form.fullTank,
-    });
+    };
+    window.setTimeout(() => addFuel(payload), prefersReducedMotion() ? 0 : 200);
   };
 
   const previous = lastFuel(records, vehicle.id);
+  const fuels = vehicleFuels(vehicle);
+  const unit = quantityUnit(form.fuelType);
 
   return (
     <form
@@ -128,7 +117,8 @@ export function AddFuelScreen() {
           <div className="odo-chips" role="group" aria-label="Vehicle">
             {vehicles.map((item) => (
               <button key={item.id} type="button" className="odo-chip odo-chip-ink" aria-pressed={item.id === vehicle.id} onClick={() => chooseVehicle(item.id)}>
-                {item.nickname}
+                <VehicleIcon type={item.kind} size={20} label={vehicleTitle(item)} />
+                {item.model}
               </button>
             ))}
           </div>
@@ -139,20 +129,22 @@ export function AddFuelScreen() {
         <Field label="Date">
           <input type="date" value={form.date} onChange={(event) => setForm({ ...form, date: event.target.value })} required />
         </Field>
-        <div className="odo-field">
-          <span>Fuel type</span>
-          <div className="odo-pills" role="group" aria-label="Fuel type">
-            {fuels.map((item) => (
-              <button key={item} type="button" className="odo-pill" aria-pressed={form.fuelType === item} onClick={() => setForm({ ...form, fuelType: item })}>
-                {fuelLabel(item)}
-              </button>
-            ))}
+        {fuels.length > 1 && (
+          <div className="odo-field">
+            <span>Fuel</span>
+            <div className="odo-pills" role="group" aria-label="Fuel">
+              {fuels.map((item) => (
+                <button key={item} type="button" className="odo-pill" aria-pressed={form.fuelType === item} onClick={() => setForm({ ...form, fuelType: item })}>
+                  {fuelLabel(item)}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-        <Field label={`Quantity (${quantityUnit(form.fuelType)})`}>
+        )}
+        <Field label={`Quantity (${unit})`}>
           <input inputMode="decimal" value={form.quantity} onChange={(event) => setQuantity(event.target.value)} />
         </Field>
-        <Field label="Price per unit (₹)">
+        <Field label={`Price per ${unit === "kWh" ? "kWh" : unit === "kg" ? "kg" : "litre"} (₹)`}>
           <input inputMode="decimal" value={form.price} onChange={(event) => setPrice(event.target.value)} />
         </Field>
         <Field label="Amount (₹)">
@@ -162,6 +154,7 @@ export function AddFuelScreen() {
           <input inputMode="decimal" value={form.odometer} onChange={(event) => setForm({ ...form, odometer: event.target.value })} />
         </Field>
         <Toggle label="Full tank" checked={form.fullTank} onChange={(fullTank) => setForm({ ...form, fullTank })} />
+        <p className="odo-hint">Leave this off for a part fill. A gas fill is often a fixed rupee amount, and that is not a full tank.</p>
         {error && (
           <p className="odo-error" role="alert">
             {error}
@@ -170,7 +163,7 @@ export function AddFuelScreen() {
       </div>
       <div className="odo-savebar">
         <button type="submit" className="odo-btn">
-          Save fill
+          {checked ? <CheckIcon /> : "Save fill"}
         </button>
       </div>
     </form>

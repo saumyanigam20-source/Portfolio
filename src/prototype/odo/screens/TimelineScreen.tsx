@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { formatDate, recordDetail, recordTitle, rupees } from "../format";
 import { scopedVehicles } from "../stats";
 import { useOdo } from "../store";
 import type { RecordItem } from "../types";
+import { KindIcon } from "../ui/Icons";
 import { WheelFace } from "../ui/Marks";
 
 const filters = [
@@ -19,6 +20,7 @@ export function TimelineScreen() {
   const [filter, setFilter] = useState<FilterId>("all");
   const [query, setQuery] = useState("");
   const ids = scopedVehicles(vehicles, selectedId).map((vehicle) => vehicle.id);
+  const seen = useRef<Set<string> | null>(null);
 
   const groups = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -39,6 +41,23 @@ export function TimelineScreen() {
     }
     return [...buckets.entries()];
   }, [filter, ids, query, records, vehicles]);
+
+  const fresh = new Set<string>();
+  if (seen.current) {
+    for (const [, items] of groups) {
+      for (const record of items) {
+        if (!seen.current.has(record.id)) fresh.add(record.id);
+      }
+    }
+  }
+
+  useEffect(() => {
+    const next = new Set<string>();
+    for (const [, items] of groups) {
+      for (const record of items) next.add(record.id);
+    }
+    seen.current = next;
+  }, [groups]);
 
   return (
     <div className="odo-scroll odo-pad">
@@ -67,8 +86,9 @@ export function TimelineScreen() {
               {items.map((record) => {
                 const vehicle = vehicles.find((item) => item.id === record.vehicleId);
                 return (
-                  <li key={record.id} className="odo-row">
-                    <div>
+                  <li key={record.id} className={fresh.has(record.id) ? "odo-row odo-row-new" : "odo-row"}>
+                    <KindIcon kind={record.kind} />
+                    <div className="odo-row-copy">
                       <p className="odo-strong">{recordTitle(record)}</p>
                       <p className="odo-muted">{recordDetail(record, vehicle)}</p>
                     </div>

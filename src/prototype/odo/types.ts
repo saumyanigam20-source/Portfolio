@@ -1,6 +1,8 @@
-export type FuelType = "petrol" | "diesel" | "cng" | "electric";
+export type FuelType = "petrol" | "diesel" | "cng" | "lpg" | "electric";
 
-export type VehicleKind = "car" | "bike" | "scooter";
+export type VehicleKind = "car" | "bike" | "scooter" | "cab";
+
+export type FuelSetup = "single" | "petrol-cng" | "petrol-lpg";
 
 export type Vehicle = {
   id: string;
@@ -8,7 +10,13 @@ export type Vehicle = {
   nickname: string;
   make: string;
   model: string;
+  variant?: string;
   fuelType: FuelType;
+  fuels?: FuelType[];
+  fuelSetup?: FuelSetup;
+  plate?: string;
+  plateDisplay?: string;
+  purchaseYear?: number | null;
   odometer: number;
 };
 
@@ -79,7 +87,13 @@ export type VehicleInput = {
   nickname: string;
   make: string;
   model: string;
+  variant: string;
   fuelType: FuelType;
+  fuels: FuelType[];
+  fuelSetup: FuelSetup;
+  plate: string;
+  plateDisplay: string;
+  purchaseYear: number | null;
   odometer: number;
 };
 
