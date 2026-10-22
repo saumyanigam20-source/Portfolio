@@ -1,0 +1,1001 @@
+html:has(.odo-root):not(:has(.odo-embed)),
+body:has(.odo-root):not(:has(.odo-embed)) {
+  overflow: hidden;
+  max-width: 100%;
+  height: 100%;
+  background: #e6ebff;
+}
+
+.odo-root {
+  height: 100dvh;
+  overflow: hidden;
+  color: #0a1240;
+  font-family: Fredoka, "Trebuchet MS", Verdana, sans-serif;
+}
+
+.odo-root button,
+.odo-root input,
+.odo-root select {
+  font: inherit;
+}
+
+.odo-stage {
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  position: relative;
+  background: #e6ebff;
+}
+
+html[data-odo-appearance="dark"] .odo-stage {
+  background: #070b24;
+}
+
+.odo-back {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #0a1240;
+  font-weight: 600;
+}
+
+.odo-phone {
+  width: 390px;
+  height: min(844px, calc(100dvh - 48px));
+  border-radius: 36px;
+  overflow: hidden;
+  background: #f3f6ff;
+  color: #0a1240;
+  box-shadow: 0 24px 60px rgba(10, 18, 64, 0.18);
+  position: relative;
+}
+
+html[data-odo-appearance="dark"] .odo-phone {
+  background: #0a1240;
+  color: #f3f6ff;
+  color-scheme: dark;
+}
+
+.odo-fill {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.odo-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: 112px;
+}
+
+.odo-loading,
+.odo-saved,
+.odo-welcome {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.odo-loading {
+  display: grid;
+  place-items: center;
+}
+
+.odo-welcome {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px 22px 32px;
+  background: #3d3dff;
+  color: #ffffff;
+}
+
+.odo-welcome h1 {
+  margin: 18px 0 0;
+  font-size: 44px;
+  line-height: 1.02;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+
+.odo-welcome p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+.odo-welcome-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.odo-welcome-art {
+  margin-top: auto;
+  color: #f3f6ff;
+}
+
+.odo-welcome .odo-btn {
+  background: #ffffff;
+  color: #0a1240;
+}
+
+.odo-welcome .odo-btn-ghost {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+.odo-logo {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
+.odo-hero {
+  background: linear-gradient(165deg, #2c34e6 0%, #1450cc 100%);
+  color: #ffffff;
+  padding: 22px 20px 58px;
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
+}
+
+.odo-hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.odo-hero-top p,
+.odo-hero h1 {
+  margin: 0;
+}
+
+.odo-hero h1 {
+  margin-top: 18px;
+  font-size: 32px;
+  line-height: 1.05;
+  font-weight: 600;
+}
+
+.odo-hero-art,
+.odo-welcome-art {
+  color: #f3f6ff;
+}
+
+.odo-hero-art .odo-art {
+  width: min(100%, 312px);
+  margin-top: 16px;
+}
+
+.odo-hero-art .odo-hero-photo {
+  width: min(100%, 300px);
+  height: 156px;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+  margin: 8px auto 0;
+}
+
+.odo-art-row .odo-hero-photo {
+  width: 100%;
+  height: 112px;
+  margin-top: 10px;
+}
+
+.odo-art {
+  width: min(100%, 260px);
+  height: auto;
+  display: block;
+  margin: 8px auto 0;
+}
+
+.odo-art-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.odo-art-row .odo-art {
+  width: 100%;
+}
+
+.odo-stack {
+  margin-top: -36px;
+  padding: 0 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.odo-card {
+  background: linear-gradient(180deg, #e7efff 0%, #fbfcff 58%, #ffffff 100%);
+  color: #0a1240;
+  border-radius: 24px;
+  padding: 16px 18px;
+  box-shadow: 0 14px 34px rgba(10, 18, 64, 0.08);
+}
+
+html[data-odo-appearance="dark"] .odo-card {
+  background: #162056;
+  color: #f3f6ff;
+  box-shadow: none;
+}
+
+.odo-stat-label,
+.odo-muted,
+.odo-hint,
+.odo-footnote {
+  color: #2c3a68;
+}
+
+html[data-odo-appearance="dark"] .odo-stat-label,
+html[data-odo-appearance="dark"] .odo-muted,
+html[data-odo-appearance="dark"] .odo-hint,
+html[data-odo-appearance="dark"] .odo-footnote {
+  color: #c5cef2;
+}
+
+.odo-stat-label,
+.odo-muted,
+.odo-hint,
+.odo-footnote,
+.odo-strong {
+  margin: 0;
+}
+
+.odo-stat-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.odo-stat-value {
+  margin: 6px 0 0;
+  font-size: 52px;
+  line-height: 0.95;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+
+.odo-stat-value-sm {
+  font-size: clamp(28px, 8vw, 36px);
+}
+
+.odo-stat-unit {
+  margin: 6px 0 0;
+  font-size: 15px;
+}
+
+.odo-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.odo-strong {
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.odo-meter {
+  margin-top: 14px;
+  height: 16px;
+  border-radius: 999px;
+  background: #d9e2ff;
+  overflow: hidden;
+}
+
+html[data-odo-appearance="dark"] .odo-meter {
+  background: #2a3568;
+}
+
+.odo-meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #1a6bff, #19d68a);
+}
+
+.odo-insight {
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: #fff6d6;
+  color: #0a1240;
+  font-weight: 600;
+}
+
+html[data-odo-appearance="dark"] .odo-insight {
+  background: #1a2458;
+  color: #f3f6ff;
+  box-shadow: inset 6px 0 0 #ffc21a;
+}
+
+.odo-footnote {
+  padding: 4px 22px 12px;
+  font-size: 14px;
+}
+
+.odo-title {
+  margin: 8px 0 12px;
+  font-size: 32px;
+  line-height: 1.05;
+  font-weight: 600;
+}
+
+.odo-pad {
+  padding: 18px 16px 0;
+}
+
+.odo-chips,
+.odo-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.odo-hero .odo-chips {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  max-width: 100%;
+  padding-bottom: 2px;
+}
+
+.odo-chip,
+.odo-pill,
+.odo-btn,
+.odo-icon-btn,
+.odo-tab,
+.odo-plus,
+.odo-sheet-btn,
+.odo-text-btn,
+.odo-kind,
+.odo-toggle {
+  cursor: pointer;
+}
+
+.odo-chip,
+.odo-pill {
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.odo-chip-ink,
+.odo-pill {
+  background: #ffffff;
+  color: #0a1240;
+  border-color: rgba(10, 18, 64, 0.12);
+}
+
+html[data-odo-appearance="dark"] .odo-chip-ink,
+html[data-odo-appearance="dark"] .odo-pill {
+  background: #1a2458;
+  color: #f3f6ff;
+  border-color: rgba(243, 246, 255, 0.16);
+}
+
+.odo-chip[aria-pressed="true"],
+.odo-pill[aria-pressed="true"],
+.odo-pill[aria-checked="true"] {
+  background: #1a6bff;
+  border-color: #1a6bff;
+  color: #ffffff;
+}
+
+.odo-btn {
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: 16px;
+  background: #1a6bff;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.odo-btn-ghost {
+  background: transparent;
+  color: #0a1240;
+  border: 2px solid rgba(10, 18, 64, 0.16);
+}
+
+html[data-odo-appearance="dark"] .odo-btn-ghost {
+  color: #f3f6ff;
+  border-color: rgba(243, 246, 255, 0.24);
+}
+
+.odo-btn:disabled,
+.odo-text-btn:disabled {
+  opacity: 0.45;
+}
+
+.odo-tabs {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 5;
+  height: 74px;
+  padding: 8px 6px 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: end;
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(10, 18, 64, 0.16);
+}
+
+html[data-odo-appearance="dark"] .odo-tabs {
+  background: #121844;
+}
+
+.odo-tab {
+  min-height: 48px;
+  border: 0;
+  background: transparent;
+  color: #3a4670;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+html[data-odo-appearance="dark"] .odo-tab {
+  color: #c5cef2;
+}
+
+.odo-tab[aria-current="page"] {
+  color: #1a6bff;
+}
+
+.odo-plus {
+  width: 56px;
+  height: 56px;
+  margin: -28px auto 0;
+  border: 0;
+  border-radius: 50%;
+  background: #1a6bff;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 16px rgba(26, 107, 255, 0.35);
+}
+
+.odo-glyph {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.odo-glyph-plus {
+  width: 26px;
+  height: 26px;
+}
+
+.odo-sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  background: rgba(10, 18, 64, 0.38);
+  display: flex;
+  align-items: flex-end;
+  padding: 16px 16px 108px;
+}
+
+.odo-sheet {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 24px;
+  background: #ffffff;
+}
+
+html[data-odo-appearance="dark"] .odo-sheet {
+  background: #162056;
+}
+
+.odo-sheet-btn {
+  min-height: 52px;
+  border: 0;
+  border-radius: 16px;
+  background: #f3f6ff;
+  color: #0a1240;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+html[data-odo-appearance="dark"] .odo-sheet-btn {
+  background: #1a2458;
+  color: #f3f6ff;
+}
+
+.odo-sheet-quiet {
+  background: transparent;
+}
+
+.odo-form-screen {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.odo-form-screen .odo-scroll {
+  padding-bottom: 16px;
+}
+
+.odo-subhead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 12px 0;
+}
+
+.odo-subhead h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.odo-icon-btn {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: inherit;
+  display: grid;
+  place-items: center;
+}
+
+.odo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 12px 16px 8px;
+}
+
+.odo-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.odo-field input {
+  min-height: 48px;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 14px;
+  border: 2px solid rgba(10, 18, 64, 0.12);
+  background: #ffffff;
+  color: #0a1240;
+  padding: 0 14px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+html[data-odo-appearance="dark"] .odo-field input {
+  background: #121844;
+  color: #f3f6ff;
+  border-color: rgba(243, 246, 255, 0.16);
+}
+
+.odo-field input[type="file"] {
+  padding: 10px;
+}
+
+.odo-savebar {
+  padding: 12px 16px 18px;
+}
+
+.odo-text-btn {
+  align-self: flex-start;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: #1a6bff;
+  font-weight: 600;
+  padding: 0;
+}
+
+.odo-kind-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.odo-kind {
+  min-height: 92px;
+  border-radius: 18px;
+  border: 2px solid rgba(10, 18, 64, 0.1);
+  background: #ffffff;
+  color: #3d3dff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+html[data-odo-appearance="dark"] .odo-kind {
+  background: #162056;
+  border-color: rgba(243, 246, 255, 0.14);
+}
+
+.odo-kind .odo-art {
+  width: 78px;
+  margin: 0;
+}
+
+.odo-kind[aria-pressed="true"] {
+  border-color: #1a6bff;
+  background: #e8efff;
+}
+
+.odo-toggle {
+  width: 100%;
+  min-height: 48px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+  font-weight: 600;
+  padding: 0;
+}
+
+.odo-switch {
+  width: 52px;
+  height: 32px;
+  border-radius: 999px;
+  background: #d5def8;
+  position: relative;
+  flex: none;
+}
+
+html[data-odo-appearance="dark"] .odo-switch {
+  background: #2a3568;
+}
+
+.odo-switch::after {
+  content: "";
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ffffff;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+}
+
+.odo-toggle[aria-checked="true"] .odo-switch {
+  background: #19d68a;
+}
+
+.odo-toggle[aria-checked="true"] .odo-switch::after {
+  left: 23px;
+}
+
+.odo-error {
+  margin: 0;
+  color: #8a1c1c;
+  font-weight: 600;
+}
+
+.odo-hint {
+  font-size: 13px;
+}
+
+.odo-preview {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.odo-search input {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 16px;
+  border: 2px solid rgba(10, 18, 64, 0.12);
+  background: #ffffff;
+  color: #0a1240;
+  padding: 0 14px;
+  font-size: 16px;
+}
+
+html[data-odo-appearance="dark"] .odo-search input {
+  background: #121844;
+  color: #f3f6ff;
+  border-color: rgba(243, 246, 255, 0.16);
+}
+
+.odo-search input::placeholder {
+  color: #3a4670;
+}
+
+.odo-day {
+  margin-top: 18px;
+}
+
+.odo-day h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.odo-day ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.odo-row,
+.odo-vehicles li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(10, 18, 64, 0.05);
+}
+
+html[data-odo-appearance="dark"] .odo-row,
+html[data-odo-appearance="dark"] .odo-vehicles li {
+  background: #162056;
+  box-shadow: none;
+}
+
+.odo-row-amount {
+  margin: 0;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.odo-vehicles {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.odo-vehicles li {
+  display: block;
+}
+
+.odo-chart {
+  width: 100%;
+  height: auto;
+  margin-top: 8px;
+  color: #0a1240;
+}
+
+html[data-odo-appearance="dark"] .odo-chart {
+  color: #f3f6ff;
+}
+
+.odo-legend {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.odo-legend li {
+  display: grid;
+  grid-template-columns: 14px 1fr auto;
+  gap: 8px;
+  align-items: center;
+  min-height: 28px;
+}
+
+.odo-legend span {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+}
+
+.odo-empty {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 28px 12px;
+  text-align: center;
+}
+
+.odo-wheel {
+  width: 96px;
+  height: 96px;
+}
+
+.odo-saved {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 28px 22px 32px;
+}
+
+.odo-saved h1,
+.odo-saved p {
+  margin: 0;
+}
+
+.odo-saved-figure {
+  font-size: 48px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.odo-saved-figure span {
+  font-size: 20px;
+}
+
+.odo-success-mark {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: #19d68a;
+  color: #0a1240;
+  display: grid;
+  place-items: center;
+  animation: odo-pop 480ms ease;
+}
+
+.odo-check {
+  width: 36px;
+  height: 36px;
+}
+
+.odo-toast {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 100px;
+  z-index: 7;
+  margin: 0;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: #19d68a;
+  color: #0a1240;
+  font-weight: 600;
+}
+
+.odo-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.odo-root :focus-visible {
+  outline: 3px solid #0a1240;
+  outline-offset: 2px;
+}
+
+.odo-welcome :focus-visible,
+.odo-hero :focus-visible,
+.odo-plus:focus-visible {
+  outline-color: #ffffff;
+}
+
+@keyframes odo-pop {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 479px) {
+  .odo-back {
+    display: none;
+  }
+
+  .odo-stage,
+  html:has(.odo-root):not(:has(.odo-embed)),
+  body:has(.odo-root):not(:has(.odo-embed)) {
+    background: #f3f6ff;
+  }
+
+  .odo-phone {
+    width: 100%;
+    height: 100dvh;
+    max-width: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+/* Case study embed: phone stays in document flow. */
+.odo-embed .odo-root {
+  height: auto;
+  overflow: visible;
+}
+
+.odo-embed .odo-stage,
+html[data-odo-appearance="dark"] .odo-embed .odo-stage {
+  height: auto;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: transparent;
+}
+
+.odo-embed .odo-back {
+  display: none;
+}
+
+.odo-embed .odo-phone {
+  width: min(390px, 100%);
+  height: min(844px, calc(100dvh - 7rem));
+  max-width: 390px;
+  flex: none;
+  border-radius: 36px;
+  box-shadow: 0 24px 60px rgba(10, 18, 64, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .odo-root *,
+  .odo-root *::before,
+  .odo-root *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

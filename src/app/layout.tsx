@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, Syne } from "next/font/google";
-import { AsideBot } from "@/components/aside/AsideBot";
-import { Nav } from "@/components/Nav";
+import { SiteFrame } from "@/components/SiteFrame";
 import { profile } from "@/lib/profile";
 import "./globals.css";
 
@@ -37,10 +36,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${syne.variable} ${dmSans.variable} antialiased`}>
-        <div className="noise" aria-hidden />
-        <Nav />
-        {children}
-        <AsideBot />
+        <SiteFrame>{children}</SiteFrame>
       </body>
     </html>
   );
