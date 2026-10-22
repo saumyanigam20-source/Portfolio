@@ -1,12 +1,21 @@
-import type { RecordItem, ThemeMode, Vehicle } from "./types";
+import type { FuelType, RecordItem, ThemeMode, Vehicle, VehicleKind } from "./types";
 
 const DATA_KEY = "odo-vehicle-recorder";
 const THEME_KEY = "odo-theme";
+const SESSION_KEY = "odo-session";
+
+const fuelTypes = new Set<FuelType>(["petrol", "diesel", "cng", "lpg", "electric"]);
+const kinds = new Set<VehicleKind>(["car", "bike", "scooter", "cab"]);
+
+export type Session = { signedIn: boolean; phone: string; name: string };
+
+const emptySession: Session = { signedIn: false, phone: "", name: "" };
 
 export type SavedData = {
   started: boolean;
   vehicles: Vehicle[];
   records: RecordItem[];
+  selectedId?: string;
 };
 
 export function uid(prefix: string): string {
@@ -39,7 +48,42 @@ export function clearAppearance() {
 function isVehicle(value: unknown): value is Vehicle {
   if (!value || typeof value !== "object") return false;
   const vehicle = value as Vehicle;
-  return typeof vehicle.id === "string" && typeof vehicle.nickname === "string" && typeof vehicle.odometer === "number";
+  const named = typeof vehicle.nickname === "string" || typeof vehicle.make === "string";
+  return typeof vehicle.id === "string" && named && typeof vehicle.odometer === "number";
+}
+
+function normaliseVehicle(vehicle: Vehicle): Vehicle {
+  const fuelType = fuelTypes.has(vehicle.fuelType) ? vehicle.fuelType : "petrol";
+  const listed = Array.isArray(vehicle.fuels) ? vehicle.fuels.filter((fuel) => fuelTypes.has(fuel)) : [];
+  const fuels = listed.length > 0 ? listed : [fuelType];
+  const kind = kinds.has(vehicle.kind) ? vehicle.kind : "car";
+  return {
+    ...vehicle,
+    kind,
+    fuelType: fuels[0] ?? fuelType,
+    fuels,
+    nickname: vehicle.nickname || `${vehicle.make} ${vehicle.model}`.trim() || "Vehicle",
+  };
+}
+
+export function loadSession(): Session {
+  if (typeof localStorage === "undefined") return emptySession;
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if (!raw) return emptySession;
+    const parsed = JSON.parse(raw) as Partial<Session>;
+    return {
+      signedIn: Boolean(parsed.signedIn),
+      phone: typeof parsed.phone === "string" ? parsed.phone : "",
+      name: typeof parsed.name === "string" ? parsed.name : "",
+    };
+  } catch {
+    return emptySession;
+  }
+}
+
+export function saveSession(session: Session) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
 }
 
 function isRecordItem(value: unknown): value is RecordItem {
@@ -62,8 +106,9 @@ export function loadData(): SavedData | null {
     if (!parsed || !Array.isArray(parsed.vehicles) || !Array.isArray(parsed.records)) return null;
     return {
       started: Boolean(parsed.started),
-      vehicles: parsed.vehicles.filter(isVehicle),
+      vehicles: parsed.vehicles.filter(isVehicle).map(normaliseVehicle),
       records: parsed.records.filter(isRecordItem),
+      selectedId: typeof parsed.selectedId === "string" ? parsed.selectedId : undefined,
     };
   } catch {
     return null;

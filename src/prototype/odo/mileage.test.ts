@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { averageLatestMileage, mileageReadings } from "./mileage";
+import { averageLatestMileage, mileageForFuel, mileageReadings } from "./mileage";
 import { createSample } from "./sample-data";
-import { insightSentence } from "./stats";
+import { costPerKm, insightSentence } from "./stats";
 import type { FuelRecord } from "./types";
 
 describe("mileageReadings", () => {
@@ -73,6 +73,7 @@ describe("sample data", () => {
   it("has one petrol hatchback and one petrol scooter across 2025 and 2026", () => {
     expect(sample.vehicles.map((vehicle) => vehicle.kind).sort()).toEqual(["car", "scooter"]);
     expect(sample.vehicles.every((vehicle) => vehicle.fuelType === "petrol")).toBe(true);
+    expect(sample.vehicles.find((vehicle) => vehicle.id === "mint")?.fuels).toEqual(["petrol", "cng"]);
 
     const dates = sample.records.map((record) => record.date).sort();
     expect(dates[0]?.startsWith("2025-08")).toBe(true);
@@ -102,20 +103,64 @@ describe("sample data", () => {
       for (let index = 1; index < fills.length; index += 1) {
         expect(fills[index]?.odometer ?? 0).toBeGreaterThan(fills[index - 1]?.odometer ?? 0);
       }
-      const readings = mileageReadings(
-        fills.map((fill) => ({
-          id: fill.id,
-          date: fill.date,
-          quantity: fill.quantity,
-          odometer: fill.odometer,
-          fullTank: fill.fullTank,
-        })),
-      );
-      const average = averageLatestMileage(readings);
-      expect(average).not.toBeNull();
-      expect(average ?? 0).toBeGreaterThan(10);
-      expect(average ?? 0).toBeLessThan(60);
+      const fuelTypes = vehicle.fuels ?? [vehicle.fuelType];
+      for (const fuelType of fuelTypes) {
+        const readings = mileageForFuel(fills, fuelType);
+        const average = averageLatestMileage(readings);
+        expect(average).not.toBeNull();
+        expect(average ?? 0).toBeGreaterThan(10);
+        expect(average ?? 0).toBeLessThan(60);
+      }
     }
+  });
+});
+
+function fill(id: string, date: string, fuelType: FuelRecord["fuelType"], quantity: number, amount: number, odometer: number | null, fullTank: boolean): FuelRecord {
+  return { id, vehicleId: "v", kind: "fuel", date, fuelType, quantity, pricePerUnit: 100, amount, odometer, fullTank };
+}
+
+describe("mileage by fuel", () => {
+  const fills = [
+    fill("p1", "2026-01-01", "petrol", 10, 1000, 10000, true),
+    fill("c1", "2026-01-02", "cng", 5, 450, 10050, true),
+    fill("p2", "2026-01-04", "petrol", 2, 200, 10100, false),
+    fill("c2", "2026-01-05", "cng", 1, 90, 10120, false),
+    fill("p3", "2026-01-08", "petrol", 8, 800, 10300, true),
+    fill("c3", "2026-01-10", "cng", 4, 360, 10400, true),
+  ];
+
+  it("keeps a single fuel on its own tank", () => {
+    const readings = mileageForFuel(fills.filter((item) => item.fuelType === "petrol"), "petrol");
+    expect(readings).toHaveLength(1);
+    expect(readings[0]).toMatchObject({ distance: 300, fuel: 10, kmPerUnit: 30 });
+  });
+
+  it("does not mix interleaved fills of the other fuel", () => {
+    const petrol = mileageForFuel(fills, "petrol");
+    const cng = mileageForFuel(fills, "cng");
+    expect(petrol[0]).toMatchObject({ fuel: 10, kmPerUnit: 30 });
+    expect(cng[0]).toMatchObject({ distance: 350, fuel: 5, kmPerUnit: 70 });
+    expect(petrol[0]?.fuel).not.toBe(cng[0]?.fuel);
+  });
+
+  it("adds part fills that sit between two full fills of the same fuel", () => {
+    expect(mileageForFuel(fills, "petrol")[0]?.fuel).toBe(2 + 8);
+    expect(mileageForFuel(fills, "cng")[0]?.fuel).toBe(1 + 4);
+  });
+
+  it("returns no mileage from a single full fill", () => {
+    expect(mileageForFuel([fill("only", "2026-02-01", "lpg", 6, 500, 5000, true)], "lpg")).toEqual([]);
+  });
+
+  it("returns no mileage when a fuel has no fills", () => {
+    expect(mileageForFuel(fills, "diesel")).toEqual([]);
+    expect(mileageForFuel([], "petrol")).toEqual([]);
+  });
+
+  it("divides every fuel's spend by the kilometres in the period", () => {
+    expect(costPerKm(fills, ["v"], 2026)).toBeCloseTo(2900 / 400);
+    expect(costPerKm([fill("one", "2026-03-01", "petrol", 10, 1000, 1000, true)], ["v"], 2026)).toBeNull();
+    expect(costPerKm([], ["v"], 2026)).toBeNull();
   });
 });
 

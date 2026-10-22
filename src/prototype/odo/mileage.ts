@@ -65,6 +65,10 @@ export function mileageReadings(fills: readonly MileageFill[]): MileageReading[]
   return readings;
 }
 
+export function mileageForFuel<T extends MileageFill & { fuelType: string }>(fills: readonly T[], fuelType: string): MileageReading[] {
+  return mileageReadings(fills.filter((fill) => fill.fuelType === fuelType));
+}
+
 export function averageLatestMileage(readings: readonly MileageReading[], count = 3): number | null {
   if (readings.length === 0) return null;
   const latest = readings.slice(-count);

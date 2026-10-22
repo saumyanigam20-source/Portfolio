@@ -7,6 +7,10 @@ export const metadata: Metadata = {
   title: "odo prototype",
   description: "A phone prototype for logging fuel, parts and services.",
   icons: { icon: "/odo/odo-icon.svg" },
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F5F7FA" },
+    { media: "(prefers-color-scheme: dark)", color: "#101828" },
+  ],
 };
 
 export default function VehicleRecorderLayout({ children }: { children: React.ReactNode }) {
@@ -16,7 +20,7 @@ export default function VehicleRecorderLayout({ children }: { children: React.Re
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
       />
       <script dangerouslySetInnerHTML={{ __html: themeBoot }} />
       {children}

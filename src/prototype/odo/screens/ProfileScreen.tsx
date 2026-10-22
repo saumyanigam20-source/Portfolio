@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { fuelLabel, km } from "../format";
+import { fuelLabel, km, vehicleFuels, vehicleTitle } from "../format";
 import { useOdo } from "../store";
-import type { ThemeMode } from "../types";
+import type { FuelType, ThemeMode } from "../types";
 import { Logo } from "../ui/Logo";
+import { VehicleIcon } from "../ui/VehicleIcon";
 
 const modes: { value: ThemeMode; label: string }[] = [
   { value: "system", label: "System" },
@@ -11,24 +12,54 @@ const modes: { value: ThemeMode; label: string }[] = [
 ];
 
 export function ProfileScreen() {
-  const { vehicles, theme, setTheme, resetDemo, go } = useOdo();
+  const { vehicles, theme, setTheme, resetDemo, go, signOut, setFuels, session } = useOdo();
   const [confirming, setConfirming] = useState(false);
-  const onPaper = theme === "light" || (theme === "system" && documentAppearance() === "light");
+  const [kitFor, setKitFor] = useState<string | null>(null);
+
+  const addKit = (id: string, gas: Extract<FuelType, "cng" | "lpg">) => {
+    const vehicle = vehicles.find((item) => item.id === id);
+    if (!vehicle) return;
+    const fuels = vehicleFuels(vehicle).filter((fuel) => fuel !== "cng" && fuel !== "lpg");
+    setFuels(id, [...(fuels.includes("petrol") ? fuels : ["petrol", ...fuels.filter((fuel) => fuel !== "petrol")]), gas]);
+    setKitFor(null);
+  };
 
   return (
     <div className="odo-scroll odo-pad">
-      <Logo on={onPaper ? "paper" : "dark"} />
-      <h1 className="odo-title">Profile</h1>
+      <Logo />
+      <h1 className="odo-title">{session.name || "Profile"}</h1>
       <ul className="odo-vehicles">
-        {vehicles.map((vehicle) => (
-          <li key={vehicle.id}>
-            <p className="odo-strong">{vehicle.nickname}</p>
-            <p className="odo-muted">
-              {vehicle.make} {vehicle.model} · {fuelLabel(vehicle.fuelType)}
-            </p>
-            <p>{km(vehicle.odometer)}</p>
-          </li>
-        ))}
+        {vehicles.map((vehicle) => {
+          const fuels = vehicleFuels(vehicle);
+          const hasGas = fuels.includes("cng") || fuels.includes("lpg");
+          return (
+            <li key={vehicle.id}>
+              <div className="odo-vehicle-row">
+                <VehicleIcon type={vehicle.kind} size={32} label={vehicleTitle(vehicle)} />
+                <div>
+                  <p className="odo-strong">{vehicleTitle(vehicle)}</p>
+                  <p className="odo-muted">
+                    {vehicle.plateDisplay ? `${vehicle.plateDisplay} · ` : ""}
+                    {fuels.map((fuel) => fuelLabel(fuel)).join(" · ")}
+                  </p>
+                  <p>{km(vehicle.odometer)}</p>
+                </div>
+              </div>
+              {!hasGas && (
+                kitFor === vehicle.id ? (
+                  <div className="odo-pills" role="group" aria-label="Gas kit">
+                    <button type="button" className="odo-pill" onClick={() => addKit(vehicle.id, "cng")}>Petrol + CNG</button>
+                    <button type="button" className="odo-pill" onClick={() => addKit(vehicle.id, "lpg")}>Petrol + LPG</button>
+                  </div>
+                ) : (
+                  <button type="button" className="odo-text-btn" onClick={() => setKitFor(vehicle.id)}>
+                    Add a gas kit
+                  </button>
+                )
+              )}
+            </li>
+          );
+        })}
       </ul>
       <button type="button" className="odo-btn odo-btn-ghost" onClick={() => go({ name: "add-vehicle", returnTo: "profile" })}>
         Add a vehicle
@@ -63,12 +94,10 @@ export function ProfileScreen() {
       >
         {confirming ? "Reset demo now" : "Reset demo"}
       </button>
-      <p className="odo-hint">Reset loads the sample hatchback and scooter. Data stays on this device.</p>
+      <p className="odo-hint">Reset loads the sample car and scooter. Data stays on this device.</p>
+      <button type="button" className="odo-btn odo-btn-ghost" onClick={signOut}>
+        Sign out
+      </button>
     </div>
   );
-}
-
-function documentAppearance(): "light" | "dark" {
-  if (typeof document === "undefined") return "light";
-  return document.documentElement.dataset.odoAppearance === "dark" ? "dark" : "light";
 }

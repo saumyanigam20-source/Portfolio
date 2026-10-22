@@ -6,18 +6,21 @@ import "@/app/prototype/vehicle-recorder/prototype.css";
 import {
   odoAudience,
   odoDecisions,
-  odoFeatures,
+  odoFuelCaption,
+  odoFuelSteps,
   odoGoal,
-  odoInterviewNote,
+  odoHeard,
+  odoInside,
   odoLead,
   odoLearned,
-  odoMeasure,
   odoMeta,
   odoProblem,
   odoPrototypeBullets,
   odoPrototypeHref,
-  odoPrototypeNote,
+  odoPrototypeIntro,
+  odoScatter,
   odoSnapshot,
+  odoTargets,
 } from "@/content/odo";
 
 const focusRing =
@@ -56,62 +59,65 @@ export default function OdoPage() {
 
         <div className="mt-14 space-y-16">
           <section>
-            <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">The goal</h2>
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">
+              What it&apos;s designed to do
+            </h2>
             <p className="mt-4 max-w-3xl text-[0.98rem] leading-relaxed text-muted">{odoGoal.intro}</p>
-            <BulletList items={odoGoal.bullets} />
-            <p className="mt-4 max-w-3xl text-[0.98rem] leading-relaxed text-muted">{odoGoal.close}</p>
+            <ul className="mt-4 max-w-3xl space-y-3">
+              {odoGoal.bullets.map((item) => (
+                <li key={item.lead} className="flex gap-3 text-[0.95rem] leading-relaxed text-muted">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden />
+                  <span>
+                    <span className="font-medium text-ink">{item.lead}</span> {item.detail}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted">{odoGoal.close}</p>
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">The problem</h2>
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">
+              The problem, simply
+            </h2>
             <div className="mt-4 max-w-3xl space-y-4 text-[0.98rem] leading-relaxed text-muted">
-              {odoProblem.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
+              <p>{odoProblem.open}</p>
+              <p>{odoProblem.scatter}</p>
+            </div>
+            <RecordGap />
+            <p className="mt-6 max-w-3xl text-[0.98rem] leading-relaxed text-muted italic">
+              {odoProblem.aside}
+            </p>
+            <p className="mt-4 max-w-3xl text-[0.98rem] leading-relaxed text-muted">{odoProblem.close}</p>
+            <blockquote className="mt-8 max-w-3xl border-l border-accent/50 pl-4 font-display text-xl leading-snug font-semibold tracking-[-0.03em] text-ink sm:text-2xl">
+              {odoProblem.quote}
+            </blockquote>
+          </section>
+
+          <section>
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">Who it&apos;s for</h2>
+            <p className="mt-4 max-w-3xl text-[0.98rem] leading-relaxed text-muted">{odoAudience}</p>
+          </section>
+
+          <section>
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">What I heard</h2>
+            <p className="mt-4 max-w-3xl text-[0.98rem] leading-relaxed text-muted">{odoHeard.intro}</p>
+            <div className="mt-6 max-w-3xl space-y-4 text-[0.98rem] leading-relaxed text-muted">
+              {odoHeard.findings.map((finding) => (
+                <p key={finding.lead}>
+                  <span className="font-medium text-ink">{finding.lead}</span> {finding.detail}
+                </p>
               ))}
             </div>
-          </section>
-
-          <section>
-            <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">Who it is for</h2>
-            <BulletList items={odoAudience} />
-          </section>
-
-          <section>
-            <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">How I approached it</h2>
-            <ol className="mt-6 max-w-3xl list-decimal space-y-8 pl-5 marker:text-accent">
-              <li>
-                <h3 className="font-display text-xl font-semibold tracking-[-0.02em] text-ink">Start with myself.</h3>
-                <p className="mt-3 text-[0.98rem] leading-relaxed text-muted">
-                  I am the user who tracks nothing today. So I asked what would make me log at all, and what would make me quit. I would log right at the pump or the workshop. I would quit if logging takes too many taps, if reminders get annoying, or if the app gives me nothing useful back.
-                </p>
-                <p className="mt-3 text-[0.98rem] leading-relaxed text-muted">Those three answers became my design rules:</p>
-                <BulletList
-                  items={[
-                    "Logging is faster than forgetting. A target of under 15 seconds per entry.",
-                    "Reminders respect you. One a week during the last month before a due date, not a flood.",
-                    "The app gives back. It answers questions for you instead of storing data.",
-                  ]}
-                />
-              </li>
-              <li>
-                <h3 className="font-display text-xl font-semibold tracking-[-0.02em] text-ink">Talk to real owners.</h3>
-                <div className="mt-3">
-                  <ToAdd>{odoInterviewNote}</ToAdd>
-                </div>
-              </li>
-              <li>
-                <h3 className="font-display text-xl font-semibold tracking-[-0.02em] text-ink">Define the product.</h3>
-                <p className="mt-3 text-[0.98rem] leading-relaxed text-muted">
-                  I wrote a full product requirements document (PRD): users, goals, scope, data model, flows, requirements, business model and risks. It keeps the product honest about what is in and what is out.
-                </p>
-              </li>
-              <li>
-                <h3 className="font-display text-xl font-semibold tracking-[-0.02em] text-ink">Prototype fast.</h3>
-                <p className="mt-3 text-[0.98rem] leading-relaxed text-muted">
-                  I built a working prototype in one week to test the core loop: add a vehicle, log fuel, log a part, see what you have spent.
-                </p>
-              </li>
-            </ol>
+            <p className="mt-6 max-w-3xl text-[0.98rem] leading-relaxed text-muted">{odoHeard.rulesIntro}</p>
+            <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+              {odoHeard.rules.map((rule) => (
+                <li key={rule.title} className="min-w-0 rounded-[1.6rem] border border-line bg-canvas-elevated p-5">
+                  <h3 className="font-display text-lg font-semibold tracking-[-0.02em] text-ink">{rule.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{rule.detail}</p>
+                </li>
+              ))}
+            </ul>
           </section>
 
           <section>
@@ -121,31 +127,34 @@ export default function OdoPage() {
                 <div key={decision.title}>
                   <h3 className="font-display text-xl font-semibold tracking-[-0.02em]">{decision.title}</h3>
                   <p className="mt-3 text-[0.98rem] leading-relaxed text-muted">{decision.body}</p>
+                  {"fuel" in decision ? <FuelFlow /> : null}
                 </div>
               ))}
             </div>
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">Every feature, briefly</h2>
-            <FeatureTable />
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">What&apos;s inside</h2>
+            <div className="mt-6 max-w-3xl divide-y divide-line border-y border-line">
+              {odoInside.map(([name, detail]) => (
+                <div key={name} className="grid gap-1 py-4 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-6">
+                  <h3 className="text-sm font-semibold text-ink">{name}</h3>
+                  <p className="min-w-0 text-sm leading-relaxed text-muted">{detail}</p>
+                </div>
+              ))}
+            </div>
           </section>
 
           <section>
             <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">The prototype</h2>
-            <p className="mt-4 max-w-3xl text-[0.98rem] leading-relaxed text-muted">
-              The prototype is a working web version that runs on sample data for a car and a scooter. You can:
-            </p>
+            <p className="mt-4 max-w-3xl text-[0.98rem] leading-relaxed text-muted">{odoPrototypeIntro}</p>
             <BulletList items={odoPrototypeBullets} />
-            <div className="mt-6">
-              <ToAdd>{odoPrototypeNote}</ToAdd>
-            </div>
             <div id="odo-prototype" className="odo-embed mx-auto mt-10 w-full scroll-mt-28">
               <link rel="preconnect" href="https://fonts.googleapis.com" />
               <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
               <link
                 rel="stylesheet"
-                href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap"
+                href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
               />
               <script
                 dangerouslySetInnerHTML={{
@@ -162,9 +171,18 @@ export default function OdoPage() {
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">Goals I will measure</h2>
-            <p className="mt-4 max-w-3xl text-[0.98rem] leading-relaxed text-muted">{odoMeasure.intro}</p>
-            <BulletList items={odoMeasure.bullets} />
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">
+              Targets for the first 90 days
+            </h2>
+            <p className="mt-4 max-w-3xl text-[0.98rem] leading-relaxed text-muted">{odoTargets.intro}</p>
+            <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {odoTargets.cards.map((card) => (
+                <li key={card.value} className="min-w-0 rounded-[1.6rem] border border-line bg-canvas-elevated p-5">
+                  <p className="font-display text-2xl font-semibold tracking-[-0.03em] text-ink">{card.value}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{card.detail}</p>
+                </li>
+              ))}
+            </ul>
           </section>
 
           <section>
@@ -175,6 +193,62 @@ export default function OdoPage() {
       </article>
       <Footer />
     </main>
+  );
+}
+
+function RecordGap() {
+  return (
+    <figure className="mt-6 max-w-3xl">
+      <div
+        role="img"
+        aria-label="Petrol at the pump, service at the workshop, insurance renewed online, and a battery bought on a Saturday. None of them has a single record."
+        className="grid grid-cols-2 gap-2"
+      >
+        {odoScatter.map((item) => (
+          <p
+            key={item.title}
+            aria-hidden
+            className="min-w-0 rounded-2xl border border-line bg-canvas-elevated px-3 py-3 text-sm leading-snug"
+          >
+            <span className="font-medium text-ink">{item.title}</span>
+            <span className="text-muted">, {item.detail}</span>
+          </p>
+        ))}
+        <p
+          aria-hidden
+          className="col-span-2 rounded-2xl border border-accent bg-accent-soft px-4 py-3 text-center text-sm font-medium text-ink"
+        >
+          Where&apos;s the record?
+        </p>
+      </div>
+    </figure>
+  );
+}
+
+function FuelFlow() {
+  return (
+    <figure className="mt-6">
+      <ol
+        role="img"
+        aria-label="Mileage runs from a full tank, through a part-fill, through another part-fill, to the next full tank."
+        className="flex flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center"
+      >
+        {odoFuelSteps.map((step, index) => (
+          <li key={`${step}-${index}`} aria-hidden className="flex min-w-0 items-center gap-2">
+            {index > 0 ? (
+              <span className="text-sm text-faint">
+                <span className="sm:hidden">↓</span>
+                <span className="hidden sm:inline">→</span>
+              </span>
+            ) : null}
+            <span className="rounded-2xl border border-line bg-canvas-elevated px-3 py-2 text-sm font-medium text-ink">
+              {step}
+            </span>
+          </li>
+        ))}
+      </ol>
+      <figcaption className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">{odoFuelCaption}</figcaption>
+    </figure>
   );
 }
 
@@ -189,14 +263,6 @@ function PrototypeLink() {
   );
 }
 
-function ToAdd({ children }: { children: string }) {
-  return (
-    <div className="rounded-2xl border border-dashed border-accent/40 bg-accent-soft px-4 py-4">
-      <p className="text-sm leading-relaxed text-ink">{children}</p>
-    </div>
-  );
-}
-
 function BulletList({ items }: { items: readonly string[] }) {
   return (
     <ul className="mt-4 max-w-3xl space-y-3">
@@ -207,41 +273,5 @@ function BulletList({ items }: { items: readonly string[] }) {
         </li>
       ))}
     </ul>
-  );
-}
-
-function FeatureTable() {
-  return (
-    <div
-      tabIndex={0}
-      aria-label="Every feature, briefly. Feature and what it does."
-      className={`mt-8 max-w-full overflow-x-auto overscroll-x-contain ${focusRing}`}
-    >
-      <table className="w-full min-w-[46rem] border-collapse text-left text-sm">
-        <caption className="caption-top mb-3 text-left text-sm leading-relaxed text-muted">
-          Feature and what it does
-        </caption>
-        <thead>
-          <tr>
-            <th className="border-b border-line px-3 py-3 font-semibold text-ink" scope="col">
-              Feature
-            </th>
-            <th className="border-b border-line px-3 py-3 font-semibold text-ink" scope="col">
-              What it does
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {odoFeatures.map(([feature, detail]) => (
-            <tr key={feature}>
-              <th className="border-b border-line px-3 py-3 align-top font-medium text-ink" scope="row">
-                {feature}
-              </th>
-              <td className="border-b border-line px-3 py-3 align-top text-muted">{detail}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
   );
 }

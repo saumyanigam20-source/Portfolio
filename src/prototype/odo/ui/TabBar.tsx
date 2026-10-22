@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from "react";
 import { useOdo } from "../store";
 import { HomeIcon, PlusIcon, ProfileIcon, ReportIcon, TimelineIcon } from "./Icons";
 
@@ -10,9 +11,19 @@ const tabs = [
 
 export function TabBar() {
   const { screen, go, plusOpen, setPlusOpen } = useOdo();
+  const nav = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    const bar = nav.current;
+    if (!bar) return;
+    const current = bar.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!current) return;
+    bar.style.setProperty("--odo-tab-x", `${current.offsetLeft}px`);
+    bar.style.setProperty("--odo-tab-w", `${current.offsetWidth}px`);
+  }, [screen.name]);
 
   return (
-    <nav className="odo-tabs" aria-label="Primary">
+    <nav ref={nav} className="odo-tabs" aria-label="Primary">
       {tabs.slice(0, 2).map((tab) => (
         <button
           key={tab.name}

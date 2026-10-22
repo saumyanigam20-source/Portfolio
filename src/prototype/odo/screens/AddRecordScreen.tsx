@@ -1,7 +1,10 @@
-import { useState } from "react";
-import { addMonths, parseNumber, todayISO } from "../format";
+import { useRef, useState } from "react";
+import { addMonths, parseNumber, todayISO, vehicleTitle } from "../format";
 import { useOdo } from "../store";
 import { Field } from "../ui/Field";
+import { CheckIcon } from "../ui/Icons";
+import { VehicleIcon } from "../ui/VehicleIcon";
+import { prefersReducedMotion } from "../ui/motion";
 import { ScreenHeader } from "../ui/ScreenHeader";
 
 export function AddRecordScreen() {
@@ -19,6 +22,8 @@ export function AddRecordScreen() {
   const [dueTouched, setDueTouched] = useState(false);
   const [preview, setPreview] = useState("");
   const [error, setError] = useState("");
+  const [checked, setChecked] = useState(false);
+  const saving = useRef(false);
 
   const save = () => {
     const amount = parseNumber(price);
@@ -27,7 +32,10 @@ export function AddRecordScreen() {
       setError("Add a name, brand, price, warranty and due date.");
       return;
     }
-    addExpense({
+    if (saving.current) return;
+    saving.current = true;
+    setChecked(true);
+    const payload = {
       vehicleId,
       recordKind,
       date,
@@ -36,7 +44,8 @@ export function AddRecordScreen() {
       amount,
       warrantyMonths: months,
       dueDate: due,
-    });
+    };
+    window.setTimeout(() => addExpense(payload), prefersReducedMotion() ? 0 : 200);
   };
 
   return (
@@ -53,7 +62,8 @@ export function AddRecordScreen() {
           <div className="odo-chips" role="group" aria-label="Vehicle">
             {vehicles.map((vehicle) => (
               <button key={vehicle.id} type="button" className="odo-chip odo-chip-ink" aria-pressed={vehicle.id === vehicleId} onClick={() => setVehicleId(vehicle.id)}>
-                {vehicle.nickname}
+                <VehicleIcon type={vehicle.kind} size={20} label={vehicleTitle(vehicle)} />
+                {vehicle.model}
               </button>
             ))}
           </div>
@@ -120,7 +130,7 @@ export function AddRecordScreen() {
       </div>
       <div className="odo-savebar">
         <button type="submit" className="odo-btn">
-          Save {recordKind}
+          {checked ? <CheckIcon /> : `Save ${recordKind}`}
         </button>
       </div>
     </form>
