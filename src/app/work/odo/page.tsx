@@ -234,16 +234,20 @@ function FuelFlow() {
         className="flex flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center"
       >
         {odoFuelSteps.map((step, index) => (
-          <li key={`${step}-${index}`} aria-hidden className="flex min-w-0 items-center gap-2">
-            {index > 0 ? (
-              <span className="text-sm text-faint">
+          <li
+            key={`${step}-${index}`}
+            aria-hidden
+            className="flex flex-col items-center gap-2 sm:flex-row sm:items-center"
+          >
+            <span className="rounded-2xl border border-line bg-canvas-elevated px-3 py-2 text-sm font-medium text-ink">
+              {step}
+            </span>
+            {index < odoFuelSteps.length - 1 ? (
+              <span className="text-sm leading-none text-faint">
                 <span className="sm:hidden">↓</span>
                 <span className="hidden sm:inline">→</span>
               </span>
             ) : null}
-            <span className="rounded-2xl border border-line bg-canvas-elevated px-3 py-2 text-sm font-medium text-ink">
-              {step}
-            </span>
           </li>
         ))}
       </ol>
